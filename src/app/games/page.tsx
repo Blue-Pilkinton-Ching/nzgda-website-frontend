@@ -5,6 +5,9 @@ import logo from '../../../public/images/game-logo.png'
 import React, { Suspense } from 'react'
 import { GamesList } from '../../../interfaces'
 
+import ispy from '../../../public/images/I-Spyportrait.png'
+import Link from 'next/link'
+
 export default function Page() {
   return (
     <>
@@ -14,7 +17,7 @@ export default function Page() {
             <Image quality={100} src={logo} alt="game-characters"></Image>
           </div>
           <br />
-          <p className="lg:max-w-[500px] sm:max-w-[350px] lg:text-lg">
+          <p className="lg:max-w-[500px] sm:max-w-[350px] lg:text-lg mb-5 sm:mb-0">
             Play, laugh, and learn! HEIHEI tākaro is a safe place for our
             tamariki. Watch shows on TVNZ On Demand, or Play games right here.
           </p>
@@ -52,21 +55,22 @@ async function Games() {
   return (
     <>
       <br />
-      <div className="flex ls:justify-between justify-evenly lg:gap-6 gap-3 flex-wrap">
+      <div className="flex justify-evenly lg:gap-6 gap-3 flex-wrap">
         {data.data.map((element, index) => {
+          const thumbnail = element.name === 'I_SPY' ? ispy : element.thumbnail
+
           return (
-            <div
-              key={index}
-              className="w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-100"
-            >
-              <Image
-                src={element.thumbnail}
-                alt={element.name}
-                width={150}
-                height={200}
-                className="rounded-lg"
-              ></Image>
-            </div>
+            <Link key={index} href={`/${element.id}`}>
+              <div className="max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-100">
+                <Image
+                  src={thumbnail}
+                  alt={element.name}
+                  width={150}
+                  height={200}
+                  className="rounded-lg"
+                ></Image>
+              </div>
+            </Link>
           )
         })}
       </div>
