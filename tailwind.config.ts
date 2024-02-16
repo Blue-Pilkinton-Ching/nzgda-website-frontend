@@ -10,9 +10,11 @@ const config: Config = {
     extend: {
       colors: {
         red: '#ff1268',
+        green: '#00A98F',
       },
     },
   },
+
   plugins: [],
 }
 export default config
