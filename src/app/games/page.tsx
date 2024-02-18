@@ -7,6 +7,7 @@ import { GamesList } from '../../../interfaces'
 
 import ispy from '../../../public/images/I-Spyportrait.png'
 import Link from 'next/link'
+import encodeObjToURI from '../encodeIntoURI'
 
 export default function Page() {
   return (
@@ -60,7 +61,7 @@ async function Games() {
           const thumbnail = element.name === 'I_SPY' ? ispy : element.thumbnail
 
           return (
-            <Link key={index} href={`/${element.id}`}>
+            <Link key={index} href={`/${element.id}${encodeObjToURI(element)}`}>
               <div className="max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-100">
                 <Image
                   src={thumbnail}
