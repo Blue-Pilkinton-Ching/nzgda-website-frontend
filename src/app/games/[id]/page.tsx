@@ -54,8 +54,8 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col-reverse xl:flex-row justify-evenly items-center gap-10">
-      <div className="space-y-6 xl:min-w-[400px] xl:w-[400px] h-full">
+    <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-10 *:max-w-[800px] *:xl:max-w-none h-[calc(100vh-80px)]">
+      <div className="space-y-6 xl:min-w-[400px] xl:w-[400px] h-full flex justify-center flex-col">
         <h1 className="sm:text-5xl text-4xl text-green font-semibold">
           {game.name}
         </h1>
@@ -94,7 +94,7 @@ export default function Page() {
           maxWidth: game.width,
           maxHeight: game.height && game.height < 800 ? game.height : 800,
         }}
-        className="justify-center max-h-[800px] w-full max-w-[800px] xl:w-auto items-center aspect-video flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
+        className="justify-center max-h-[800px] w-full xl:w-auto items-center aspect-video flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
       >
         {game.url ? (
           <>
