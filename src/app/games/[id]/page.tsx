@@ -59,10 +59,11 @@ export default function Page() {
         <h1 className="sm:text-5xl text-4xl text-green font-semibold">
           {game.name}
         </h1>
+        <br />
         <p className="sm:text-xl text-lg whitespace-pre-line">
           {game.description}
         </p>
-        <div className="flex justify-evenly max-w-[400px]">
+        <div className="flex justify-center gap-8">
           {game.androidLink ? (
             <div>
               <Link href={game.androidLink} target="_blank">
@@ -93,7 +94,7 @@ export default function Page() {
           maxWidth: game.width,
           maxHeight: game.height && game.height < 800 ? game.height : 800,
         }}
-        className="justify-center max-h-[800px] items-center aspect-video flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
+        className="justify-center max-h-[800px] w-full max-w-[800px] xl:w-auto items-center aspect-video flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
       >
         {game.url ? (
           <>
@@ -143,6 +144,16 @@ export default function Page() {
               </div>
             </div>
           </>
+        ) : game.screenshot ? (
+          <div className="w-full h-full shadow-lg rounded-xl">
+            <Image
+              src={game.screenshot}
+              quality={100}
+              fill
+              alt={'game visual'}
+              className="w-full h-auto shadow-lg rounded-xl"
+            ></Image>
+          </div>
         ) : (
           <p className="text-5xl font-semibold text-green">
             Game doesn&apos;t exist!
