@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Game, GamesList } from '../../../../interfaces'
-import { notFound } from 'next/navigation'
+import { notFound, useParams } from 'next/navigation'
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page() {
   const [game, setGame] = useState<Game | null>()
   const [error, setError] = useState('')
   const gameView = useRef<HTMLIFrameElement>(null)
   const [isFullscreen, setFullscreen] = useState(false)
+
+  const params = useParams<{ id: string }>()
 
   useEffect(() => {
     getData()
@@ -26,10 +28,11 @@ export default function Page({ params }: { params: { id: string } }) {
     }
 
     const data: GamesList = await res.json()
-    const game = data.data.find((x) => x.id === decodeURIComponent(params.id))
+
+    const game = data.data.find((x) => x.id === Number(params.id))
 
     if (!game) {
-      setError(`Couldn't find game informaion :(`)
+      setError(`Couldn't find game :(`)
       return notFound()
     }
 
