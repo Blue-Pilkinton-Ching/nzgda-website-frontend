@@ -2,7 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Game, GamesList } from '../../../../interfaces'
-import { notFound, useParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
+import Image from 'next/image'
+
+import logo from '../../../../public/images/heihei-logo-green.png'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
@@ -33,7 +36,6 @@ export default function Page() {
 
     if (!game) {
       setError(`Couldn't find game :(`)
-      return notFound()
     }
 
     setGame(game)
@@ -55,7 +57,10 @@ export default function Page() {
       </div>
       <div
         ref={gameView}
-        style={{ maxWidth: game.width }}
+        style={{
+          maxWidth: game.width,
+          maxHeight: game.height && game.height < 800 ? game.height : 800,
+        }}
         className="justify-center max-h-[800px] items-center aspect-video flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
       >
         {game.url ? (
@@ -72,7 +77,7 @@ export default function Page() {
             ></iframe>
             <div
               style={{ maxWidth: game.width }}
-              className="w-full h-16 flex justify-between flex-row-reverse items-center"
+              className="w-full h-16 flex justify-between flex-row-reverse items-center px-3"
             >
               <button
                 onClick={() => {
@@ -102,6 +107,9 @@ export default function Page() {
                   {isFullscreen ? 'EXIT' : 'FULLSCREEN'}
                 </p>
               </button>
+              <div className="w-8 h-8 pb-9">
+                <Image quality={10} src={logo} alt={'logo'}></Image>
+              </div>
             </div>
           </>
         ) : (
