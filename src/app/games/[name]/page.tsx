@@ -90,7 +90,9 @@ export default function Page({ params }: { params: { name: string } }) {
             </div>
           </>
         ) : (
-          <div>Game doesn&apos;t exist!</div>
+          <p className="text-5xl font-semibold text-green">
+            Game doesn&apos;t exist!
+          </p>
         )}
       </div>
     </div>
