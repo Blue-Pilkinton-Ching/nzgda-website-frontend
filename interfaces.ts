@@ -6,7 +6,7 @@ export interface GamesList {
 }
 
 export interface Game {
-  id: number
+  id: string
   name: string
   description: string
   thumbnail: string

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Game, GamesList } from '../../../../interfaces'
 import { notFound } from 'next/navigation'
 
-export default function Page({ params }: { params: { name: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   const [game, setGame] = useState<Game | null>()
   const [error, setError] = useState('')
   const gameView = useRef<HTMLIFrameElement>(null)
@@ -26,12 +26,10 @@ export default function Page({ params }: { params: { name: string } }) {
     }
 
     const data: GamesList = await res.json()
-    const game = data.data.find(
-      (x) => x.name === decodeURIComponent(params.name)
-    )
+    const game = data.data.find((x) => x.id === decodeURIComponent(params.id))
 
     if (!game) {
-      setError('Could not find games :(')
+      setError(`Couldn't find game informaion :(`)
       return notFound()
     }
 
