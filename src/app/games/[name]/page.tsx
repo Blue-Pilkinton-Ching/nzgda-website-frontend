@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Game, GamesList } from '../../../../interfaces'
 import { notFound } from 'next/navigation'
 
 export default function Page({ params }: { params: { name: string } }) {
   const [game, setGame] = useState<Game | null>()
   const [error, setError] = useState('')
+  const gameView = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
     getData()
@@ -45,25 +46,33 @@ export default function Page({ params }: { params: { name: string } }) {
   }
 
   return (
-    <div className="flex flex-row justify-between gap-10">
+    <div className="flex flex-row justify-evenly gap-10">
       <div className="space-y-6 min-w-[400px] w-[400px] h-full">
         <h1 className="text-5xl text-green font-semibold">{game.name}</h1>
         <p className="text-xl whitespace-pre-line">{game.description}</p>
       </div>
-      <div className="flex flex-col flex-grow h-full max-h-[800px] box-content aspect-video rounded-lg *:rounded-lg ">
+      <div
+        ref={gameView}
+        style={{ maxWidth: game.width }}
+        className="justify-center max-h-[800px] items-center aspect-video flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
+      >
         {game.url ? (
           <>
             <iframe
               src={game.url}
               allowFullScreen
-              className="w-full h-full shadow-lg overflow-hidden float-right"
+              className="w-full h-full shadow-lg overflow-hidden"
+              style={{ maxWidth: game.width, maxHeight: game.height }}
               scrolling="no"
               id="heihei-game"
             ></iframe>
-            <div className="w-full h-16 flex justify-between flex-row-reverse items-center">
+            <div
+              style={{ maxWidth: game.width }}
+              className="w-full h-16 flex justify-between flex-row-reverse items-center"
+            >
               <button
                 onClick={() => {
-                  document.getElementById('heihei-game')?.requestFullscreen()
+                  gameView.current?.requestFullscreen()
                 }}
                 className="flex bg-green h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
               >
