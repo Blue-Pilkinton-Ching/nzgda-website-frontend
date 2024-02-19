@@ -2,12 +2,16 @@ import Image from 'next/image'
 
 import charactors from '../../../public/images/game-characters.png'
 import logo from '../../../public/images/game-logo.png'
-import React, { Suspense } from 'react'
 import { GamesList } from '../../../interfaces'
 
 import ispy from '../../../public/images/I-Spyportrait.png'
 import Link from 'next/link'
-import encodeObjToURI from '../encodeIntoURI'
+
+import bannerBottom from '../../../public/images/footer-side.png'
+import tvnz from '../../../public/images/tvnz-logo.png'
+import nzonair from '../../../public/images/nzonair-logo.png'
+import { Suspense } from 'react'
+import Footer from '../footer'
 
 export default function Page() {
   return (
@@ -61,7 +65,7 @@ async function Games() {
           const thumbnail = element.name === 'I_SPY' ? ispy : element.thumbnail
 
           return (
-            <Link key={index} href={`/${element.id}${encodeObjToURI(element)}`}>
+            <Link key={index} href={`/games/${element.id}`}>
               <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-100">
                 <Image
                   src={thumbnail}

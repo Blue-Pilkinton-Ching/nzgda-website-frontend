@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import background from '../../../public/images/game-background.png'
+import Footer from '../footer'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Image quality={100} src={background} alt={'background'}></Image>
       </div>
       <div className="p-10">{children}</div>
+      <Footer />
     </div>
   )
 }
