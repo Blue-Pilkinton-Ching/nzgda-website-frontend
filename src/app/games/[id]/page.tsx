@@ -6,6 +6,10 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
 import logo from '../../../../public/images/heihei-logo-green.png'
+import Link from 'next/link'
+
+import google from '../../../../public/images/google-badge.svg'
+import apple from '../../../../public/images/apple-badge.svg'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
@@ -50,14 +54,38 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col-reverse xl:flex-row justify-evenly gap-10">
-      <div className="space-y-6 xl:min-w-[400px] lg:w-[400px] h-full">
+    <div className="flex flex-col-reverse xl:flex-row justify-evenly items-center gap-10">
+      <div className="space-y-6 xl:min-w-[400px] xl:w-[400px] h-full">
         <h1 className="sm:text-5xl text-4xl text-green font-semibold">
           {game.name}
         </h1>
         <p className="sm:text-xl text-lg whitespace-pre-line">
           {game.description}
         </p>
+        <div className="flex justify-evenly max-w-[400px]">
+          {game.androidLink ? (
+            <div>
+              <Link href={game.androidLink} target="_blank">
+                <Image
+                  src={google}
+                  alt={'Download on Android'}
+                  className="pt-px"
+                ></Image>
+              </Link>
+            </div>
+          ) : (
+            ''
+          )}
+          {game.iosLink ? (
+            <div>
+              <Link href={game.iosLink} target="_blank">
+                <Image src={apple} alt={'Download on IOS'}></Image>
+              </Link>
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
       <div
         ref={gameView}
@@ -76,7 +104,6 @@ export default function Page() {
               style={{ maxWidth: game.width, maxHeight: game.height }}
               scrolling="no"
               id="heihei-game"
-              allowTransparency
               frameBorder={0}
             ></iframe>
             <div
