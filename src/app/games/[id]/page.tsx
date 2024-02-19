@@ -50,10 +50,14 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-row justify-evenly gap-10">
-      <div className="space-y-6 min-w-[400px] w-[400px] h-full">
-        <h1 className="text-5xl text-green font-semibold">{game.name}</h1>
-        <p className="text-xl whitespace-pre-line">{game.description}</p>
+    <div className="flex flex-col-reverse xl:flex-row justify-evenly gap-10">
+      <div className="space-y-6 xl:min-w-[400px] lg:w-[400px] h-full">
+        <h1 className="sm:text-5xl text-4xl text-green font-semibold">
+          {game.name}
+        </h1>
+        <p className="sm:text-xl text-lg whitespace-pre-line">
+          {game.description}
+        </p>
       </div>
       <div
         ref={gameView}
