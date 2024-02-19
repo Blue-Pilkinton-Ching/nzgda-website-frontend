@@ -8,6 +8,7 @@ export default function Page({ params }: { params: { name: string } }) {
   const [game, setGame] = useState<Game | null>()
   const [error, setError] = useState('')
   const gameView = useRef<HTMLIFrameElement>(null)
+  const [isFullscreen, setFullscreen] = useState(false)
 
   useEffect(() => {
     getData()
@@ -65,6 +66,8 @@ export default function Page({ params }: { params: { name: string } }) {
               style={{ maxWidth: game.width, maxHeight: game.height }}
               scrolling="no"
               id="heihei-game"
+              allowTransparency
+              frameBorder={0}
             ></iframe>
             <div
               style={{ maxWidth: game.width }}
@@ -72,6 +75,15 @@ export default function Page({ params }: { params: { name: string } }) {
             >
               <button
                 onClick={() => {
+                  setFullscreen((old) => {
+                    if (old) {
+                      document.exitFullscreen()
+                    } else {
+                      gameView.current?.requestFullscreen()
+                    }
+                    return !old
+                  })
+
                   gameView.current?.requestFullscreen()
                 }}
                 className="flex bg-green h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
@@ -85,7 +97,9 @@ export default function Page({ params }: { params: { name: string } }) {
                 >
                   <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path>
                 </svg>
-                <p className="font-semibold text-white pt-0.5 ">FULLSCREEN</p>
+                <p className="font-semibold text-white pt-0.5 ">
+                  {isFullscreen ? 'EXIT' : 'FULLSCREEN'}
+                </p>
               </button>
             </div>
           </>
