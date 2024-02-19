@@ -62,7 +62,7 @@ async function Games() {
 
           return (
             <Link key={index} href={`/${element.id}${encodeObjToURI(element)}`}>
-              <div className="max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-100">
+              <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-100">
                 <Image
                   src={thumbnail}
                   alt={element.name}
