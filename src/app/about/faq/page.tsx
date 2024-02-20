@@ -7,6 +7,7 @@ export default function Page() {
   return (
     <>
       <About>
+        <br />
         <H1>HELP & FAQs</H1>
         <br />
         <br />
