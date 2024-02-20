@@ -1,17 +1,17 @@
+import React from 'react'
 import H1 from '../H1'
 import H2 from '../H2'
 import P from '../P'
+import About from '../about'
 
 export default function Page() {
   return (
-    <div className="sm:w-[80%] lg:w-[700px] mx-auto">
+    <About>
       <br />
       <H1>The Who, What and Why</H1>
       <br />
       <br />
-
       <H2>Who is HEIHEI?</H2>
-
       <P>
         HEIHEI is brought to you by a mighty tag team duo of NZ on Air and TVNZ,
         who both recognise the importance of embracing our cultural identity and
@@ -54,6 +54,6 @@ export default function Page() {
         down and enjoy HEIHEI: a reliable place to satisfy your child’s hunger
         for quality digital screen entertainment.
       </P>
-    </div>
+    </About>
   )
 }
