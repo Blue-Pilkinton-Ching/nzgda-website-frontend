@@ -25,4 +25,4 @@ Inside .env file, you should have a GOOGLE_APPLICATION_CREDENTIALS key that poin
 
 This .json credential can be generated from the firebase console
 
-GOOGLE_APPLICATION_CREDENTIALS="./firebase.json"
+`GOOGLE_APPLICATION_CREDENTIALS="./firebase.json"`
