@@ -11,7 +11,7 @@ export default function Page() {
         <p className="inline-block">The Who, What, & Why</p>
         <br />
       </Link>
-      <Link href={'/about/help'} className={classes}>
+      <Link href={'/about/faq'} className={classes}>
         <p className="inline-block">Help & FAQ</p>
         <br />
       </Link>

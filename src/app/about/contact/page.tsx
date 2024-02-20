@@ -8,8 +8,8 @@ export default function Page() {
     <>
       <About>
         <H1>Contact Us</H1>
+        <br />
         <H2>Want to get in touch?</H2>
-
         <P>
           Email Us heihei@tvnz.co.nz We always love hearing from our wonderful
           community, but if you have a question make sure to check out Help &

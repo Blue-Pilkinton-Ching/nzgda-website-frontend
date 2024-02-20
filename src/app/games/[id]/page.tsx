@@ -61,14 +61,14 @@ export default function Page() {
   return (
     <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-10 *:max-w-[800px] *:xl:max-w-none h-[calc(100vh-80px)]">
       <div className="space-y-6 xl:min-w-[400px] xl:w-[400px] h-full flex justify-center flex-col">
-        <h1 className="sm:text-5xl inline text-4xl text-green font-semibold text-wrap">
+        <h1 className="sm:text-5xl text-4xl text-green font-semibold text-wrap flex items-center">
           <button
             onClick={() => {
               router.push('/games')
             }}
-            className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12"
+            className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12 flex items-center mr-5"
           >
-            <Image src={back} alt={'back'} className="w-11 mr-5"></Image>
+            <Image src={back} alt={'back'} className="w-12"></Image>
           </button>
           {game.name}
         </h1>
