@@ -8,6 +8,8 @@ export default function Page() {
     <About>
       <br />
       <H1>Privacy & Safety</H1>
+      <br />
+      <br />
       <H2>HOUSE RULES</H2>
       <P>
         Like anything, there are a few rules around using our websites and apps.
