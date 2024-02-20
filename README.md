@@ -10,8 +10,6 @@ npm run dev
 
 Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
 
-All react components and important code is stored inside src/app
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
@@ -20,3 +18,11 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 Developed by [http://www.bluepc.me](Blue Pilkinton-Ching)
+
+## Secrets
+
+Inside .env file, you should have a GOOGLE_APPLICATION_CREDENTIALS key that points to `firebase.json`, which contains credentials to initilize Firebase Admin SDK.
+
+This .json credential can be generated from the firebase console
+
+GOOGLE_APPLICATION_CREDENTIALS="./firebase.json"
