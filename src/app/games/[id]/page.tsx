@@ -25,9 +25,15 @@ export default function Page() {
   const params = useParams<{ id: string }>()
 
   useEffect(() => {
+    document.addEventListener('fullscreenchange', onFullscreenChange)
+
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  function onFullscreenChange() {
+    setFullscreen(document.fullscreenElement != null)
+  }
 
   async function getData() {
     const res: Response = await fetch(
