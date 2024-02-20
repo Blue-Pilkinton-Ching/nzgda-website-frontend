@@ -59,7 +59,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-10 *:max-w-[800px] *:xl:max-w-none h-[calc(100vh-80px)]">
+    <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-10 *:max-w-[800px] *:xl:max-w-none min-h-[calc(100vh-80px)]">
       <div className="space-y-6 xl:min-w-[400px] xl:w-[400px] h-full flex justify-center flex-col">
         <h1 className="sm:text-5xl text-4xl text-green font-semibold text-wrap flex items-center">
           <Link
