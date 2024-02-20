@@ -11,9 +11,7 @@ export default function Background({
   return (
     <div className="w-full min-h-dvh flex-col flex justify-between">
       <Header />
-      <main className="text-center mx-auto text-red sm:w-[400px] w-[90%]">
-        {children}
-      </main>
+      <main className="text-center mx-auto text-red w-[90%]">{children}</main>
       <Footer />
     </div>
   )

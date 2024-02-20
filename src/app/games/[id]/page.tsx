@@ -11,11 +11,16 @@ import Link from 'next/link'
 import google from '../../../../public/images/google-badge.svg'
 import apple from '../../../../public/images/apple-badge.svg'
 
+import back from '../../../../public/images/back.svg'
+import { useRouter } from 'next/navigation'
+
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
   const [error, setError] = useState('')
   const gameView = useRef<HTMLIFrameElement>(null)
   const [isFullscreen, setFullscreen] = useState(false)
+
+  const router = useRouter()
 
   const params = useParams<{ id: string }>()
 
@@ -56,7 +61,15 @@ export default function Page() {
   return (
     <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-10 *:max-w-[800px] *:xl:max-w-none h-[calc(100vh-80px)]">
       <div className="space-y-6 xl:min-w-[400px] xl:w-[400px] h-full flex justify-center flex-col">
-        <h1 className="sm:text-5xl text-4xl text-green font-semibold">
+        <h1 className="sm:text-5xl inline text-4xl text-green font-semibold text-wrap">
+          <button
+            onClick={() => {
+              router.push('/games')
+            }}
+            className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12"
+          >
+            <Image src={back} alt={'back'} className="w-11 mr-5"></Image>
+          </button>
           {game.name}
         </h1>
         <br />
