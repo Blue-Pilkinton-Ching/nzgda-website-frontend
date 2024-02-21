@@ -66,7 +66,7 @@ async function Games() {
 
           return (
             <Link key={index} href={`/games/${element.id}`}>
-              <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-100">
+              <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-95">
                 <Image
                   src={thumbnail}
                   alt={element.name}

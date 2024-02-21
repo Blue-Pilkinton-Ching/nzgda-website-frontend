@@ -2,6 +2,7 @@
 
 import {
   useAuthState,
+  useSendPasswordResetEmail,
   useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth'
 import Background from '../(components)/background'
@@ -9,7 +10,7 @@ import Email from '../(components)/email'
 import Password from '../(components)/password'
 import Submit from '../(components)/submit'
 import { getAuth } from 'firebase/auth'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState, MouseEvent } from 'react'
 
 import '../(utils)/firebase'
 import { useRouter } from 'next/navigation'
@@ -98,8 +99,17 @@ export default function Page() {
           >
             <Email />
             <Password confirm={false} />
-            <Submit isLogin />
+            <div className="flex justify-center gap-3">
+              <Submit text={'Login'} />
+              <Button inverted onClick={() => router.push('/register')}>
+                Go to register
+              </Button>
+            </div>
           </form>
+          <br />
+          <Button onClick={() => router.push('/reset-password')} inverted>
+            Forgot Password?
+          </Button>
         </>
       )}
     </Background>

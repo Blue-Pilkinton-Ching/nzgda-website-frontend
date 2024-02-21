@@ -71,13 +71,15 @@ export default function Page() {
   function onSendNewEmail(event: MouseEvent<HTMLButtonElement>) {
     const button = event.currentTarget
 
-    button.disabled = true
+    if (!button.disabled) {
+      button.disabled = true
 
-    setTimeout(() => {
-      button.disabled = false
-    }, 70000)
+      setTimeout(() => {
+        button.disabled = false
+      }, 70000)
 
-    sendEmailVerification()
+      sendEmailVerification()
+    }
   }
 
   useEffect(() => {
@@ -182,12 +184,17 @@ export default function Page() {
           <form
             action={undefined}
             onSubmit={onFormSubmit}
-            className="flex flex-col max-w-[300px] mx-auto"
+            className="flex flex-col max-w-[300px] mx-auto mb-3"
           >
             <Email />
             <Password confirm={false} />
             <Password confirm />
-            <Submit isLogin={false} />
+            <div className="flex justify-center gap-3">
+              <Submit text={'Register'} />
+              <Button inverted onClick={() => router.push('/login')}>
+                Go to Login
+              </Button>
+            </div>
           </form>
         </>
       )}
