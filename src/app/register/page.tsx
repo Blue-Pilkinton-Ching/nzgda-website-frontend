@@ -6,6 +6,8 @@ import Email from '../(components)/email'
 import Password from '../(components)/password'
 import Submit from '../(components)/submit'
 
+import { MouseEvent } from 'react'
+
 import '../(utils)/firebase'
 
 import * as auth from 'firebase/auth'
@@ -13,21 +15,27 @@ import * as auth from 'firebase/auth'
 import {
   useAuthState,
   useCreateUserWithEmailAndPassword,
+  useSendEmailVerification,
 } from 'react-firebase-hooks/auth'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function Page() {
   const [textError, setTextError] = useState('')
-
-  const [user] = useAuthState(auth.getAuth())
-
+  const [user, userLoading, userError] = useAuthState(auth.getAuth())
   const [returnMessage, setReturnMessage] = useState('')
+  const [verified, setVerified] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const [sendEmailVerification, verifyLoading, verifyError] =
+    useSendEmailVerification(auth.getAuth())
 
   const [
     createUserWithEmailAndPassword,
     createUser,
     createLoading,
     createError,
-  ] = useCreateUserWithEmailAndPassword(auth.getAuth())
+  ] = useCreateUserWithEmailAndPassword(auth.getAuth(), {})
 
   async function onFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -49,32 +57,126 @@ export default function Page() {
       })
     }
 
-    await createUserWithEmailAndPassword(inputs[0].value, inputs[1].value)
+    const newUserCredential = await createUserWithEmailAndPassword(
+      inputs[0].value,
+      inputs[1].value
+    )
 
-    if (createUser) {
-      await auth.sendEmailVerification(createUser.user)
+    if (newUserCredential && newUserCredential.user) {
+      sendEmailVerification()
     }
   }
 
-  if (createLoading && returnMessage !== `Creating account...`) {
-    setReturnMessage(`Creating account...`)
+  function onSendNewEmail(event: MouseEvent<HTMLButtonElement>) {
+    const button = event.currentTarget
+
+    button.disabled = true
+
+    setTimeout(() => {
+      button.disabled = false
+    }, 70000)
+
+    sendEmailVerification()
   }
 
-  if (
-    createError &&
-    returnMessage !==
-      `The was an error creating your account. Check the console for details.`
-  ) {
-    console.error(createError)
-    setReturnMessage(
-      `The was an error creating your account. Check the console for details.`
-    )
-  }
+  useEffect(() => {
+    const checkEmailVerified = async () => {
+      if (user) {
+        await user.reload() // This reloads the user's profile from Firebase
+        if (user.emailVerified) {
+          setVerified(true)
+          clearInterval(interval)
+        }
+      }
+    }
+
+    const interval = setInterval(checkEmailVerified, 5000) // Check every 5 seconds
+
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
+
+  //   useEffect(() => {
+  //     if (userLoading) {
+  //       setReturnMessage(`Signing In...`)
+  //     }
+  //   }, [userLoading])
+
+  useEffect(() => {
+    if (userError) {
+      console.error(`Failed to sign in`)
+      setReturnMessage(`Failed to sign in`)
+    }
+  }, [userError])
+
+  useEffect(() => {
+    if (createLoading) {
+      setReturnMessage(`Creating account...`)
+    }
+  }, [createLoading])
+
+  useEffect(() => {
+    if (createError) {
+      console.error(createError)
+      setReturnMessage(
+        `The was an error creating your account. Check the console for details.
+      ${createError.message}`
+      )
+    }
+  }, [createError])
+
+  useEffect(() => {
+    if (verifyLoading) {
+      setReturnMessage('Sending Verification Email...')
+    }
+  }, [verifyLoading])
+
+  useEffect(() => {
+    if (verifyError) {
+      console.log(verifyError)
+      setReturnMessage(`Sending Verification Email Failed. Check the console for details.
+        ${verifyError.message}`)
+    }
+  }, [verifyError])
 
   return (
     <Background>
-      {returnMessage ? (
-        <p className="text-2xl">{returnMessage}</p>
+      {user ? (
+        verified ? (
+          <>
+            <h1 className="text-4xl font-bold">Registration complete!</h1>
+            <br />
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="w-43 p-3 rounded-xl shadow-md bg-red text-white hover:scale-105 active:scale-95 duration-100 disabled:scale-100 disabled:saturate-0 disabled:contrast-75"
+            >
+              Go to Dashboard
+            </button>
+          </>
+        ) : (
+          <div className="max-w-[400px] mx-auto space-y-1">
+            <h1 className="text-4xl font-bold">You&apos;re almost there!</h1>
+            <br />
+            <h2 className="text-lg">We sent an email to</h2>
+            <h3 className="text-lg font-semibold">{user.email}</h3>
+            <br />
+            <p>
+              Just click on the link sent inside the email to complete your
+              registration. If you don&apos;t see it, you may need to
+              <b> check your spam </b>
+              folder.
+            </p>
+            <br />
+            <button
+              onClick={onSendNewEmail}
+              className="w-43 p-3 rounded-xl shadow-md bg-red text-white hover:scale-105 active:scale-95 duration-100 disabled:scale-100 disabled:saturate-0 disabled:contrast-75"
+            >
+              Resend Verification Email
+            </button>
+          </div>
+        )
+      ) : returnMessage ? (
+        <p className="text-2xl max-w-[800px] mx-auto">{returnMessage}</p>
       ) : (
         <>
           <p className="mb-3">{textError}</p>
