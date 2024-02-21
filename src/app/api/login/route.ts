@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 
 import { config } from 'dotenv'
 
-import admin from '../../../utils/firebase'
+import admin from '../../../utils/firebase-admin'
 
 config()
 

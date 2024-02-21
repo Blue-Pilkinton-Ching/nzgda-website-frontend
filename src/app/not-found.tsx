@@ -1,4 +1,4 @@
-import Background from './background'
+import Background from './(components)/background'
 
 export default function NotFound() {
   return (

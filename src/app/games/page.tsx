@@ -11,7 +11,7 @@ import bannerBottom from '../../../public/images/footer-side.png'
 import tvnz from '../../../public/images/tvnz-logo.png'
 import nzonair from '../../../public/images/nzonair-logo.png'
 import { Suspense } from 'react'
-import Footer from '../footer'
+import Footer from '../(components)/footer'
 
 export default function Page() {
   return (

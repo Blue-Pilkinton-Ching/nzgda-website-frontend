@@ -1,8 +1,8 @@
 import React from 'react'
 
 import Image from 'next/image'
-import banner from '../../public/images/banner-split.png'
-import logo from '../../public/images/heihei-logo.png'
+import banner from '../../../public/images/banner-split.png'
+import logo from '../../../public/images/heihei-logo.png'
 import Link from 'next/link'
 
 export default function Header() {

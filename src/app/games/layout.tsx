@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import background from '../../../public/images/game-background.png'
-import Footer from '../footer'
+import Footer from '../(components)/footer'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Background from '../background'
+import Background from '../(components)/background'
 
 const classes =
   'font-bold text-3xl hover:*:underline hover:brightness-75 duration-100 *:mb-4 '
