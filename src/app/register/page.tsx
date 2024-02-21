@@ -55,6 +55,7 @@ export default function Page() {
           ? `Passwords still don't match`
           : `Passwords don't match`
       })
+      return
     }
 
     const newUserCredential = await createUserWithEmailAndPassword(
@@ -78,6 +79,13 @@ export default function Page() {
 
     sendEmailVerification()
   }
+
+  useEffect(() => {
+    if (user && user.emailVerified) {
+      router.push('/dashboard')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (user?.emailVerified) {
@@ -137,12 +145,9 @@ export default function Page() {
           <>
             <h1 className="text-4xl font-bold">Registration complete!</h1>
             <br />
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="w-43 p-3 rounded-xl shadow-md font-semibold bg-red text-white hover:scale-105 active:scale-95 duration-100 disabled:scale-100 disabled:saturate-0 disabled:contrast-75"
-            >
+            <Button onClick={() => router.push('/dashboard')}>
               Go to Dashboard
-            </button>
+            </Button>
           </>
         ) : (
           <div className="max-w-[400px] mx-auto space-y-1">
