@@ -111,13 +111,17 @@ export default function Page() {
   useEffect(() => {
     if (createLoading) {
       setReturnMessage(`Creating account...`)
+    } else if (returnMessage === 'Creating account...') {
+      setReturnMessage('')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createLoading])
 
   useEffect(() => {
     if (createError) {
       console.error(createError)
-      setReturnMessage(
+      setReturnMessage('')
+      setTextError(
         `The was an error creating your account. Check the console for details.
       ${createError.message}`
       )
@@ -127,13 +131,17 @@ export default function Page() {
   useEffect(() => {
     if (verifyLoading) {
       setReturnMessage('Sending Verification Email...')
+    } else if (returnMessage === 'Sending Verification Email...') {
+      setReturnMessage('')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [verifyLoading])
 
   useEffect(() => {
     if (verifyError) {
       console.log(verifyError)
-      setReturnMessage(`Sending Verification Email Failed. Check the console for details.
+      setReturnMessage('')
+      setTextError(`Sending Verification Email Failed. Check the console for details.
         ${verifyError.message}`)
     }
   }, [verifyError])

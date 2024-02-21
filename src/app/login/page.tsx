@@ -1,6 +1,9 @@
 'use client'
 
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import {
+  useAuthState,
+  useSignInWithEmailAndPassword,
+} from 'react-firebase-hooks/auth'
 import Background from '../(components)/background'
 import Email from '../(components)/email'
 import Password from '../(components)/password'
@@ -15,6 +18,8 @@ import Button from '../(components)/button'
 export default function Page() {
   const [signInWithEmailAndPassword, signInUser, signInLoading, signInError] =
     useSignInWithEmailAndPassword(getAuth())
+
+  const [user, userLoading, userError] = useAuthState(getAuth())
 
   const [returnMessage, setReturnMessage] = useState('')
   const [textError, setTextError] = useState('')
@@ -34,25 +39,47 @@ export default function Page() {
   }
 
   useEffect(() => {
-    if (signInError && returnMessage) {
-      setReturnMessage(``)
-      return
+    if (user && user.emailVerified) {
+      router.push('/dashboard')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  useEffect(() => {
     if (signInLoading) {
       setReturnMessage(`Signing in...`)
+    } else if (returnMessage === `Signing in...`) {
+      setReturnMessage(``)
     }
-  }, [signInLoading, signInError, returnMessage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signInLoading])
 
   useEffect(() => {
     if (signInError) {
-      setTextError(`Error Signing in: ${signInError?.message}`)
+      setReturnMessage(``)
+      setTextError(`Error Signing in user: ${signInError?.message}`)
     }
   }, [signInError])
 
+  useEffect(() => {
+    if (userLoading) {
+      setReturnMessage(`User loading...`)
+    } else if (returnMessage === `User loading...`) {
+      setReturnMessage(``)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userLoading])
+
+  useEffect(() => {
+    if (userError) {
+      setReturnMessage(``)
+      setTextError(`Error loading user: ${userError?.message}`)
+    }
+  }, [userError])
+
   return (
     <Background>
-      {signInUser ? (
+      {user ? (
         <>
           <h1 className="text-4xl font-bold">Sign in complete!</h1>
           <br />
