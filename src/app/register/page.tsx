@@ -18,14 +18,14 @@ import {
   useSendEmailVerification,
 } from 'react-firebase-hooks/auth'
 import { usePathname, useRouter } from 'next/navigation'
+import Button from '../(components)/button'
 
 export default function Page() {
   const [textError, setTextError] = useState('')
-  const [user, userLoading, userError] = useAuthState(auth.getAuth())
+  const [user] = useAuthState(auth.getAuth())
   const [returnMessage, setReturnMessage] = useState('')
   const [verified, setVerified] = useState(false)
   const router = useRouter()
-  const pathname = usePathname()
 
   const [sendEmailVerification, verifyLoading, verifyError] =
     useSendEmailVerification(auth.getAuth())
@@ -80,6 +80,10 @@ export default function Page() {
   }
 
   useEffect(() => {
+    if (user?.emailVerified) {
+      setVerified(true)
+    }
+
     const checkEmailVerified = async () => {
       if (user) {
         await user.reload() // This reloads the user's profile from Firebase
@@ -95,19 +99,6 @@ export default function Page() {
     return () => clearInterval(interval)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
-
-  //   useEffect(() => {
-  //     if (userLoading) {
-  //       setReturnMessage(`Signing In...`)
-  //     }
-  //   }, [userLoading])
-
-  useEffect(() => {
-    if (userError) {
-      console.error(`Failed to sign in`)
-      setReturnMessage(`Failed to sign in`)
-    }
-  }, [userError])
 
   useEffect(() => {
     if (createLoading) {
@@ -148,7 +139,7 @@ export default function Page() {
             <br />
             <button
               onClick={() => router.push('/dashboard')}
-              className="w-43 p-3 rounded-xl shadow-md bg-red text-white hover:scale-105 active:scale-95 duration-100 disabled:scale-100 disabled:saturate-0 disabled:contrast-75"
+              className="w-43 p-3 rounded-xl shadow-md font-semibold bg-red text-white hover:scale-105 active:scale-95 duration-100 disabled:scale-100 disabled:saturate-0 disabled:contrast-75"
             >
               Go to Dashboard
             </button>
@@ -167,12 +158,7 @@ export default function Page() {
               folder.
             </p>
             <br />
-            <button
-              onClick={onSendNewEmail}
-              className="w-43 p-3 rounded-xl shadow-md bg-red text-white hover:scale-105 active:scale-95 duration-100 disabled:scale-100 disabled:saturate-0 disabled:contrast-75"
-            >
-              Resend Verification Email
-            </button>
+            <Button onClick={onSendNewEmail}> Resend Verification Email</Button>
           </div>
         )
       ) : returnMessage ? (
