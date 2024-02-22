@@ -1,29 +1,32 @@
-import { NextRequest } from 'next/server'
-
-import { config } from 'dotenv'
-
 import admin from '../../../utils/firebase-admin'
-import { headers } from 'next/headers'
+import * as fs from 'firebase/firestore'
+import { config } from 'dotenv'
+import { NextRequest } from 'next/server'
 
 config()
 
 export async function GET(req: NextRequest) {
-  const headersList = headers()
+  const authHeader = req.headers.get('Authorization')
 
-  const auth = headersList.get('Authorization')
-
-  if (!auth) {
+  if (!authHeader) {
     return new Response('Authorization Header was not present', { status: 401 })
   }
 
-  const token = auth.split('Bearer ')[1]
+  const token = authHeader.split('Bearer ')[1]
 
   try {
-    const verification = await admin.auth().verifyIdToken(token)
-    const body = JSON.stringify(verification)
-
-    return new Response(body, { status: 200 })
+    await admin.auth().verifyIdToken(token)
   } catch (error) {
+    console.error(error)
     return new Response('Error Verifying Token', { status: 401 })
   }
+
+  const query = await admin.firestore().collection('users').limit(50).get()
+
+  const data = query.docs.map((doc) => doc.data())
+
+  return new Response(JSON.stringify(data), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  })
 }

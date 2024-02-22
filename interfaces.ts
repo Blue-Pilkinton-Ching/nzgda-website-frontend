@@ -40,3 +40,5 @@ export interface Game {
 export interface AuthHeader {
   authorization: IncomingHttpHeaders
 }
+
+export interface DashboardData {}

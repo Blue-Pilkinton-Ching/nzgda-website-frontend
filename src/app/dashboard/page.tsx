@@ -4,7 +4,7 @@ import { useAuthState, useSignOut } from 'react-firebase-hooks/auth'
 import Background from '../(components)/background'
 import Button from '../(components)/button'
 import { User, getAuth } from 'firebase/auth'
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense, use, useEffect, useState } from 'react'
 
 import '../(utils)/firebase'
 import { useRouter } from 'next/navigation'
@@ -13,10 +13,10 @@ import NoAuth from './noauth'
 
 export default function Page() {
   const [user, userLoading, userError] = useAuthState(getAuth())
-
   const [signOut, loading, signOutError] = useSignOut(getAuth())
-
   const [dashboard, setDashboard] = useState<React.ReactNode>()
+
+  const [uid, setUID] = useState('')
 
   const router = useRouter()
 
@@ -35,12 +35,19 @@ export default function Page() {
   }, [userError?.message, userError])
 
   useEffect(() => {
-    if (user) {
+    if (uid && user) {
       if (user.emailVerified) {
         getDashboardLoggedIn(user)
       } else {
         router.push('/register')
       }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uid])
+
+  useEffect(() => {
+    if (user && user.uid !== uid) {
+      setUID(user.uid)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
@@ -55,11 +62,8 @@ export default function Page() {
     })
 
     if (res.ok) {
-      const body = await res.json()
-
-      console.log(body)
       // You are an admin
-      setDashboard(<Dashboard />)
+      setDashboard(<Dashboard data={await res.json()} />)
     } else if (res.status === 401) {
       // You need to be an admin
       setDashboard(<NoAuth />)
