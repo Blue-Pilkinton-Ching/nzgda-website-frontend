@@ -3,16 +3,20 @@
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth'
 import Background from '../(components)/background'
 import Button from '../(components)/button'
-import { getAuth } from 'firebase/auth'
-import { Suspense, useEffect } from 'react'
+import { User, getAuth } from 'firebase/auth'
+import React, { Suspense, useEffect, useState } from 'react'
 
 import '../(utils)/firebase'
 import { useRouter } from 'next/navigation'
+import Dashboard from './dashboard'
+import NoAuth from './noauth'
 
 export default function Page() {
   const [user, userLoading, userError] = useAuthState(getAuth())
 
   const [signOut, loading, signOutError] = useSignOut(getAuth())
+
+  const [dashboard, setDashboard] = useState<React.ReactNode>()
 
   const router = useRouter()
 
@@ -30,11 +34,49 @@ export default function Page() {
     }
   }, [userError?.message, userError])
 
+  useEffect(() => {
+    if (user) {
+      if (user.emailVerified) {
+        getDashboardLoggedIn(user)
+      } else {
+        router.push('/register')
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
+
+  async function getDashboardLoggedIn(user: User) {
+    const res = await fetch('/api/dashboard', {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + (await user.getIdToken(true)),
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (res.ok) {
+      const body = await res.json()
+
+      console.log(body)
+      // You are an admin
+      setDashboard(<Dashboard />)
+    } else if (res.status === 401) {
+      // You need to be an admin
+      setDashboard(<NoAuth />)
+    } else {
+      // Server / Network Error
+      console.error(res)
+      alert(
+        'Something went wrong fetching the dashboard. Please try again later.'
+      )
+    }
+  }
+
   return (
     <Background>
       {user ? (
         <>
-          <Suspense fallback={<></>}></Suspense>
+          {dashboard}
           <Button onClick={signOut}>Logout</Button>
         </>
       ) : (

@@ -1,3 +1,5 @@
+import { IncomingHttpHeaders } from 'http'
+
 export interface GamesList {
   total: number
   limit: number
@@ -33,4 +35,8 @@ export interface Game {
   parent: number
   createdAt?: string
   updatedAt?: string
+}
+
+export interface AuthHeader {
+  authorization: IncomingHttpHeaders
 }
