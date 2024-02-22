@@ -53,15 +53,6 @@ export default function ResetPassword() {
   }
 
   useEffect(() => {
-    if (passwordLoading) {
-      setReturnResult('Sending Reset Email...')
-    } else if (returnMessage === 'Sending Reset Email...') {
-      setReturnResult('')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [passwordLoading])
-
-  useEffect(() => {
     if (passwordError) {
       console.log(passwordError)
       setReturnResult('')
