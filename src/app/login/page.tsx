@@ -39,6 +39,8 @@ export default function Page() {
     await signInWithEmailAndPassword(inputs[0].value, inputs[1].value)
   }
 
+  useEffect(() => {}, [user])
+
   useEffect(() => {
     if (user && user.emailVerified) {
       router.push('/dashboard')
@@ -82,7 +84,7 @@ export default function Page() {
     <Background>
       {user ? (
         <>
-          <h1 className="text-4xl font-bold">Sign in complete!</h1>
+          <h1 className="text-4xl font-bold"> You are signed in!</h1>
           <br />
           <Button onClick={() => router.push('/dashboard')}>
             Go to Dashboard

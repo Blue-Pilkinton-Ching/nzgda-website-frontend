@@ -83,6 +83,10 @@ export default function ResetPassword() {
           <Button onClick={onSendPasswordResetEmail}>
             Resend Password reset Email
           </Button>
+          <br />
+          <Button inverted onClick={() => router.push('/dashboard')}>
+            Continue to Dashboard
+          </Button>
         </div>
       ) : (
         <>
