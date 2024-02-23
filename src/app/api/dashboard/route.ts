@@ -1,7 +1,8 @@
 import admin from '../../../utils/firebase-admin'
-import * as fs from 'firebase/firestore'
 import { config } from 'dotenv'
-import { NextRequest } from 'next/server'
+import { NextRequest, userAgent } from 'next/server'
+import { AdminData } from '../../../../interfaces'
+import { DecodedIdToken } from 'firebase-admin/auth'
 
 config()
 
@@ -12,21 +13,37 @@ export async function GET(req: NextRequest) {
     return new Response('Authorization Header was not present', { status: 401 })
   }
 
-  const token = authHeader.split('Bearer ')[1]
+  let credential: DecodedIdToken
 
   try {
-    await admin.auth().verifyIdToken(token)
+    credential = await admin
+      .auth()
+      .verifyIdToken(authHeader.split('Bearer ')[1])
   } catch (error) {
     console.error(error)
     return new Response('Error Verifying Token', { status: 401 })
   }
 
-  const query = await admin.firestore().collection('users').limit(50).get()
+  const adminData = (
+    await admin.firestore().doc('users/privileged').get()
+  ).data() as AdminData
 
-  const data = query.docs.map((doc) => doc.data())
+  if (adminData == undefined) {
+    console.error('adminData is undefined')
+    return new Response('', { status: 500 })
+  }
 
-  return new Response(JSON.stringify(data), {
-    status: 200,
+  const a = adminData.admins.find((x) => x.uid === credential.uid)
+
+  if (a) {
+    return new Response('', {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
+  return new Response('Unauthorized', {
+    status: 401,
     headers: { 'Content-Type': 'application/json' },
   })
 }

@@ -8,7 +8,6 @@ if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.applicationDefault(),
     })
-    console.log('init')
   } catch (error) {
     console.error('Firebase admin initialization error', error)
   }

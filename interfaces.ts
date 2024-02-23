@@ -42,3 +42,12 @@ export interface AuthHeader {
 }
 
 export interface DashboardData {}
+
+export interface AdminData {
+  admins: Admin[]
+}
+
+export interface Admin {
+  email: string
+  uid: string
+}
