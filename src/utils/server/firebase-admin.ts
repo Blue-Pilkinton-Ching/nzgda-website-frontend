@@ -12,5 +12,3 @@ if (!admin.apps.length) {
     console.error('Firebase admin initialization error', error)
   }
 }
-
-export default admin

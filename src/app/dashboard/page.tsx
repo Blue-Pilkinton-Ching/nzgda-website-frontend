@@ -6,7 +6,7 @@ import Button from '../(components)/button'
 import { User, getAuth } from 'firebase/auth'
 import React, { Suspense, use, useEffect, useState } from 'react'
 
-import '../../utils/firebase'
+import '../../utils/client/firebase'
 import { useRouter } from 'next/navigation'
 import Dashboard from './dashboard'
 import NoAuth from './noauth'

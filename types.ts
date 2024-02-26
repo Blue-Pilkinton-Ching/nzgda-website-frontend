@@ -51,3 +51,10 @@ export interface Admin {
   email: string
   uid: string
 }
+
+export type UserPrivilege =
+  | 'missing'
+  | 'invalid'
+  | 'error'
+  | 'noprivilege'
+  | 'admin'

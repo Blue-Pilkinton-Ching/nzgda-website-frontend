@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Game, GamesList } from '../../../../interfaces'
+import { Game, GamesList } from '../../../../types'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 

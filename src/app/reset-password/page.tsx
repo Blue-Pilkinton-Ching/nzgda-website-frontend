@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 
-import '../../utils/firebase'
+import '../../utils/client/firebase'
 
 export default function ResetPassword() {
   const router = useRouter()

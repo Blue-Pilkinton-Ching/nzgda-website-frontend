@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 import charactors from '../../../public/images/game-characters.png'
 import logo from '../../../public/images/game-logo.png'
-import { GamesList } from '../../../interfaces'
+import { GamesList } from '../../../types'
 
 import ispy from '../../../public/images/I-Spyportrait.png'
 import Link from 'next/link'

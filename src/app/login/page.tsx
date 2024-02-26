@@ -12,7 +12,7 @@ import Submit from '../(components)/submit'
 import { getAuth } from 'firebase/auth'
 import { FormEvent, useEffect, useState, MouseEvent } from 'react'
 
-import '../../utils/firebase'
+import '../../utils/client/firebase'
 import { useRouter } from 'next/navigation'
 import Button from '../(components)/button'
 
