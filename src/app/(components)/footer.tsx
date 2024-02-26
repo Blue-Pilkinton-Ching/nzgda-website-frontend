@@ -2,9 +2,6 @@ import React from 'react'
 
 import Image from 'next/image'
 import bannerBottom from '../../../public/images/footer-side.png'
-import tvnz from '../../../public/images/tvnz-logo.png'
-import nzonair from '../../../public/images/nzonair-logo.png'
-
 import Link from 'next/link'
 
 export default function Footer() {

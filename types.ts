@@ -1,6 +1,6 @@
 import { IncomingHttpHeaders } from 'http'
 
-export interface GamesList {
+export interface GamesListItem {
   total: number
   limit: number
   skip: number
@@ -58,3 +58,8 @@ export type UserPrivilege =
   | 'error'
   | 'noprivilege'
   | 'admin'
+
+export interface GamesListItem {
+  id: number
+  name: string
+}

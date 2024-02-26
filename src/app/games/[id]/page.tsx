@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Game, GamesList } from '../../../../types'
+import { Game, GamesListItem } from '../../../../types'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
@@ -45,7 +45,7 @@ export default function Page() {
       return
     }
 
-    const data: GamesList = await res.json()
+    const data: GamesListItem = await res.json()
 
     const game = data.data.find((x) => x.id === Number(params.id))
 

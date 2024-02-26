@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import '@/utils/server/init'
 import getPrivilege from '@/utils/server/get-privilege'
-import { Admin, DashboardBody, UserPrivilege } from '../../../../types'
+import {
+  Admin,
+  DashboardBody,
+  GamesListItem,
+  UserPrivilege,
+} from '../../../../types'
 import * as admin from 'firebase-admin'
 
 export async function GET(req: NextRequest) {
@@ -15,18 +20,24 @@ export async function GET(req: NextRequest) {
 
   if (privilege === 'admin') {
     let admins
+    let gameslist
 
     try {
       admins = (
         await admin.firestore().doc('users/privileged').get()
       ).data() as Admin[]
+
+      gameslist = (
+        await admin.firestore().doc(`gameslist/RutbwXO2iXsB01x7js2K`).get()
+      ).data() as { data: GamesListItem[] }
+
       statusCode = 200
     } catch (error) {
       console.error(error)
       statusCode = 500
     }
 
-    body = { admins }
+    body = { admins, gameslist }
   } else {
     statusCode = 401
   }

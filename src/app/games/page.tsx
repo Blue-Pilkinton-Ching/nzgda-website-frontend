@@ -2,16 +2,11 @@ import Image from 'next/image'
 
 import charactors from '../../../public/images/game-characters.png'
 import logo from '../../../public/images/game-logo.png'
-import { GamesList } from '../../../types'
+import { GamesListItem } from '../../../types'
 
 import ispy from '../../../public/images/I-Spyportrait.png'
 import Link from 'next/link'
-
-import bannerBottom from '../../../public/images/footer-side.png'
-import tvnz from '../../../public/images/tvnz-logo.png'
-import nzonair from '../../../public/images/nzonair-logo.png'
 import { Suspense } from 'react'
-import Footer from '../(components)/footer'
 
 export default function Page() {
   return (
@@ -55,7 +50,7 @@ async function Games() {
     return <p className="text-lg">Failed to fetch Games :(</p>
   }
 
-  const data: GamesList = await res.json()
+  const data: GamesListItem = await res.json()
 
   return (
     <>
