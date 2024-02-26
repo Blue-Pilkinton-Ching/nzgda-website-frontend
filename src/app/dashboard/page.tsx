@@ -4,7 +4,7 @@ import { useAuthState, useSignOut } from 'react-firebase-hooks/auth'
 import Background from '../(components)/background'
 import Button from '../(components)/button'
 import { User, getAuth } from 'firebase/auth'
-import React, { Suspense, use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import '../../utils/client/firebase'
 import { useRouter } from 'next/navigation'
@@ -46,6 +46,8 @@ export default function Page() {
   }, [uid])
 
   useEffect(() => {
+    console.log(user)
+
     if (user && user.uid !== uid) {
       setUID(user.uid)
     }

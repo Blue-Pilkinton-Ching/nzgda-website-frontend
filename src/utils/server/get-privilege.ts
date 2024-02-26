@@ -1,14 +1,16 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { DecodedIdToken } from 'firebase-admin/auth'
 import * as admin from 'firebase-admin'
-import { AdminData } from '../../../types'
+import { DashboardBody } from '../../../types'
 
 export default async function getPrivilege(req: NextRequest) {
+  const res = new NextResponse()
+
   const authHeader = req.headers.get('Authorization')
 
   if (!authHeader) {
-    req.headers.append('privilege', 'missing')
-    return req
+    res.headers.append('privilege', 'missing')
+    return res
   }
 
   let credential: DecodedIdToken
@@ -20,27 +22,27 @@ export default async function getPrivilege(req: NextRequest) {
   } catch (error) {
     console.error(error)
 
-    req.headers.append('privilege', 'invalid')
-    return req
+    res.headers.append('privilege', 'invalid')
+    return res
   }
 
   const adminData = (
     await admin.firestore().doc('users/privileged').get()
-  ).data() as AdminData
+  ).data() as DashboardBody
 
   if (adminData == undefined) {
     console.error('adminData is undefined')
-    req.headers.append('privilege', 'error')
-    return req
+    res.headers.append('privilege', 'error')
+    return res
   }
 
   const a = adminData.admins.find((x) => x.uid === credential.uid)
 
   if (a) {
-    req.headers.append('privilege', 'admin')
-    return req
+    res.headers.append('privilege', 'admin')
+    return res
   }
 
-  req.headers.append('privilege', 'noprivilege')
-  return req
+  res.headers.append('privilege', 'noprivilege')
+  return res
 }

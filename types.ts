@@ -43,7 +43,7 @@ export interface AuthHeader {
 
 export interface DashboardData {}
 
-export interface AdminData {
+export interface DashboardBody {
   admins: Admin[]
 }
 
