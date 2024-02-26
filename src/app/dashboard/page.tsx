@@ -4,12 +4,13 @@ import { useAuthState, useSignOut } from 'react-firebase-hooks/auth'
 import Background from '../(components)/background'
 import Button from '../(components)/button'
 import { User, getAuth } from 'firebase/auth'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 
 import '../../utils/client/firebase'
 import { useRouter } from 'next/navigation'
 import Dashboard from './dashboard'
 import NoAuth from './noauth'
+import { UserPrivilege } from '../../../types'
 
 export default function Page() {
   const [user, userLoading, userError] = useAuthState(getAuth())
@@ -37,7 +38,7 @@ export default function Page() {
   useEffect(() => {
     if (uid && user) {
       if (user.emailVerified) {
-        getDashboardLoggedIn(user)
+        fetchDashboardData()
       } else {
         router.push('/register')
       }
@@ -54,14 +55,37 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
-  async function getDashboardLoggedIn(user: User) {
+  async function fetchDashboardData() {
     const res = await fetch('/api/dashboard', {
       method: 'GET',
       headers: {
-        Authorization: 'Bearer ' + (await user.getIdToken(true)),
+        Authorization: 'Bearer ' + (await user?.getIdToken(true)),
         'Content-Type': 'application/json',
       },
     })
+
+    switch (res.headers.get('privilege') as UserPrivilege) {
+      case 'admin':
+        setDashboard(<Dashboard data={await res.json()} />)
+        break
+      case 'invalid':
+        alert('Invalid credential.')
+        break
+      case 'error':
+        alert(
+          'Something went wrong fetching the dashboard. Please try again later.'
+        )
+        break
+      case 'noprivilege':
+        setDashboard(<NoAuth />)
+        break
+      case 'missing':
+        setDashboard(<TryAgain onButtonClick={fetchDashboardData} />)
+        alert(
+          'Something went wrong fetching the dashboard. Please try again later.'
+        )
+        break
+    }
 
     if (res.ok) {
       // You are an admin
@@ -102,4 +126,8 @@ export default function Page() {
       )}
     </Background>
   )
+}
+
+function TryAgain({ onButtonClick }: { onButtonClick: () => void }) {
+  return <Button onClick={onButtonClick}>Try Again</Button>
 }

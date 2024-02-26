@@ -58,18 +58,14 @@ export default function Games() {
       }
     } catch (error) {
       console.error(error)
-      setGames(<p className=" text-green text-3xl">Failed to fetch game :(</p>)
+      setGames(<p className=" text-green text-3xl">Failed to fetch games :(</p>)
     }
   }
 
   return (
     <>
       <br />
-      {games ? (
-        games
-      ) : (
-        <p className="text-green text-3xl">Failed to fetch game :(</p>
-      )}
+      {games ? games : <p className="text-green text-3xl">Fetching Games...</p>}
     </>
   )
 }
