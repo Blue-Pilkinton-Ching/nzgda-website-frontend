@@ -14,7 +14,6 @@ import apple from '../../../../public/images/apple-badge.svg'
 import back from '../../../../public/images/back.svg'
 import { useRouter } from 'next/navigation'
 import * as firestore from 'firebase/firestore'
-import { signIn } from '@/utils/client/init'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
@@ -45,8 +44,6 @@ export default function Page() {
     )
 
     try {
-      await signIn()
-
       const snapshot = await firestore.getDocs(query)
 
       game = snapshot.docs[0].data() as Game
