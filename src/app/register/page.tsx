@@ -8,7 +8,7 @@ import Submit from '../(components)/submit'
 
 import { MouseEvent } from 'react'
 
-import '../(utils)/firebase'
+import '../../utils/firebase'
 
 import * as auth from 'firebase/auth'
 
