@@ -13,14 +13,14 @@ import apple from '../../../../public/images/apple-badge.svg'
 
 import back from '../../../../public/images/back.svg'
 import { useRouter } from 'next/navigation'
+import * as firestore from 'firebase/firestore'
+import { signIn } from '@/utils/client/init'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
   const [error, setError] = useState('')
   const gameView = useRef<HTMLIFrameElement>(null)
   const [isFullscreen, setFullscreen] = useState(false)
-
-  const router = useRouter()
 
   const params = useParams<{ id: string }>()
 
@@ -36,21 +36,24 @@ export default function Page() {
   }
 
   async function getData() {
-    const res: Response = await fetch(
-      'https://heihei-server.gamefroot.com/games/?approved=1&parent=0&%24sort%5BcreatedAt%5D=-1'
+    let game: Game
+
+    const query = firestore.query(
+      firestore.collection(firestore.getFirestore(), 'games'),
+      firestore.where('id', '==', Number(params.id)),
+      firestore.limit(1)
     )
 
-    if (!res.ok) {
-      setError('Failed to fetch Games :(')
+    try {
+      await signIn()
+
+      const snapshot = await firestore.getDocs(query)
+
+      game = snapshot.docs[0].data() as Game
+    } catch (error) {
+      console.error(error)
+      setError('Failed to fetch Game :(')
       return
-    }
-
-    const data: GamesListItem = await res.json()
-
-    const game = data.data.find((x) => x.id === Number(params.id))
-
-    if (!game) {
-      setError(`Couldn't find game :(`)
     }
 
     setGame(game)

@@ -1,5 +1,4 @@
 import * as firebase from 'firebase/app'
-import { getAuth } from 'firebase/auth'
 
 if (!firebase.getApps().length) {
   const firebaseConfig = {
@@ -13,6 +12,4 @@ if (!firebase.getApps().length) {
   }
 
   const app = firebase.initializeApp(firebaseConfig)
-
-  getAuth(app).currentUser?.reload()
 }

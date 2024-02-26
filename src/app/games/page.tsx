@@ -7,6 +7,9 @@ import { GamesListItem } from '../../../types'
 import ispy from '../../../public/images/I-Spyportrait.png'
 import Link from 'next/link'
 import { Suspense } from 'react'
+import { getAuth, signInAnonymously } from 'firebase/auth'
+import * as firestore from 'firebase/firestore'
+import { signIn } from '@/utils/client/init'
 
 export default function Page() {
   return (
@@ -33,7 +36,14 @@ export default function Page() {
       </section>
       <section>
         <h3 className="text-3xl font-bold text-green">Games</h3>
-        <Suspense fallback={<p className="text-lg">Fetching Games...</p>}>
+        <Suspense
+          fallback={
+            <>
+              <br />
+              <p className=" text-green text-3xl">Fetching Games...</p>
+            </>
+          }
+        >
           <Games />
         </Suspense>
       </section>
@@ -42,15 +52,25 @@ export default function Page() {
 }
 
 async function Games() {
-  const res: Response = await fetch(
-    'https://heihei-server.gamefroot.com/games/?approved=1&parent=0&%24sort%5BcreatedAt%5D=-1'
-  )
-
-  if (!res.ok) {
-    return <p className="text-lg">Failed to fetch Games :(</p>
+  let data
+  try {
+    await signIn()
+    data = (
+      await firestore.getDoc(
+        firestore.doc(
+          firestore.getFirestore(),
+          'gameslist/BrHoO8yuD3JdDFo8F2BC'
+        )
+      )
+    ).data() as { data: GamesListItem[] }
+    if (!data) {
+      console.error('Data not on firebase for some reason')
+      throw 'Data not on firebase for some reason'
+    }
+  } catch (error) {
+    console.error(error)
+    return <p className="text-lg">Failed to fetch game :(</p>
   }
-
-  const data: GamesListItem = await res.json()
 
   return (
     <>

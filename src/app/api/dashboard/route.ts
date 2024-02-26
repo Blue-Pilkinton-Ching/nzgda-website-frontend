@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       ).data() as Admin[]
 
       gameslist = (
-        await admin.firestore().doc(`gameslist/RutbwXO2iXsB01x7js2K`).get()
+        await admin.firestore().doc('gameslist/BrHoO8yuD3JdDFo8F2BC').get()
       ).data() as { data: GamesListItem[] }
 
       statusCode = 200

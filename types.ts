@@ -62,4 +62,5 @@ export type UserPrivilege =
 export interface GamesListItem {
   id: number
   name: string
+  thumbnail: string
 }
