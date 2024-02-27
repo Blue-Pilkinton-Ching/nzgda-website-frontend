@@ -71,7 +71,6 @@ export default function Dashboard({
       }),
       headers: {
         Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-        'Content-Type': 'application/json',
       },
     })
 
@@ -201,11 +200,16 @@ export default function Dashboard({
             <Button onClick={exitGame}>Back to games</Button>
           </div>
         </div>
-        <table className={`border-collapse ${gameId ? 'hidden' : 'block'}`}>
+        <table
+          className={`border-collapse ${
+            gameId == undefined ? 'block' : 'hidden'
+          }`}
+        >
           <thead>
             <tr className="*:p-1">
               <th>ID</th>
               <th>Name</th>
+              <th>Edit</th>
               <th>Hide</th>
               <th>Delete</th>
             </tr>
