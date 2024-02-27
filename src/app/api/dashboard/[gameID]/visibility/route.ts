@@ -18,8 +18,6 @@ export async function PATCH(
   const hidden = (await req.json()).hidden as boolean
   const privilege = res.headers.get('privilege') as UserPrivilege
 
-  console.log(hidden)
-
   let body: DashboardBody | {} = {}
   let statusCode = 500
 

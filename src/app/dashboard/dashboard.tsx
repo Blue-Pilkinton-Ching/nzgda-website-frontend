@@ -152,13 +152,15 @@ export default function Dashboard({
   async function onToggleVisibility(listItem: GameListItem) {
     const d = dashboardData as DashboardBody
 
+    const shouldHide = !listItem.hidden
+
     setDashboardData({
       ...d,
       gameslist: {
         ...d.gameslist,
         data: d.gameslist.data.map((x) => {
           if (x.id === listItem.id) {
-            x.hidden = !listItem.hidden
+            x.hidden = shouldHide
           }
           return x
         }),
@@ -166,7 +168,7 @@ export default function Dashboard({
     })
 
     const res = await fetch(`/api/dashboard/${listItem.id}/visibility`, {
-      body: JSON.stringify({ hidden: !listItem.hidden }),
+      body: JSON.stringify({ hidden: shouldHide }),
       method: 'PATCH',
       headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
     })
@@ -178,7 +180,7 @@ export default function Dashboard({
         alert('You are Unauthorized to make that action')
         return
       case 500:
-        alert('An error occured while saving the game')
+        alert('An error occured while setting game visibility')
         return
     }
   }
