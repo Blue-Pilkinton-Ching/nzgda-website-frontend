@@ -1,5 +1,5 @@
 'use client'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { DashboardBody as DashboardData, Game } from '../../../types'
 import * as firestore from 'firebase/firestore'
 import TextInput from './text-input'
@@ -7,7 +7,13 @@ import Button from '../(components)/button'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 
-export default function Dashboard({ data }: { data: DashboardData }) {
+export default function Dashboard({
+  data,
+  invalidateData,
+}: {
+  data: DashboardData
+  invalidateData: () => void
+}) {
   const [gameId, setGameID] = useState<number>()
 
   const [user] = useAuthState(getAuth())
@@ -71,7 +77,7 @@ export default function Dashboard({ data }: { data: DashboardData }) {
 
     switch (res.status) {
       case 200:
-        alert('Game saved')
+        exitGame()
         return
       case 401:
         alert('You are Unauthorized to make that action')
@@ -93,7 +99,10 @@ export default function Dashboard({ data }: { data: DashboardData }) {
   }
 
   async function exitGame() {
+    invalidateData()
+
     setGameID(undefined)
+    setGame(undefined)
   }
 
   function onInputChange(
@@ -128,13 +137,16 @@ export default function Dashboard({ data }: { data: DashboardData }) {
   return (
     <>
       <div className="max-w-[600px] text-wrap mx-auto text-left mt-20 text-lg mb-12">
-        <div className={gameId ? 'block' : 'hidden'}>
+        <div className={game ? 'block' : 'hidden'}>
           <h1 className="text-4xl font-bold">
             {data.gameslist.data.find((x) => x.id === gameId)?.name}
           </h1>
           <h2 className="text-1xl">{gameId}</h2>
           <br />
-          <form className="flex flex-col mx-auto " onSubmit={saveGame}>
+          <form
+            className={`flex-col mx-auto ${name ? 'flex' : 'hidden'}`}
+            onSubmit={saveGame}
+          >
             <TextInput
               onChange={onInputChange}
               value={name}

@@ -10,7 +10,6 @@ import '../../utils/client/firebase'
 import { useRouter } from 'next/navigation'
 import Dashboard from './dashboard'
 import NoAuth from './noauth'
-import { UserPrivilege } from '../../../types'
 
 export default function Page() {
   const [user, userLoading, userError] = useAuthState(getAuth())
@@ -66,7 +65,12 @@ export default function Page() {
 
     switch (res.status) {
       case 200:
-        setDashboard(<Dashboard data={await res.json()} />)
+        setDashboard(
+          <Dashboard
+            data={await res.json()}
+            invalidateData={fetchDashboardData}
+          />
+        )
         break
       case 401:
         setDashboard(<NoAuth />)
