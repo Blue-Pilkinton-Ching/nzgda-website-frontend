@@ -64,41 +64,18 @@ export default function Page() {
       },
     })
 
-    switch (res.headers.get('privilege') as UserPrivilege) {
-      case 'admin':
+    switch (res.status) {
+      case 200:
         setDashboard(<Dashboard data={await res.json()} />)
         break
-      case 'invalid':
-        alert('Invalid credential.')
-        break
-      case 'error':
-        alert(
-          'Something went wrong fetching the dashboard. Please try again later.'
-        )
-        break
-      case 'noprivilege':
+      case 401:
         setDashboard(<NoAuth />)
         break
-      case 'missing':
+      case 500:
         setDashboard(<TryAgain onButtonClick={fetchDashboardData} />)
         alert(
           'Something went wrong fetching the dashboard. Please try again later.'
         )
-        break
-    }
-
-    if (res.ok) {
-      // You are an admin
-      setDashboard(<Dashboard data={await res.json()} />)
-    } else if (res.status === 401) {
-      // You need to be an admin
-      setDashboard(<NoAuth />)
-    } else {
-      // Server / Network Error
-      console.error(res)
-      alert(
-        'Something went wrong fetching the dashboard. Please try again later.'
-      )
     }
   }
 

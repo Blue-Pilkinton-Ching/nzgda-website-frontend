@@ -41,10 +41,9 @@ export interface AuthHeader {
   authorization: IncomingHttpHeaders
 }
 
-export interface DashboardData {}
-
 export interface DashboardBody {
   admins: Admin[]
+  gameslist: { data: GamesListItem[] }
 }
 
 export interface Admin {
