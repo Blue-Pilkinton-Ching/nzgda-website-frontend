@@ -8,7 +8,7 @@ export default function Button({
   onClick,
 }: {
   children: React.ReactNode
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   inverted?: boolean
 }) {
   return (

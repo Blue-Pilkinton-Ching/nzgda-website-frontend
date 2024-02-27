@@ -6,24 +6,23 @@ export default function TextInput({
   type = 'text',
   tooltip,
   value,
+  onChange,
 }: {
   required?: boolean
   name: string
   type?: string
   tooltip?: string
   value: string
+  onChange: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    name: string
+  ) => void
 }) {
   const [currentValue, setCurrentValue] = useState('')
 
   useEffect(() => {
     setCurrentValue(value)
   }, [value])
-
-  function onChange(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    setCurrentValue(event.target.value)
-  }
 
   return (
     <>
@@ -37,7 +36,7 @@ export default function TextInput({
         </label>
         {type === 'textarea' ? (
           <textarea
-            onChange={onChange}
+            onChange={(event) => onChange(event, name)}
             value={currentValue}
             required={required}
             name={name}
@@ -46,7 +45,7 @@ export default function TextInput({
           ></textarea>
         ) : (
           <input
-            onChange={onChange}
+            onChange={(event) => onChange(event, name)}
             value={currentValue}
             type="text"
             name={name}
