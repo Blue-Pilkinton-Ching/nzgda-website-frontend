@@ -1,11 +1,21 @@
 'use client'
-import { ChangeEvent, useState } from 'react'
-import { DashboardBody as DashboardData, Game } from '../../../types'
+import { ChangeEvent, useEffect, useState } from 'react'
+import {
+  DashboardBody,
+  DashboardBody as DashboardData,
+  Game,
+  GameListItem,
+} from '../../../types'
 import * as firestore from 'firebase/firestore'
 import TextInput from './text-input'
 import Button from '../(components)/button'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
+
+import { IoEye } from 'react-icons/io5'
+import { IoEyeOff } from 'react-icons/io5'
+import { MdModeEdit } from 'react-icons/md'
+import { MdDeleteForever } from 'react-icons/md'
 
 export default function Dashboard({
   data,
@@ -27,6 +37,12 @@ export default function Dashboard({
   const [gamefroot, setGamefroot] = useState('')
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
+
+  const [dashboardData, setDashboardData] = useState<DashboardData>()
+
+  useEffect(() => {
+    setDashboardData(data)
+  }, [data])
 
   async function editGame(id: number) {
     setGameID(id)
@@ -104,7 +120,7 @@ export default function Dashboard({
     setGame(undefined)
   }
 
-  function onInputChange(
+  function onGameInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     name: string
   ) {
@@ -133,6 +149,39 @@ export default function Dashboard({
     }
   }
 
+  async function onToggleVisibility(listItem: GameListItem) {
+    const d = dashboardData as DashboardBody
+
+    setDashboardData({
+      ...d,
+      gameslist: {
+        ...d.gameslist,
+        data: d.gameslist.data.map((x) => {
+          if (x.id === listItem.id) {
+            x.hidden = !listItem.hidden
+          }
+          return x
+        }),
+      },
+    })
+
+    const res = await fetch(`/api/dashboard/${listItem.id}/visibility`, {
+      body: JSON.stringify({ hidden: !listItem.hidden }),
+      method: 'PATCH',
+      headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
+    })
+
+    switch (res.status) {
+      case 200:
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('An error occured while saving the game')
+        return
+    }
+  }
   return (
     <>
       <div className="max-w-[600px] text-wrap mx-auto text-left mt-20 text-lg mb-12">
@@ -147,46 +196,48 @@ export default function Dashboard({
             onSubmit={saveGame}
           >
             <TextInput
-              onChange={onInputChange}
+              onChange={onGameInputChange}
               value={name}
               required
               name={'Name'}
             />
             <TextInput
-              onChange={onInputChange}
+              onChange={onGameInputChange}
               value={description}
               type="textarea"
               required
               name={'Description'}
             />
             <TextInput
-              onChange={onInputChange}
+              onChange={onGameInputChange}
               value={ios}
               type="url"
               name={'Ios Link'}
             />
             <TextInput
-              onChange={onInputChange}
+              onChange={onGameInputChange}
               value={android}
               type="url"
               name={'Android Link'}
             />
             <TextInput
-              onChange={onInputChange}
+              onChange={onGameInputChange}
               value={gamefroot}
               type="url"
               name={'Gamefroot Link'}
             />
             <TextInput
-              onChange={onInputChange}
+              onChange={onGameInputChange}
               value={width}
               type="number"
+              tooltip="If this game has a maximum canvas width, enter it here. If not, leave it blank, or set to 0."
               name={'Width'}
             />
             <TextInput
-              onChange={onInputChange}
+              onChange={onGameInputChange}
               value={height}
               type="number"
+              tooltip="Same as width, but for height."
               name={'Height'}
             />
             <div className="mx-auto *:block *:w-38">
@@ -209,13 +260,15 @@ export default function Dashboard({
             <tr className="*:p-1">
               <th>ID</th>
               <th>Name</th>
-              <th>Edit</th>
-              <th>Hide</th>
-              <th>Delete</th>
+              <th className="w-14 text-center">Edit</th>
+              <th className="w-14 text-center">Hide</th>
+              <th className="flex justify-center w-14 max-w-14 text-center">
+                Delete
+              </th>
             </tr>
           </thead>
           <tbody>
-            {data.gameslist.data.map((element, index) => {
+            {dashboardData?.gameslist.data.map((element, index) => {
               return (
                 <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
                   <td>{element.id}</td>
@@ -227,6 +280,29 @@ export default function Dashboard({
                       {element.name}
                     </div>
                   </td>
+                  <td>
+                    <IconButton onClick={() => editGame(element.id)}>
+                      <MdModeEdit className="w-full" size={'30px'} />
+                    </IconButton>
+                  </td>
+                  <td>
+                    <IconButton
+                      onClick={() => {
+                        onToggleVisibility(element)
+                      }}
+                    >
+                      {element.hidden ? (
+                        <IoEyeOff className="w-full" size={'30px'} />
+                      ) : (
+                        <IoEye className="w-full" size={'30px'} />
+                      )}
+                    </IconButton>
+                  </td>
+                  <td>
+                    <IconButton onClick={() => {}}>
+                      <MdDeleteForever className="w-full" size={'30px'} />
+                    </IconButton>
+                  </td>
                 </tr>
               )
             })}
@@ -234,5 +310,22 @@ export default function Dashboard({
         </table>
       </div>
     </>
+  )
+}
+
+function IconButton({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full h-10 block hover:scale-110 active:scale-95 duration-100"
+    >
+      {children}
+    </button>
   )
 }

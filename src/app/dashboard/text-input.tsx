@@ -27,13 +27,13 @@ export default function TextInput({
   return (
     <>
       <div className="flex flex-col mb-3">
-        <p className="text-red text-sm">{tooltip}</p>
         <label
           htmlFor={name}
           className="w-32 text-left text-base font-bold mb-1"
         >
           {name}
         </label>
+        <p className="text-red text-sm mb-3">{tooltip}</p>
         {type === 'textarea' ? (
           <textarea
             onChange={(event) => onChange(event, name)}
@@ -41,7 +41,7 @@ export default function TextInput({
             required={required}
             name={name}
             rows={10}
-            className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow focus:border-red outline-none text-lg"
+            className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow-md focus:border-red outline-none text-lg"
           ></textarea>
         ) : (
           <input
@@ -50,7 +50,7 @@ export default function TextInput({
             type="text"
             name={name}
             required={required}
-            className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow focus:border-red outline-none text-lg"
+            className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow-md focus:border-red outline-none text-lg mb-3"
           />
         )}
       </div>

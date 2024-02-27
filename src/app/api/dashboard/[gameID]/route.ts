@@ -6,7 +6,7 @@ import * as admin from 'firebase-admin'
 
 import {
   DashboardBody,
-  GamesListItem,
+  GameListItem,
   UserPrivilege,
 } from '../../../../../types'
 
@@ -36,7 +36,7 @@ export async function PATCH(
         }
         let updateGame2 = async () => {
           const doc = (await query2.get()).docs[0]
-          const data = doc.data() as GamesListItem
+          const data = doc.data() as { data: GameListItem[] }
 
           data.data[
             data.data.findIndex((item) => item.id === Number(params.gameID))

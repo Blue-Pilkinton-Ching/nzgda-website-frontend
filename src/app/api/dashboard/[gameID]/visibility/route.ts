@@ -1,43 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server'
-
 import '@/utils/server/init'
 import getPrivilege from '@/utils/server/get-privilege'
+
+import * as admin from 'firebase-admin'
+
 import {
-  Admin,
   DashboardBody,
   GameListItem,
   UserPrivilege,
-} from '../../../../types'
-import * as admin from 'firebase-admin'
+} from '../../../../../../types'
 
-export async function GET(req: NextRequest) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { gameID: string } }
+) {
   const res = await getPrivilege(req)
-
+  const hidden = (await req.json()).hidden as boolean
   const privilege = res.headers.get('privilege') as UserPrivilege
+
+  console.log(hidden)
 
   let body: DashboardBody | {} = {}
   let statusCode = 500
 
   if (privilege === 'admin') {
-    let admins
-    let gameslist
-
     try {
-      admins = (
-        await admin.firestore().doc('users/privileged').get()
-      ).data() as Admin[]
+      const query = admin.firestore().collection('gameslist').limit(1)
 
-      gameslist = (
-        await admin.firestore().doc('gameslist/BrHoO8yuD3JdDFo8F2BC').get()
-      ).data() as { data: GameListItem[] }
+      const doc = (await query.get()).docs[0]
+      const data = doc.data() as { data: GameListItem[] }
+
+      data.data[
+        data.data.findIndex((item) => item.id === Number(params.gameID))
+      ].hidden = hidden
+
+      await doc.ref.set(data)
 
       statusCode = 200
     } catch (error) {
       console.error(error)
       statusCode = 500
     }
-
-    body = { admins, gameslist }
   } else {
     statusCode = 401
   }

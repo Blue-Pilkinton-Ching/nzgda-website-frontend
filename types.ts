@@ -1,12 +1,4 @@
 import { IncomingHttpHeaders } from 'http'
-
-export interface GamesListItem {
-  total: number
-  limit: number
-  skip: number
-  data: Game[]
-}
-
 export interface Game {
   id: number
   name: string
@@ -43,7 +35,7 @@ export interface AuthHeader {
 
 export interface DashboardBody {
   admins: Admin[]
-  gameslist: { data: GamesListItem[] }
+  gameslist: { data: GameListItem[] }
 }
 
 export interface Admin {
@@ -58,8 +50,9 @@ export type UserPrivilege =
   | 'noprivilege'
   | 'admin'
 
-export interface GamesListItem {
+export interface GameListItem {
   id: number
   name: string
   thumbnail: string
+  hidden: boolean
 }

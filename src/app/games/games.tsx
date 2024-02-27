@@ -1,6 +1,6 @@
 'use client'
 
-import { GamesListItem } from '../../../types'
+import { GameListItem } from '../../../types'
 
 import ispy from '../../../public/images/I-Spyportrait.png'
 import Link from 'next/link'
@@ -28,7 +28,7 @@ export default function Games() {
             'gameslist/BrHoO8yuD3JdDFo8F2BC'
           )
         )
-      ).data() as { data: GamesListItem[] }
+      ).data() as { data: GameListItem[] }
 
       setGames(
         <div className="flex justify-evenly lg:gap-6 gap-3 flex-wrap">
