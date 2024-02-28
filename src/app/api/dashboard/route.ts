@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     }
 
     body = { admins, gameslist, authRequests }
-    console.log(body) //{ admins: undefined, gameslist: undefined, authRequests: undefined }
+    console.log(body)
   } else {
     statusCode = 401
   }
