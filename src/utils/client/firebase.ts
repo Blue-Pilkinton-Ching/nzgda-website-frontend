@@ -1,5 +1,7 @@
 import * as firebase from 'firebase/app'
 
+console.log('Initialized Firebase Client')
+
 if (!firebase.getApps().length) {
   const firebaseConfig = {
     apiKey: 'AIzaSyC7_B8Bq7-aiaawyBzb1jDL0YKlHfihjJ0',

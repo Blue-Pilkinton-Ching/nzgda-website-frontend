@@ -12,8 +12,8 @@ import google from '../../../../public/images/google-badge.svg'
 import apple from '../../../../public/images/apple-badge.svg'
 
 import back from '../../../../public/images/back.svg'
-import { useRouter } from 'next/navigation'
 import * as firestore from 'firebase/firestore'
+import '@/utils/client/firebase'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
