@@ -56,3 +56,8 @@ export interface GameListItem {
   thumbnail: string
   hidden: boolean
 }
+
+export interface AuthRequest {
+  email: string
+  uid: string
+}

@@ -30,25 +30,21 @@ export async function PATCH(
         .limit(1)
       const query2 = admin.firestore().collection('gameslist').limit(1)
 
-      let updateGame = async () => {
-        let updateGame1 = async () => {
-          await (await query.get()).docs[0].ref.update(gameChanges)
-        }
-        let updateGame2 = async () => {
-          const doc = (await query2.get()).docs[0]
-          const data = doc.data() as { data: GameListItem[] }
+      const updateGame1 = async () => {
+        await (await query.get()).docs[0].ref.update(gameChanges)
+      }
+      const updateGame2 = async () => {
+        const doc = (await query2.get()).docs[0]
+        const data = doc.data() as { data: GameListItem[] }
 
-          data.data[
-            data.data.findIndex((item) => item.id === Number(params.gameID))
-          ].name = gameChanges.name
+        data.data[
+          data.data.findIndex((item) => item.id === Number(params.gameID))
+        ].name = gameChanges.name
 
-          await doc.ref.set(data)
-        }
-        updateGame1()
-        updateGame2()
+        await doc.ref.set(data)
       }
 
-      await updateGame()
+      await Promise.all([updateGame1(), updateGame2()])
 
       statusCode = 200
     } catch (error) {

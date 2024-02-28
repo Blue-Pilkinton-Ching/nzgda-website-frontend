@@ -4,6 +4,7 @@ import '@/utils/server/init'
 import getPrivilege from '@/utils/server/get-privilege'
 import {
   Admin,
+  AuthRequest,
   DashboardBody,
   GameListItem,
   UserPrivilege,
@@ -21,15 +22,25 @@ export async function GET(req: NextRequest) {
   if (privilege === 'admin') {
     let admins
     let gameslist
+    let authRequests
 
     try {
-      admins = (
-        await admin.firestore().doc('users/privileged').get()
-      ).data() as Admin[]
+      const func1 = async () =>
+        (gameslist = (
+          await admin.firestore().doc('gameslist/BrHoO8yuD3JdDFo8F2BC').get()
+        ).data() as { data: GameListItem[] })
 
-      gameslist = (
-        await admin.firestore().doc('gameslist/BrHoO8yuD3JdDFo8F2BC').get()
-      ).data() as { data: GameListItem[] }
+      const func2 = async () =>
+        (authRequests = (
+          await admin.firestore().collection('users/privileged/requests').get()
+        ).docs.map((doc) => doc.data()) as AuthRequest[])
+
+      const func3 = async () =>
+        (admins = (
+          await admin.firestore().doc('users/privileged').get()
+        ).data() as Admin[])
+
+      await Promise.all([func1(), func2(), func3()])
 
       statusCode = 200
     } catch (error) {
@@ -37,7 +48,8 @@ export async function GET(req: NextRequest) {
       statusCode = 500
     }
 
-    body = { admins, gameslist }
+    body = { admins, gameslist, authRequests }
+    console.log(body) //{ admins: undefined, gameslist: undefined, authRequests: undefined }
   } else {
     statusCode = 401
   }
