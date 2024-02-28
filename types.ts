@@ -36,6 +36,7 @@ export interface AuthHeader {
 export interface DashboardBody {
   admins: Admin[]
   gameslist: { data: GameListItem[] }
+  authRequests: AuthRequest[]
 }
 
 export interface Admin {

@@ -12,10 +12,11 @@ import Button from '../(components)/button'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 
-import { IoEye } from 'react-icons/io5'
+import { IoCheckmarkSharp, IoEye } from 'react-icons/io5'
 import { IoEyeOff } from 'react-icons/io5'
 import { MdModeEdit } from 'react-icons/md'
 import { MdDeleteForever } from 'react-icons/md'
+import { FaXmark } from 'react-icons/fa6'
 
 export default function Dashboard({
   data,
@@ -344,6 +345,30 @@ export default function Dashboard({
                   <th className="w-14 text-center">Deny</th>
                 </tr>
               </thead>
+              <tbody className="w-full">
+                {dashboardData?.authRequests.map((element, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      className="*:p-1 odd:bg-white even:bg-pink-50"
+                    >
+                      <td>
+                        <div>{element.email}</div>
+                      </td>
+                      <td>
+                        <IconButton onClick={() => {}}>
+                          <IoCheckmarkSharp className="w-full" size={'30px'} />
+                        </IconButton>
+                      </td>
+                      <td>
+                        <IconButton onClick={() => {}}>
+                          <FaXmark className="w-full" size={'30px'} />
+                        </IconButton>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
             </table>
           </div>
         </div>
