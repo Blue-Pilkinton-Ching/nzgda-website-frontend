@@ -36,19 +36,23 @@ export default function Games() {
             const thumbnail =
               element.name === 'I_SPY' ? ispy : element.thumbnail
 
-            return (
-              <Link key={index} href={`/games/${element.id}`}>
-                <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-95">
-                  <Image
-                    src={thumbnail}
-                    alt={element.name}
-                    width={150}
-                    height={200}
-                    className="rounded-lg "
-                  ></Image>
-                </div>
-              </Link>
-            )
+            if (!element.hidden) {
+              return (
+                <Link key={index} href={`/games/${element.id}`}>
+                  <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-95">
+                    <Image
+                      src={thumbnail}
+                      alt={element.name}
+                      width={150}
+                      height={200}
+                      className="rounded-lg "
+                    ></Image>
+                  </div>
+                </Link>
+              )
+            } else {
+              return null
+            }
           })}
         </div>
       )
