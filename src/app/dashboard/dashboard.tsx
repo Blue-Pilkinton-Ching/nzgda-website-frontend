@@ -25,9 +25,7 @@ export default function Dashboard({
   invalidateData: () => void
 }) {
   const [gameId, setGameID] = useState<number>()
-
   const [user] = useAuthState(getAuth())
-
   const [game, setGame] = useState<Game>()
 
   const [name, setName] = useState('')
@@ -39,6 +37,8 @@ export default function Dashboard({
   const [height, setHeight] = useState('')
 
   const [dashboardData, setDashboardData] = useState<DashboardData>()
+
+  const [panel, setPanel] = useState<'users' | 'games' | undefined>('games')
 
   useEffect(() => {
     setDashboardData(data)
@@ -253,63 +253,100 @@ export default function Dashboard({
             <Button onClick={exitGame}>Back to games</Button>
           </div>
         </div>
-        <table
+        <div
           className={`border-collapse ${
             gameId == undefined ? 'block' : 'hidden'
           }`}
         >
-          <thead>
-            <tr className="*:p-1">
-              <th>ID</th>
-              <th>Name</th>
-              <th className="w-14 text-center">Edit</th>
-              <th className="w-14 text-center">Hide</th>
-              <th className="flex justify-center w-14 max-w-14 text-center">
-                Delete
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {dashboardData?.gameslist.data.map((element, index) => {
-              return (
-                <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
-                  <td>{element.id}</td>
-                  <td>
-                    <div
-                      className="hover:underline cursor-pointer"
-                      onClick={() => editGame(element.id)}
-                    >
-                      {element.name}
-                    </div>
-                  </td>
-                  <td>
-                    <IconButton onClick={() => editGame(element.id)}>
-                      <MdModeEdit className="w-full" size={'30px'} />
-                    </IconButton>
-                  </td>
-                  <td>
-                    <IconButton
-                      onClick={() => {
-                        onToggleVisibility(element)
-                      }}
-                    >
-                      {element.hidden ? (
-                        <IoEyeOff className="w-full" size={'30px'} />
-                      ) : (
-                        <IoEye className="w-full" size={'30px'} />
-                      )}
-                    </IconButton>
-                  </td>
-                  <td>
-                    <IconButton onClick={() => {}}>
-                      <MdDeleteForever className="w-full" size={'30px'} />
-                    </IconButton>
-                  </td>
+          <div className="flex justify-center gap-10">
+            <Button
+              onClick={() => setPanel('games')}
+              inverted={panel === 'users'}
+            >
+              Games
+            </Button>
+            <Button
+              onClick={() => setPanel('users')}
+              inverted={panel === 'games'}
+            >
+              Users & Settings
+            </Button>
+          </div>
+          <br />
+          <table className={panel === 'games' ? 'block' : 'hidden'}>
+            <h1 className="text-center text-4xl font-bold">Games</h1>
+            <br />
+            <thead>
+              <tr className="*:p-1">
+                <th>ID</th>
+                <th>Name</th>
+                <th className="w-14 text-center">Edit</th>
+                <th className="w-14 text-center">Hide</th>
+                <th className="flex justify-center w-14 max-w-14 text-center">
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {dashboardData?.gameslist.data.map((element, index) => {
+                return (
+                  <tr
+                    key={index}
+                    className="*:p-1 odd:bg-white even:bg-pink-50"
+                  >
+                    <td>{element.id}</td>
+                    <td>
+                      <div
+                        className="hover:underline cursor-pointer"
+                        onClick={() => editGame(element.id)}
+                      >
+                        {element.name}
+                      </div>
+                    </td>
+                    <td>
+                      <IconButton onClick={() => editGame(element.id)}>
+                        <MdModeEdit className="w-full" size={'30px'} />
+                      </IconButton>
+                    </td>
+                    <td>
+                      <IconButton
+                        onClick={() => {
+                          onToggleVisibility(element)
+                        }}
+                      >
+                        {element.hidden ? (
+                          <IoEyeOff className="w-full" size={'30px'} />
+                        ) : (
+                          <IoEye className="w-full" size={'30px'} />
+                        )}
+                      </IconButton>
+                    </td>
+                    <td>
+                      <IconButton onClick={() => {}}>
+                        <MdDeleteForever className="w-full" size={'30px'} />
+                      </IconButton>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+          <div className={panel === 'users' ? 'block' : 'hidden'}>
+            <h1 className="text-center text-4xl font-bold">
+              Authorisation Requests
+            </h1>
+            <br />
+            <table className="w-full">
+              <thead>
+                <tr className="*:p-1">
+                  <th>Email Address</th>
+                  <th className="w-14 text-center">Accept</th>
+                  <th className="w-14 text-center">Deny</th>
                 </tr>
-              )
-            })}
-          </tbody>
-        </table>
+              </thead>
+            </table>
+          </div>
+        </div>
       </div>
     </>
   )
