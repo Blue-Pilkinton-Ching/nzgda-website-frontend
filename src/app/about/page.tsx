@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Background from '../(components)/background'
 
-import back from '../../../public/images/back.svg'
+import back from '../../../public/images/back-red.svg'
 
 const classes =
   'font-bold text-3xl hover:*:underline hover:brightness-75 duration-100 *:mb-4 inline w-min text-nowrap'
