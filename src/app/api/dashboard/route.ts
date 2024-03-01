@@ -49,7 +49,6 @@ export async function GET(req: NextRequest) {
     }
 
     body = { admins, gameslist, authRequests }
-    console.log(body)
   } else {
     statusCode = 401
   }
