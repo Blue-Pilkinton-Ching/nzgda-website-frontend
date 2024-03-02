@@ -1,10 +1,10 @@
 import Input from './input'
 import { Game } from '../../../types'
 import Button from '../(components)/button'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-import string from '@/utils/client/bool-to-string'
+import Image from 'next/image'
 
 export default function EditGame({
   game,
@@ -31,13 +31,13 @@ export default function EditGame({
   const [excludeBrowserDesktop, setExcludeBrowserDesktop] =
     useState<boolean>(false)
 
+  const [thumbnail, setThumbnail] = useState<File | string>('')
+
   useEffect(() => {
     resetGame(game)
   }, [game])
 
   async function resetGame(data: Game | undefined) {
-    console.log(data)
-
     setName(data?.name || '')
     setDescription(data?.description || '')
     setIos(data?.iosLink || '')
@@ -79,6 +79,40 @@ export default function EditGame({
         break
       case 'Tags':
         setTags(event.target.value)
+        break
+      case 'Playable on Heihei':
+        setPlayableOnHeihei(event.target.value === 'false')
+        break
+      case 'Exclude on mobile browser':
+        setExcludeBrowserMobile(event.target.value === 'false')
+        break
+      case 'Exclude on desktop browser':
+        setExcludeBrowserDesktop(event.target.value === 'false')
+        break
+      case 'Change Thumbnail':
+        const target = event.target as HTMLInputElement
+
+        console.log(target.files)
+
+        if (target.files && target.files[0]) {
+          if (target.files.length > 1) {
+            setThumbnail('Only one file is allowed!')
+            break
+          }
+          if (target.files[0].size > 1048576) {
+            setThumbnail('File size should be less than 1MB!')
+            break
+          }
+          if (
+            target.files[0].type !== 'image/png' &&
+            target.files[0].type !== 'image/jpeg' &&
+            target.files[0].type !== 'image/gif'
+          ) {
+            setThumbnail('File should be an image!')
+            break
+          }
+          setThumbnail(target.files[0])
+        }
         break
     }
   }
@@ -192,28 +226,28 @@ export default function EditGame({
             />
             <Input
               onChange={onGameInputChange}
-              value={string(playableOnHeihei)}
+              value={playableOnHeihei}
               type="checkbox"
               maxLength={0}
               name={'Playable on Heihei'}
             />
             <Input
               onChange={onGameInputChange}
-              value={string(excludeBrowserMobile)}
+              value={excludeBrowserMobile}
               type="checkbox"
               maxLength={0}
               name={'Exclude on mobile browser'}
             />
             <Input
               onChange={onGameInputChange}
-              value={string(excludeBrowserDesktop)}
+              value={excludeBrowserDesktop}
               type="checkbox"
               maxLength={0}
               name={'Exclude on desktop browser'}
             />
             <br />
             <label
-              htmlFor="Thumbnail"
+              htmlFor="Change Thumbnail"
               className="text-left text-base font-bold mb-1"
             >
               Change Thumbnail
@@ -222,7 +256,32 @@ export default function EditGame({
               Thumbnail should be 300x400px
             </p>
 
-            <input type="file" name="Thumbnail" />
+            <input
+              multiple={false}
+              type="file"
+              name="Change Thumbnail"
+              accept="image/*"
+              onChange={(event) => onGameInputChange(event, 'Change Thumbnail')}
+            />
+            {thumbnail ? (
+              <div className="py-3 text-rose-600">
+                {typeof thumbnail === 'string' ? (
+                  <p className="text-lg font-semibold">{thumbnail}</p>
+                ) : (
+                  <div className="rounded-md shadow w-[150px] h-[200px]">
+                    <Image
+                      src={URL.createObjectURL(thumbnail)}
+                      alt={'Uploaded Thumnail'}
+                      className="rounded-md shadow"
+                      width={256}
+                      height={341}
+                    ></Image>
+                  </div>
+                )}
+              </div>
+            ) : (
+              ''
+            )}
             <br />
 
             <div className="mx-auto *:block *:w-38">
