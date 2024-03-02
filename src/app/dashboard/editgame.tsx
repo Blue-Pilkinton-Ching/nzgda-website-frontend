@@ -158,14 +158,31 @@ export default function EditGame({
               name={'Height'}
             />
             <div className="mx-auto *:block *:w-38">
-              <Button inverted>Save Game</Button>
+              <Button
+                inverted
+                className="bg-black text-white"
+                invertedClassName="bg-white text-black"
+              >
+                Save Game
+              </Button>
             </div>
           </form>
           <div className="mx-auto w-40 *:w-40">
-            <Button onClick={() => resetGame(game as Game)} inverted>
+            <Button
+              onClick={() => resetGame(game as Game)}
+              inverted
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
+            >
               Reset
             </Button>
-            <Button onClick={exit}>Back to games</Button>
+            <Button
+              onClick={exit}
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
+            >
+              Back to games
+            </Button>
           </div>
         </>
       ) : (
