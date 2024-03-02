@@ -5,7 +5,7 @@ import getPrivilege from '@/utils/server/get-privilege'
 import {
   Admin,
   AuthRequest,
-  DashboardBody,
+  AdminDashboard,
   GameListItem,
   UserPrivilege,
 } from '../../../../types'
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   const privilege = res.headers.get('privilege') as UserPrivilege
 
-  let body: DashboardBody | {} = {}
+  let body: AdminDashboard | {} = {}
   let statusCode = 500
 
   if (privilege === 'admin') {

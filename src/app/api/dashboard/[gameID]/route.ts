@@ -5,7 +5,7 @@ import getPrivilege from '@/utils/server/get-privilege'
 import * as admin from 'firebase-admin'
 
 import {
-  DashboardBody,
+  AdminDashboard,
   GameListItem,
   UserPrivilege,
 } from '../../../../../types'
@@ -18,7 +18,7 @@ export async function PATCH(
   const gameChanges = await req.json()
   const privilege = res.headers.get('privilege') as UserPrivilege
 
-  let body: DashboardBody | {} = {}
+  let body: AdminDashboard | {} = {}
   let statusCode = 500
 
   if (privilege === 'admin') {

@@ -27,13 +27,14 @@ export interface Game {
   parent: number
   createdAt?: string
   updatedAt?: string
+  playableOnHeihei?: boolean
 }
 
 export interface AuthHeader {
   authorization: IncomingHttpHeaders
 }
 
-export interface DashboardBody {
+export interface AdminDashboard {
   admins: Admin[]
   gameslist: { data: GameListItem[] }
   authRequests: AuthRequest[]

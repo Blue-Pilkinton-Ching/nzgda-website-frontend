@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { DecodedIdToken } from 'firebase-admin/auth'
 import * as admin from 'firebase-admin'
-import { DashboardBody } from '../../../types'
+import { AdminDashboard } from '../../../types'
 
 export default async function getPrivilege(req: NextRequest) {
   const res = new NextResponse()
@@ -28,7 +28,7 @@ export default async function getPrivilege(req: NextRequest) {
 
   const adminData = (
     await admin.firestore().doc('users/privileged').get()
-  ).data() as DashboardBody
+  ).data() as AdminDashboard
 
   if (adminData == undefined) {
     console.error('adminData is undefined')

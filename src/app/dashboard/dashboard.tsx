@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { DashboardBody as DashboardData, Game } from '../../../types'
+import { AdminDashboard as DashboardData, Game } from '../../../types'
 import Button from '../(components)/button'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
