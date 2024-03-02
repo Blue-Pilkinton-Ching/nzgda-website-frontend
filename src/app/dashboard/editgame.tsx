@@ -1,7 +1,7 @@
 import TextInput from './text-input'
 import { Game } from '../../../types'
 import Button from '../(components)/button'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 
@@ -24,14 +24,20 @@ export default function EditGame({
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
 
-  async function resetGame(data: Game) {
-    setName(data.name)
-    setDescription(data.description)
-    setIos(data.iosLink || '')
-    setAndroid(data.androidLink || '')
-    setGamefroot(data.gamefrootLink || '')
-    setWidth(data.width?.toString() || '')
-    setHeight(data.height?.toString() || '')
+  useEffect(() => {
+    resetGame(game)
+  }, [game])
+
+  async function resetGame(data: Game | undefined) {
+    console.log(data)
+
+    setName(data?.name || '')
+    setDescription(data?.description || '')
+    setIos(data?.iosLink || '')
+    setAndroid(data?.androidLink || '')
+    setGamefroot(data?.gamefrootLink || '')
+    setWidth(data?.width?.toString() || '')
+    setHeight(data?.height?.toString() || '')
   }
 
   function onGameInputChange(
@@ -97,9 +103,9 @@ export default function EditGame({
 
   return (
     <div className={`${className} `}>
-      {game ? (
+      {name ? (
         <>
-          <h1 className="text-4xl font-bold">{game?.id}</h1>
+          <h1 className="text-4xl font-bold">{game?.name}</h1>
           <h2 className="text-1xl">{game?.id}</h2>
           <br />
           <form

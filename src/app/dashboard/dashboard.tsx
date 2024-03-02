@@ -1,22 +1,9 @@
 'use client'
-import { ChangeEvent, useEffect, useState } from 'react'
-import {
-  DashboardBody,
-  DashboardBody as DashboardData,
-  Game,
-  GameListItem,
-} from '../../../types'
-import * as firestore from 'firebase/firestore'
-import TextInput from './text-input'
+import { useEffect, useState } from 'react'
+import { DashboardBody as DashboardData, Game } from '../../../types'
 import Button from '../(components)/button'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-
-import { IoCheckmarkSharp, IoEye } from 'react-icons/io5'
-import { IoEyeOff } from 'react-icons/io5'
-import { MdModeEdit } from 'react-icons/md'
-import { MdDeleteForever } from 'react-icons/md'
-import { IconButton } from '../(components)/iconButton'
 import Users from './users'
 import GamesList from './gameslist'
 import EditGame from './editgame'
