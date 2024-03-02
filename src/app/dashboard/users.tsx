@@ -16,9 +16,9 @@ export default function Users({
 
   return (
     <div className={className}>
-      <h1 className="text-center text-4xl font-bold">Authorisation Requests</h1>
+      <h1 className="text-4xl font-bold">Authorisation Requests</h1>
       <br />
-      <table className="w-full">
+      <table className="w-full ">
         <thead>
           <tr className="*:p-1">
             <th>Email Address</th>

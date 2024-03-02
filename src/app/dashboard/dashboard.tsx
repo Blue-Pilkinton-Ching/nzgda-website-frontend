@@ -38,7 +38,7 @@ export default function Dashboard({
 
   return (
     <>
-      <div className="max-w-[600px] text-wrap mx-auto text-left mt-20 text-lg mb-12">
+      <div className="max-w-[600px] text-wrap mx-auto text-left mt-20 text-lg mb-12 font-sans text-black">
         <EditGame
           className={game ? 'block' : 'hidden'}
           game={game}
@@ -53,26 +53,34 @@ export default function Dashboard({
             <Button
               onClick={() => setPanel('games')}
               inverted={panel === 'users'}
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
             >
               Games
             </Button>
             <Button
               onClick={() => setPanel('users')}
               inverted={panel === 'games'}
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
             >
               Users & Settings
             </Button>
           </div>
           <br />
           <GamesList
-            className={panel === 'games' ? 'block' : 'hidden'}
+            className={`${
+              panel === 'games' ? 'block' : 'hidden'
+            } shadow-lg p-4 rounded`}
             games={dashboardData.gameslist.data}
             setGame={(game) => {
               setGame(game)
             }}
           ></GamesList>
           <Users
-            className={panel === 'users' ? 'block' : 'hidden'}
+            className={`${
+              panel === 'users' ? 'block' : 'hidden'
+            } shadow-lg p-4 rounded`}
             authRequests={dashboardData.authRequests}
           ></Users>
         </div>

@@ -86,10 +86,10 @@ export default function GamesList({
   }
 
   return (
-    <>
-      <h1 className="text-center text-4xl font-bold">Games</h1>
+    <div className={className}>
+      <h1 className="text-4xl font-bold">Games</h1>
       <br />
-      <table className={className}>
+      <table>
         <thead>
           <tr className="*:p-1">
             <th>ID</th>
@@ -104,7 +104,7 @@ export default function GamesList({
         <tbody>
           {games.map((element, index) => {
             return (
-              <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
+              <tr key={index} className="*:p-1 odd:bg-white even:bg-zinc-100">
                 <td>{element.id}</td>
                 <td>
                   <div
@@ -142,6 +142,6 @@ export default function GamesList({
           })}
         </tbody>
       </table>
-    </>
+    </div>
   )
 }
