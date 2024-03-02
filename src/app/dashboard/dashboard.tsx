@@ -2,8 +2,6 @@
 import { useEffect, useState } from 'react'
 import { AdminDashboard as DashboardData, Game } from '../../../types'
 import Button from '../(components)/button'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
 import Users from './users'
 import GamesList from './gameslist'
 import EditGame from './editgame'
@@ -15,7 +13,6 @@ export default function Dashboard({
   data: DashboardData
   invalidateData: () => void
 }) {
-  const [user] = useAuthState(getAuth())
   const [game, setGame] = useState<Game>()
 
   const [dashboardData, setDashboardData] = useState<DashboardData>()

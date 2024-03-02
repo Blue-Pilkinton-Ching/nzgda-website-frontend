@@ -1,9 +1,11 @@
 import Input from './input'
 import { Game } from '../../../types'
 import Button from '../(components)/button'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
+import back from '../../../public/images/back.svg'
+
 import Image from 'next/image'
 
 export default function EditGame({
@@ -153,9 +155,24 @@ export default function EditGame({
     <div className={`${className} `}>
       {name ? (
         <>
-          <h1 className="text-4xl font-bold">{game?.name}</h1>
-          <h2 className="text-1xl">{game?.id}</h2>
+          <div className="flex gap-4">
+            <button
+              onClick={exit}
+              className="duration-100 text-green *:mb-4 hover:scale-110 active:scale-95 hover:rotate-6 active:-rotate-12 "
+            >
+              <Image
+                src={back}
+                alt={back}
+                className="w-14 brightness-0"
+              ></Image>
+            </button>
+            <div>
+              <h1 className="text-4xl font-bold">{game?.name}</h1>
+              <h2 className="text-1xl">{game?.id}</h2>
+            </div>
+          </div>
           <br />
+
           <form
             className={`flex-col mx-auto ${name ? 'flex' : 'hidden'}`}
             onSubmit={saveGame}
@@ -297,18 +314,10 @@ export default function EditGame({
           <div className="mx-auto w-40 *:w-40">
             <Button
               onClick={() => resetGame(game as Game)}
-              inverted
               className="bg-black text-white"
               invertedClassName="bg-white text-black"
             >
               Reset
-            </Button>
-            <Button
-              onClick={exit}
-              className="bg-black text-white"
-              invertedClassName="bg-white text-black"
-            >
-              Back to games
             </Button>
           </div>
         </>

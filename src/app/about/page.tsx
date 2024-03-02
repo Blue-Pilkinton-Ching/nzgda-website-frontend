@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import Background from '../(components)/background'
 
 import back from '../../../public/images/back-red.svg'
 
