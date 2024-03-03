@@ -65,7 +65,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-10 *:max-w-[800px] *:xl:max-w-none min-h-[calc(100vh-80px)]">
+    <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none min-h-[calc(100vh-80px)]">
       <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] h-full flex justify-center flex-col">
         <h1 className="sm:text-4xl text-4xl text-green font-semibold text-wrap flex items-center">
           <Link
@@ -107,18 +107,21 @@ export default function Page() {
       <div
         ref={gameView}
         style={{
-          maxWidth: game.width,
+          maxWidth: game.width && game.width < 1422 ? game.width : 1422,
           maxHeight: game.height && game.height < 800 ? game.height : 800,
         }}
-        className="justify-center max-h-[800px] w-full xl:w-auto items-center aspect-video flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
+        className="justify-center max-h-[800px] w-full xl:w-auto items-center aspect-video xl:flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
       >
         {game.url ? (
           <>
             <iframe
               src={game.url}
               allowFullScreen
-              className="w-full h-full shadow-lg overflow-hidden"
-              style={{ maxWidth: game.width, maxHeight: game.height }}
+              className="w-full shadow-lg overflow-hidden aspect-video"
+              style={{
+                maxWidth: game.width,
+                maxHeight: game.height && game.height < 800 ? game.height : 800,
+              }}
               scrolling="no"
               id="heihei-game"
               frameBorder={0}
