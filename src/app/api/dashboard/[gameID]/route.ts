@@ -18,6 +18,8 @@ export async function PATCH(
   const gameChanges = await req.json()
   const privilege = res.headers.get('privilege') as UserPrivilege
 
+  console.log(gameChanges)
+
   let body: AdminDashboard | {} = {}
   let statusCode = 500
 
@@ -37,13 +39,14 @@ export async function PATCH(
         const doc = (await query2.get()).docs[0]
         const data = doc.data() as { data: GameListItem[] }
 
-        const thing =
+        const item =
           data.data[
             data.data.findIndex((item) => item.id === Number(params.gameID))
           ]
 
-        thing.name = gameChanges.name
-        thing.partner = gameChanges.partner
+        item.name = gameChanges.name
+        item.partner = gameChanges.partner
+        item.exclude = gameChanges.exclude
 
         await doc.ref.set(data)
       }

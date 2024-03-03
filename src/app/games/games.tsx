@@ -39,12 +39,15 @@ export default function Games() {
       setGames(
         <div className="flex justify-evenly lg:gap-6 gap-3 flex-wrap">
           {data.data.map((element) => {
-            console.log(data.partners, element.partner, element.name)
-
             if (
               !element.hidden &&
               data.partners.find((p) => p.name === element.partner)?.hidden !==
-                true
+                true &&
+              (element.exclude
+                ? isMobile()
+                  ? !element.exclude.includes('mobileweb')
+                  : !element.exclude.includes('desktop')
+                : true)
             ) {
               return (
                 <Link key={element.id} href={`/games/${element.id}`}>
@@ -73,6 +76,13 @@ export default function Games() {
       console.error(error)
       setGames(<p className=" text-green text-3xl">Failed to fetch games :(</p>)
     }
+  }
+
+  const isMobile = () => {
+    const userAgent = navigator.userAgent
+    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+      userAgent
+    )
   }
 
   return (

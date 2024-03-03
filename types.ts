@@ -59,6 +59,7 @@ export interface GameListItem {
   thumbnail: string
   hidden: boolean
   partner: string
+  exclude: string
 }
 
 export interface AuthRequest {
