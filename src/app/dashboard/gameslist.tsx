@@ -6,6 +6,7 @@ import * as firestore from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { useEffect, useState } from 'react'
+import Confirm from './confirm'
 
 export default function GamesList({
   className,
@@ -19,6 +20,8 @@ export default function GamesList({
   const [user] = useAuthState(getAuth())
 
   const [currentGames, setCurrentGames] = useState<GameListItem[]>([])
+  const [confirmText, setConfirmText] = useState('')
+  const [confirmAction, setConfirmAction] = useState<() => void>()
 
   useEffect(() => {
     setCurrentGames(games)
@@ -87,6 +90,11 @@ export default function GamesList({
 
   return (
     <div className={className}>
+      <Confirm
+        text={confirmText}
+        onConfirm={() => confirmAction}
+        onCancel={() => setConfirmText('')}
+      />
       <h1 className="text-4xl font-bold">Games</h1>
       <br />
       <table>
@@ -133,7 +141,14 @@ export default function GamesList({
                   </IconButton>
                 </td>
                 <td>
-                  <IconButton onClick={() => {}}>
+                  <IconButton
+                    onClick={() => {
+                      setConfirmAction(() => {})
+                      setConfirmText(
+                        'Are you sure you want to delete this partner? This action is irreversible.'
+                      )
+                    }}
+                  >
                     <MdDeleteForever className="w-full" size={'30px'} />
                   </IconButton>
                 </td>

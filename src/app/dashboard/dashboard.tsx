@@ -91,6 +91,7 @@ export default function Dashboard({
             authRequests={dashboardData.authRequests}
           ></Users>
           <Partners
+            invalidatePartners={invalidateData}
             partners={dashboardData.partners}
             className={`${
               panel === 'partners' ? 'block' : 'hidden'

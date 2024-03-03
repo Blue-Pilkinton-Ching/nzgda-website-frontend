@@ -25,7 +25,7 @@ export default function Confirm({
             <p className="font-semibold text-lg">{text}</p>
             <div className="flex justify-evenly">
               <Button
-                onClick={() => onConfirm}
+                onClick={onConfirm}
                 inverted
                 className="bg-black text-white"
                 invertedClassName="bg-white text-black"
@@ -33,7 +33,7 @@ export default function Confirm({
                 Yes, continue
               </Button>
               <Button
-                onClick={() => onCancel}
+                onClick={onCancel}
                 className="bg-black text-white"
                 invertedClassName="bg-white text-black"
               >

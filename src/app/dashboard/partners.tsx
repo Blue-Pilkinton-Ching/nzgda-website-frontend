@@ -9,16 +9,18 @@ import Confirm from './confirm'
 export default function Partners({
   className,
   partners,
+  invalidatePartners,
 }: {
   className: string
   partners: { name: string; hidden: boolean }[]
+  invalidatePartners: () => void
 }) {
   const [user] = useAuthState(getAuth())
 
   const [partnerData, setPartnerData] =
     useState<{ name: string; hidden: boolean }[]>()
   const [confirmText, setConfirmText] = useState('')
-  const [confirmAction, setConfirmAction] = useState<() => void>()
+  const [partnerToDelete, setPartnerToDelete] = useState('')
 
   useEffect(() => {
     setPartnerData(partners)
@@ -65,17 +67,46 @@ export default function Partners({
     }
   }
 
+  async function deletePartner() {
+    let res
+    try {
+      res = await fetch(`/api/dashboard/partners`, {
+        body: JSON.stringify(partnerToDelete),
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
+      })
+    } catch (error) {
+      alert('An error occured while setting partner visibility')
+      console.error(error)
+      return
+    }
+
+    switch (res.status) {
+      case 200:
+        invalidatePartners()
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('An error occured while deleting partner')
+        return
+    }
+  }
+
   return (
     <div className={className}>
       <Confirm
         text={confirmText}
-        onConfirm={() => confirmAction}
+        onConfirm={deletePartner}
         onCancel={() => setConfirmText('')}
       />
+      <h1 className="text-4xl font-bold">Partners</h1>
+      <br />
       <table className="w-full">
         <thead>
           <tr>
-            <th>Partner</th>
+            <th className="pl-2">Partner</th>
             <th className="w-16 text-center">Hide</th>
             <th className="w-16 text-center">Delete</th>
           </tr>
@@ -84,7 +115,7 @@ export default function Partners({
           {partnerData?.map((element, key) => {
             return (
               <tr key={key} className="even:bg-zinc-100 odd:bg-white">
-                <td>{element.name}</td>
+                <td className="pl-2">{element.name}</td>
                 <td>
                   <IconButton
                     onClick={() => {
@@ -101,9 +132,9 @@ export default function Partners({
                 <td>
                   <IconButton
                     onClick={() => {
-                      setConfirmAction(() => {})
+                      setPartnerToDelete(element.name)
                       setConfirmText(
-                        "Are you sure you want to delete this partner? This action can't be undone."
+                        'Are you sure you want to delete this partner? This action is irreversible.'
                       )
                     }}
                   >
