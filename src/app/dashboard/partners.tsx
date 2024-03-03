@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { MdDeleteForever } from 'react-icons/md'
+import Confirm from './confirm'
 
 export default function Partners({
   className,
@@ -14,12 +15,14 @@ export default function Partners({
 }) {
   const [user] = useAuthState(getAuth())
 
+  const [partnerData, setPartnerData] =
+    useState<{ name: string; hidden: boolean }[]>()
+  const [confirmText, setConfirmText] = useState('')
+  const [confirmAction, setConfirmAction] = useState<() => void>()
+
   useEffect(() => {
     setPartnerData(partners)
   }, [partners])
-
-  const [partnerData, setPartnerData] =
-    useState<{ name: string; hidden: boolean }[]>()
 
   async function onToggleVisibility(partner: {
     name: string
@@ -64,6 +67,11 @@ export default function Partners({
 
   return (
     <div className={className}>
+      <Confirm
+        text={confirmText}
+        onConfirm={() => confirmAction}
+        onCancel={() => setConfirmText('')}
+      />
       <table className="w-full">
         <thead>
           <tr>
@@ -91,7 +99,14 @@ export default function Partners({
                   </IconButton>
                 </td>
                 <td>
-                  <IconButton onClick={() => {}}>
+                  <IconButton
+                    onClick={() => {
+                      setConfirmAction(() => {})
+                      setConfirmText(
+                        "Are you sure you want to delete this partner? This action can't be undone."
+                      )
+                    }}
+                  >
                     <MdDeleteForever className="w-full" size={'30px'} />
                   </IconButton>
                 </td>
