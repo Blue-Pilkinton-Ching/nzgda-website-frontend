@@ -16,7 +16,7 @@ export default function Users({
 
   return (
     <div className={className}>
-      <h1 className="text-4xl font-bold">Authorisation Requests</h1>
+      <h1 className="pl-2 text-4xl font-bold">Authorisation Requests</h1>
       <br />
       <table className="w-full ">
         <thead>

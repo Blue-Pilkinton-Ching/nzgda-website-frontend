@@ -1,10 +1,11 @@
 import { IoEye, IoEyeOff } from 'react-icons/io5'
 import { IconButton } from '../(components)/iconButton'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { MdDeleteForever } from 'react-icons/md'
 import Confirm from './confirm'
+import Button from '../(components)/button'
 
 export default function Partners({
   className,
@@ -76,7 +77,7 @@ export default function Partners({
         headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
       })
     } catch (error) {
-      alert('An error occured while setting partner visibility')
+      alert('An error occured while deleting partner')
       console.error(error)
       return
     }
@@ -94,6 +95,41 @@ export default function Partners({
     }
   }
 
+  async function addPartner(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    let res
+
+    const currentTarget = event.currentTarget[0] as HTMLFormElement
+    const pName = currentTarget.value
+
+    currentTarget.value = ''
+
+    try {
+      res = await fetch(`/api/dashboard/partners`, {
+        body: JSON.stringify(pName),
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
+      })
+    } catch (error) {
+      alert('An error occured while adding partner')
+      console.error(error)
+      return
+    }
+
+    switch (res.status) {
+      case 200:
+        invalidatePartners()
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('An error occured while adding partner')
+        return
+    }
+  }
+
   return (
     <div className={className}>
       <Confirm
@@ -101,7 +137,27 @@ export default function Partners({
         onConfirm={deletePartner}
         onCancel={() => setConfirmText('')}
       />
-      <h1 className="text-4xl font-bold">Partners</h1>
+      <h1 className="text-4xl pl-2 font-bold">Partners</h1>
+
+      <form
+        onSubmit={addPartner}
+        className="flex justify-between items-center gap-8"
+      >
+        <input
+          minLength={3}
+          maxLength={100}
+          required
+          type="text"
+          placeholder="Enter new partner name..."
+          className="py-0.5 mt-3 px-2 rounded-lg flex-1 border border-white focus:border-black outline-none text-lg"
+        />
+        <Button
+          className="bg-black text-white"
+          invertedClassName="bg-white text-black"
+        >
+          Add Partner
+        </Button>
+      </form>
       <br />
       <table className="w-full">
         <thead>

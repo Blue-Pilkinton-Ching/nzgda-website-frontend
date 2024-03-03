@@ -38,14 +38,16 @@ export default function Games() {
 
       setGames(
         <div className="flex justify-evenly lg:gap-6 gap-3 flex-wrap">
-          {data.data.map((element, index) => {
+          {data.data.map((element) => {
+            console.log(data.partners, element.partner, element.name)
+
             if (
               !element.hidden &&
-              data.partners.find((p) => p.name === element.name)?.hidden !==
+              data.partners.find((p) => p.name === element.partner)?.hidden !==
                 true
             ) {
               return (
-                <Link key={index} href={`/games/${element.id}`}>
+                <Link key={element.id} href={`/games/${element.id}`}>
                   <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-95">
                     <Image
                       src={element.name === 'I_SPY' ? ispy : element.thumbnail}
