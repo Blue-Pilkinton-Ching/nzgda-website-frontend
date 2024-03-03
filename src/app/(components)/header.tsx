@@ -12,7 +12,7 @@ export default function Header() {
         <div className="w-[43%]">
           <Image quality={100} src={banner} alt={'Background'} priority></Image>
         </div>
-        <div className="absolute w-[20%] min-w-16 sm:w-32 left-[50%] hover:scale-110 duration-100 hover:rotate-6 active:scale-95 -active:rotate-6 -translate-x-1/2">
+        <div className="absolute w-[20%] min-w-16 sm:w-32 left-[50vw] hover:scale-110 duration-100 hover:rotate-6 active:scale-95 -active:rotate-6 -translate-x-1/2">
           <Link href={'/games'} className="">
             <Image quality={100} src={logo} alt={'Background'}></Image>
           </Link>
