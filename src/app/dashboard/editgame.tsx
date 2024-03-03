@@ -10,12 +10,14 @@ import Image from 'next/image'
 
 export default function EditGame({
   game,
+  partners,
   exit,
   className,
 }: {
   className: string
   game?: Game
   exit: () => void
+  partners: { name: string; hidden: boolean }[]
 }) {
   const [user] = useAuthState(getAuth())
 
@@ -32,6 +34,7 @@ export default function EditGame({
     useState<boolean>(false)
   const [excludeBrowserDesktop, setExcludeBrowserDesktop] =
     useState<boolean>(false)
+  const [partner, setPartner] = useState('')
 
   const [thumbnail, setThumbnail] = useState<File | string>('')
 
@@ -51,10 +54,13 @@ export default function EditGame({
     setPlayableOnHeihei(data?.playableOnHeihei || true)
     setExcludeBrowserMobile(data?.exclude?.includes('mobileweb') || false)
     setExcludeBrowserDesktop(data?.exclude?.includes('desktop') || false)
+    setPartner(data?.partner || 'None')
   }
 
   function onGameInputChange(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
     name: string
   ) {
     switch (name) {
@@ -116,6 +122,9 @@ export default function EditGame({
           setThumbnail(target.files[0])
         }
         break
+      case 'Partner / Studio':
+        setPartner(event.target.value)
+        break
     }
   }
 
@@ -132,6 +141,13 @@ export default function EditGame({
         gamefrootLink: gamefroot,
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
+        tags: tags.split(','),
+        playableOnHeihei,
+        exclude: [
+          excludeBrowserMobile ? 'mobileweb' : '',
+          excludeBrowserDesktop ? 'desktop' : '',
+        ].toString(),
+        partner: partner === 'None' ? '' : partner,
       }),
       headers: {
         Authorization: 'Bearer ' + (await user?.getIdToken(true)),
@@ -172,7 +188,6 @@ export default function EditGame({
             </div>
           </div>
           <br />
-
           <form
             className={`flex-col mx-auto ${name ? 'flex' : 'hidden'}`}
             onSubmit={saveGame}
@@ -194,6 +209,56 @@ export default function EditGame({
               name={'Description'}
               tooltip="This is the description people will see when they open your game. There is a 1000 character limit"
             />
+            <label
+              htmlFor="Partner / Studio"
+              className="text-left text-base font-bold mb-1"
+            >
+              Partner / Studio
+            </label>
+            <p className="text-zinc-500 text-sm mb-3">
+              Name of this games partner / studio
+            </p>
+            <select
+              id="Partner / Studio"
+              name="Partner / Studio"
+              value={partner}
+              onChange={(event) => onGameInputChange(event, 'Partner / Studio')}
+              className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-white border shadow-md focus:border-black outline-none text-lg"
+            >
+              <option value={'None'}>None</option>
+
+              {game?.partner &&
+              partners.find((x) => x.name === game.partner) === undefined ? (
+                <option value={game.partner}>{game.partner}</option>
+              ) : (
+                ''
+              )}
+              <optgroup label="Shown">
+                {partners.map((element) => {
+                  return element.hidden === false ? (
+                    <option key={element.name} value={element.name}>
+                      {element.name}
+                    </option>
+                  ) : null
+                })}
+              </optgroup>
+              <optgroup label="Hidden">
+                {partners.map((element) => {
+                  return element.hidden === true ? (
+                    <option key={element.name} value={element.name}>
+                      {element.name}
+                    </option>
+                  ) : null
+                })}
+              </optgroup>
+            </select>
+            <Input
+              onChange={onGameInputChange}
+              value={tags}
+              type="text"
+              maxLength={200}
+              name={'Tags'}
+            />
             <Input
               onChange={onGameInputChange}
               value={ios}
@@ -210,6 +275,29 @@ export default function EditGame({
               name={'Android Link'}
               tooltip="If your game has an Google Play Store link you can add that here"
             />
+            <br />
+            <Input
+              onChange={onGameInputChange}
+              value={playableOnHeihei}
+              type="checkbox"
+              maxLength={0}
+              name={'Playable on Heihei'}
+            />
+            <Input
+              onChange={onGameInputChange}
+              value={excludeBrowserMobile}
+              type="checkbox"
+              maxLength={0}
+              name={'Exclude on mobile browser'}
+            />
+            <Input
+              onChange={onGameInputChange}
+              value={excludeBrowserDesktop}
+              type="checkbox"
+              maxLength={0}
+              name={'Exclude on desktop browser'}
+            />
+            <br />
             <Input
               onChange={onGameInputChange}
               value={gamefroot}
@@ -234,34 +322,6 @@ export default function EditGame({
               tooltip="Same as width, but for height."
               name={'Height'}
             />
-            <Input
-              onChange={onGameInputChange}
-              value={tags}
-              type="text"
-              maxLength={200}
-              name={'Tags'}
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={playableOnHeihei}
-              type="checkbox"
-              maxLength={0}
-              name={'Playable on Heihei'}
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={excludeBrowserMobile}
-              type="checkbox"
-              maxLength={0}
-              name={'Exclude on mobile browser'}
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={excludeBrowserDesktop}
-              type="checkbox"
-              maxLength={0}
-              name={'Exclude on desktop browser'}
-            />
             <br />
             <label
               htmlFor="Change Thumbnail"
@@ -278,6 +338,7 @@ export default function EditGame({
               type="file"
               name="Change Thumbnail"
               accept="image/*"
+              id="Change Thumbnail"
               onChange={(event) => onGameInputChange(event, 'Change Thumbnail')}
             />
             {thumbnail ? (

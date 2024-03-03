@@ -38,6 +38,7 @@ export default function Dashboard({
     <>
       <div className="max-w-[600px] text-wrap mx-auto text-left mt-20 text-lg mb-12 font-sans text-black">
         <EditGame
+          partners={dashboardData.partners}
           className={game ? 'block' : 'hidden'}
           game={game}
           exit={exitGame}

@@ -3,6 +3,7 @@ import { IconButton } from '../(components)/iconButton'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
+import { MdDeleteForever } from 'react-icons/md'
 
 export default function Partners({
   className,
@@ -64,30 +65,40 @@ export default function Partners({
   return (
     <div className={className}>
       <table className="w-full">
-        <tr>
-          <th>Partner</th>
-          <th className="w-16 text-center">Hide</th>
-        </tr>
-        {partnerData?.map((element, key) => {
-          return (
-            <tr key={key} className="odd:bg-zinc-100">
-              <td>{element.name}</td>
-              <td>
-                <IconButton
-                  onClick={() => {
-                    onToggleVisibility(element)
-                  }}
-                >
-                  {element.hidden ? (
-                    <IoEyeOff className="w-full" size={'30px'} />
-                  ) : (
-                    <IoEye className="w-full" size={'30px'} />
-                  )}
-                </IconButton>
-              </td>
-            </tr>
-          )
-        })}
+        <thead>
+          <tr>
+            <th>Partner</th>
+            <th className="w-16 text-center">Hide</th>
+            <th className="w-16 text-center">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {partnerData?.map((element, key) => {
+            return (
+              <tr key={key} className="even:bg-zinc-100 odd:bg-white">
+                <td>{element.name}</td>
+                <td>
+                  <IconButton
+                    onClick={() => {
+                      onToggleVisibility(element)
+                    }}
+                  >
+                    {element.hidden ? (
+                      <IoEyeOff className="w-full" size={'30px'} />
+                    ) : (
+                      <IoEye className="w-full" size={'30px'} />
+                    )}
+                  </IconButton>
+                </td>
+                <td>
+                  <IconButton onClick={() => {}}>
+                    <MdDeleteForever className="w-full" size={'30px'} />
+                  </IconButton>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
       </table>
     </div>
   )

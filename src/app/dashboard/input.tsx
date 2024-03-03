@@ -46,6 +46,7 @@ export default function Input({
             required={required}
             name={name}
             maxLength={maxLength}
+            id={name}
             rows={10}
             className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow-md focus:border-black outline-none text-lg"
           ></textarea>
@@ -57,6 +58,7 @@ export default function Input({
             checked={currentValue as boolean}
             maxLength={maxLength}
             name={name}
+            id={name}
             required={required}
             className={`py-0.5 px-2 rounded-lg border-white border focus:border-black outline-none text-lg ${
               type === 'checkbox'

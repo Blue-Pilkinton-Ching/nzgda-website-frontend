@@ -37,9 +37,13 @@ export async function PATCH(
         const doc = (await query2.get()).docs[0]
         const data = doc.data() as { data: GameListItem[] }
 
-        data.data[
-          data.data.findIndex((item) => item.id === Number(params.gameID))
-        ].name = gameChanges.name
+        const thing =
+          data.data[
+            data.data.findIndex((item) => item.id === Number(params.gameID))
+          ]
+
+        thing.name = gameChanges.name
+        thing.partner = gameChanges.partner
 
         await doc.ref.set(data)
       }

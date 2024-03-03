@@ -19,7 +19,10 @@ export default function Games() {
   }, [])
 
   async function fetchGames() {
-    let data
+    let data: {
+      data: GameListItem[]
+      partners: { name: string; hidden: boolean }[]
+    }
     try {
       data = (
         await firestore.getDoc(
@@ -28,20 +31,24 @@ export default function Games() {
             'gameslist/BrHoO8yuD3JdDFo8F2BC'
           )
         )
-      ).data() as { data: GameListItem[] }
+      ).data() as {
+        data: GameListItem[]
+        partners: { name: string; hidden: boolean }[]
+      }
 
       setGames(
         <div className="flex justify-evenly lg:gap-6 gap-3 flex-wrap">
           {data.data.map((element, index) => {
-            const thumbnail =
-              element.name === 'I_SPY' ? ispy : element.thumbnail
-
-            if (!element.hidden) {
+            if (
+              !element.hidden &&
+              data.partners.find((p) => p.name === element.name)?.hidden !==
+                true
+            ) {
               return (
                 <Link key={index} href={`/games/${element.id}`}>
                   <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-95">
                     <Image
-                      src={thumbnail}
+                      src={element.name === 'I_SPY' ? ispy : element.thumbnail}
                       alt={element.name}
                       width={150}
                       height={200}
