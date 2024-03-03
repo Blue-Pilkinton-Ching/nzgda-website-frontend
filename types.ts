@@ -36,7 +36,8 @@ export interface AuthHeader {
 
 export interface AdminDashboard {
   admins: Admin[]
-  gameslist: { data: GameListItem[] }
+  partners: { name: string; hidden: boolean }[]
+  gameslist: GameListItem[]
   authRequests: AuthRequest[]
 }
 

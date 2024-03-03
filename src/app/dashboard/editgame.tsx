@@ -300,8 +300,7 @@ export default function EditGame({
               ''
             )}
             <br />
-
-            <div className="mx-auto *:block *:w-38">
+            <div className="flex justify-center *:w-32 gap-4">
               <Button
                 inverted
                 className="bg-black text-white"
@@ -309,17 +308,18 @@ export default function EditGame({
               >
                 Save Game
               </Button>
+              <Button
+                onClick={(event) => {
+                  event.preventDefault()
+                  resetGame(game as Game)
+                }}
+                className="bg-black text-white"
+                invertedClassName="bg-white text-black"
+              >
+                Reset
+              </Button>
             </div>
           </form>
-          <div className="mx-auto w-40 *:w-40">
-            <Button
-              onClick={() => resetGame(game as Game)}
-              className="bg-black text-white"
-              invertedClassName="bg-white text-black"
-            >
-              Reset
-            </Button>
-          </div>
         </>
       ) : (
         <p className="text-lg font-semibold text-red">Loading Game...</p>

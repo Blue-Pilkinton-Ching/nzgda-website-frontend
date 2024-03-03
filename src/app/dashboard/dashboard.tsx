@@ -5,6 +5,7 @@ import Button from '../(components)/button'
 import Users from './users'
 import GamesList from './gameslist'
 import EditGame from './editgame'
+import Partners from './partners'
 
 export default function Dashboard({
   data,
@@ -16,7 +17,7 @@ export default function Dashboard({
   const [game, setGame] = useState<Game>()
 
   const [dashboardData, setDashboardData] = useState<DashboardData>()
-  const [panel, setPanel] = useState<'users' | 'games' | undefined>('games')
+  const [panel, setPanel] = useState<'users' | 'games' | 'partners'>('games')
 
   useEffect(() => {
     setDashboardData(data)
@@ -49,7 +50,7 @@ export default function Dashboard({
           <div className="flex justify-center gap-10">
             <Button
               onClick={() => setPanel('games')}
-              inverted={panel === 'users'}
+              inverted={panel !== 'games'}
               className="bg-black text-white"
               invertedClassName="bg-white text-black"
             >
@@ -57,11 +58,19 @@ export default function Dashboard({
             </Button>
             <Button
               onClick={() => setPanel('users')}
-              inverted={panel === 'games'}
+              inverted={panel !== 'users'}
               className="bg-black text-white"
               invertedClassName="bg-white text-black"
             >
               Users & Settings
+            </Button>
+            <Button
+              onClick={() => setPanel('partners')}
+              inverted={panel !== 'partners'}
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
+            >
+              Partners
             </Button>
           </div>
           <br />
@@ -69,7 +78,7 @@ export default function Dashboard({
             className={`${
               panel === 'games' ? 'block' : 'hidden'
             } shadow-lg p-4 rounded`}
-            games={dashboardData.gameslist.data}
+            games={dashboardData.gameslist}
             setGame={(game) => {
               setGame(game)
             }}
@@ -80,6 +89,12 @@ export default function Dashboard({
             } shadow-lg p-4 rounded`}
             authRequests={dashboardData.authRequests}
           ></Users>
+          <Partners
+            partners={dashboardData.partners}
+            className={`${
+              panel === 'partners' ? 'block' : 'hidden'
+            } shadow-lg p-4 rounded`}
+          ></Partners>
         </div>
       </div>
     </>

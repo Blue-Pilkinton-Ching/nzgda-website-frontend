@@ -23,12 +23,20 @@ export async function GET(req: NextRequest) {
     let admins
     let gameslist
     let authRequests
+    let partners
 
     try {
-      const func1 = async () =>
-        (gameslist = (
+      const func1 = async () => {
+        const d = (
           await admin.firestore().doc('gameslist/BrHoO8yuD3JdDFo8F2BC').get()
-        ).data() as { data: GameListItem[] })
+        ).data() as {
+          data: GameListItem[]
+          partners: { name: string; hidden: boolean }[]
+        }
+
+        gameslist = d.data
+        partners = d.partners
+      }
 
       const func2 = async () =>
         (authRequests = (
@@ -48,7 +56,7 @@ export async function GET(req: NextRequest) {
       statusCode = 500
     }
 
-    body = { admins, gameslist, authRequests }
+    body = { admins, gameslist, authRequests, partners }
   } else {
     statusCode = 401
   }
