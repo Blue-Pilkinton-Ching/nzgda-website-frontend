@@ -95,7 +95,7 @@ export default function Games() {
 
   return (
     <>
-      <h3 className="text-3xl font-bold text-green">Play Games online!</h3>
+      <h3 className="text-3xl font-bold text-green">Play Games online</h3>
       <br />
       {gamesData ? (
         <div
