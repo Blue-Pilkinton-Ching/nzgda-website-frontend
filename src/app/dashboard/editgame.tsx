@@ -229,7 +229,7 @@ export default function EditGame({
               name="Partner / Studio"
               value={partner}
               onChange={(event) => onGameInputChange(event, 'Partner / Studio')}
-              className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-white border shadow-md focus:border-black outline-none text-lg"
+              className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
             >
               <option value={'None'}>None</option>
 

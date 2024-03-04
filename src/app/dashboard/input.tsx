@@ -48,7 +48,7 @@ export default function Input({
             maxLength={maxLength}
             id={name}
             rows={10}
-            className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow-md focus:border-black outline-none text-lg"
+            className="py-0.5 px-2 rounded-lg flex-1 border border-zinc-400 shadow-md focus:border-black outline-none text-lg"
           ></textarea>
         ) : (
           <input
@@ -60,7 +60,7 @@ export default function Input({
             name={name}
             id={name}
             required={required}
-            className={`py-0.5 px-2 rounded-lg border-white border focus:border-black outline-none text-lg ${
+            className={`py-0.5 px-2 rounded-lg border-zinc-400 border focus:border-black outline-none text-lg ${
               type === 'checkbox'
                 ? 'mx-4 -mt-0.5 scale-[200%]'
                 : 'shadow-md flex-1 mb-3 '
