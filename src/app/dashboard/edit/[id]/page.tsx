@@ -47,7 +47,6 @@ export default function EditGame() {
       window.location.href = '/dashboard'
       return
     } else {
-      console.log(user)
       Promise.all([fetchGame(), fetchPartners()])
     }
 
@@ -74,8 +73,6 @@ export default function EditGame() {
     }
 
     async function fetchGame() {
-      console.log(params.id)
-
       const query = firestore.query(
         firestore.collection(firestore.getFirestore(), 'games'),
         firestore.limit(1),
