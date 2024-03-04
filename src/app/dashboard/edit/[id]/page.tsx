@@ -1,7 +1,7 @@
 'use client'
 
 import Input from './../../input'
-import { Game, Partner } from '../../../../../types'
+import { Game, GamesList, Partner } from '../../../../../types'
 import Button from '../../../(components)/button'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -43,49 +43,67 @@ export default function EditGame() {
   const [partners, setPartners] = useState<Partner[]>()
 
   useEffect(() => {
-    if (params.id) {
-      console.log(params.id)
-      fetchGame()
+    if (user == null) {
+      window.location.href = '/dashboard'
+      return
+    } else {
+      console.log(user)
+      Promise.all([fetchGame(), fetchPartners()])
     }
 
     async function fetchPartners() {
-      const query = firestore.query(
-        firestore.collection(firestore.getFirestore(), 'gameslist'),
-        firestore.limit(1)
-      )
-
-      const querySnapshot = await firestore.getDocs(query)
-
-      if (!querySnapshot || querySnapshot.docs.length === 0) {
-        alert("Couldn't find gameslist")
-        setMessage('Error fetching partners')
-        return
+      let data
+      try {
+        data = (
+          await firestore.getDoc(
+            firestore.doc(
+              firestore.getFirestore(),
+              'gameslist/BrHoO8yuD3JdDFo8F2BC'
+            )
+          )
+        ).data() as GamesList
+        if (!data) {
+          setMessage("Couldn't find data :(")
+          throw 'Partner data not on firebase for some reason'
+        }
+        setPartners(data?.partners)
+      } catch (error) {
+        console.error(error)
+        setMessage('Failed to fetch games :(')
       }
-
-      const data = querySnapshot.docs[0].data().partners as Partner[]
-      setPartners(data)
     }
 
     async function fetchGame() {
+      console.log(params.id)
+
       const query = firestore.query(
         firestore.collection(firestore.getFirestore(), 'games'),
         firestore.limit(1),
-        firestore.where('id', '==', params.id)
+        firestore.where('id', '==', Number(params.id))
       )
 
-      const querySnapshot = await firestore.getDocs(query)
+      let data
 
-      if (!querySnapshot || querySnapshot.docs.length === 0) {
-        alert("Couldn't find game")
-        return
+      try {
+        const querySnapshot = await firestore.getDocs(query)
+        if (!querySnapshot || querySnapshot.docs.length === 0) {
+          setMessage('Error fetching game :(')
+          throw 'Game data not on firebase for some reason'
+        }
+        data = querySnapshot.docs[0].data() as Game
+      } catch (error) {
+        console.error(error)
+        setMessage('Failed to fetch game data :(')
       }
-
-      const data = querySnapshot.docs[0].data() as Game
       resetGame(data)
     }
-  }, [params.id])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   async function resetGame(data: Game | undefined) {
+    setGame(data)
+
     setName(data?.name || '')
     setDescription(data?.description || '')
     setIos(data?.iosLink || '')
@@ -216,8 +234,8 @@ export default function EditGame() {
   }
 
   return (
-    <div className={``}>
-      {name ? (
+    <div className="max-w-[600px] mx-auto text-left text-black">
+      {game && partners ? (
         <>
           <div className="flex gap-4">
             <button
