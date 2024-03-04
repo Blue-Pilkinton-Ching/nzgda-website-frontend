@@ -6,9 +6,7 @@ import {
   Admin,
   AuthRequest,
   AdminDashboard,
-  GameListItem,
   UserPrivilege,
-  Partner,
   GamesList,
 } from '../../../../types'
 import * as admin from 'firebase-admin'
