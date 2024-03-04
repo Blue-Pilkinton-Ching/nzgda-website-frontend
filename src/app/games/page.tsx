@@ -28,7 +28,6 @@ export default function Page() {
         </div>
       </section>
       <section>
-        <h3 className="text-3xl font-bold text-green">Games</h3>
         <Games />
       </section>
     </>

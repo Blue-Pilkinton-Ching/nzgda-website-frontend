@@ -14,20 +14,16 @@ export interface Game {
   uploadStatus: string
   iosLink?: string
   androidLink?: string
-  androidApplicationId?: string
-  iosApplicationId?: string
   gamefrootLink?: string
   fileSize?: number
   exclude?: string
   width?: number
   height?: number
-  tvnzLink?: string
-  tvnzShowName?: string
   orientation?: string
-  parent: number
   createdAt?: string
   updatedAt?: string
   playableOnHeihei?: boolean
+  displayAppBadge?: boolean
 }
 
 export interface AuthHeader {
@@ -60,6 +56,7 @@ export interface GameListItem {
   hidden: boolean
   partner: string
   exclude: string
+  app?: boolean
 }
 
 export interface AuthRequest {

@@ -18,8 +18,6 @@ export async function PATCH(
   const gameChanges = await req.json()
   const privilege = res.headers.get('privilege') as UserPrivilege
 
-  console.log(gameChanges)
-
   let body: AdminDashboard | {} = {}
   let statusCode = 500
 
@@ -47,6 +45,7 @@ export async function PATCH(
         item.name = gameChanges.name
         item.partner = gameChanges.partner
         item.exclude = gameChanges.exclude
+        item.app = gameChanges.displayAppBadge
 
         await doc.ref.set(data)
       }

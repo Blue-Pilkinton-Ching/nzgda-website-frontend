@@ -35,6 +35,7 @@ export default function EditGame({
   const [excludeBrowserDesktop, setExcludeBrowserDesktop] =
     useState<boolean>(false)
   const [partner, setPartner] = useState('')
+  const [displayAppBadge, setDisplayAppBadge] = useState(false)
 
   const [thumbnail, setThumbnail] = useState<File | string>('')
 
@@ -55,6 +56,7 @@ export default function EditGame({
     setExcludeBrowserMobile(data?.exclude?.includes('mobileweb') || false)
     setExcludeBrowserDesktop(data?.exclude?.includes('desktop') || false)
     setPartner(data?.partner || 'None')
+    setDisplayAppBadge(data?.displayAppBadge || false)
   }
 
   function onGameInputChange(
@@ -125,6 +127,9 @@ export default function EditGame({
       case 'Partner / Studio':
         setPartner(event.target.value)
         break
+      case 'Display App Badge':
+        setDisplayAppBadge(event.target.value === 'false')
+        break
     }
   }
 
@@ -148,6 +153,7 @@ export default function EditGame({
           excludeBrowserDesktop ? 'desktop' : '',
         ].toString(),
         partner: partner === 'None' ? '' : partner,
+        displayAppBadge,
       }),
       headers: {
         Authorization: 'Bearer ' + (await user?.getIdToken(true)),
@@ -278,6 +284,13 @@ export default function EditGame({
             <br />
             <Input
               onChange={onGameInputChange}
+              value={displayAppBadge}
+              type="checkbox"
+              maxLength={0}
+              name={'Display App Badge'}
+            />
+            <Input
+              onChange={onGameInputChange}
               value={playableOnHeihei}
               type="checkbox"
               maxLength={0}
@@ -312,7 +325,7 @@ export default function EditGame({
               type="number"
               maxLength={4}
               tooltip="Ideally your game's canvas should extend infinitely. If this is the case, leave this value blank, or set to 0. If this is not the base, enter the canvas's max width in px."
-              name={'Width'}
+              name={'Max Width'}
             />
             <Input
               onChange={onGameInputChange}
@@ -320,7 +333,7 @@ export default function EditGame({
               type="number"
               maxLength={4}
               tooltip="Same as width, but for height."
-              name={'Height'}
+              name={'Max Height'}
             />
             <br />
             <label

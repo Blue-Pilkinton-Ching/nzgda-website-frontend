@@ -1,17 +1,25 @@
 'use client'
 
 import { GameListItem } from '../../../types'
-
-import ispy from '../../../public/images/I-Spyportrait.png'
-import Link from 'next/link'
-import Image from 'next/image'
 import * as firestore from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 
 import '@/utils/client/firebase'
+import { useWindowSize } from '@uidotdev/usehooks'
+import Card from './card'
 
 export default function Games() {
-  const [games, setGames] = useState<React.ReactNode>(null)
+  const { width } = useWindowSize()
+
+  const [error, setError] = useState('')
+
+  const [gamesData, setGamesData] = useState<{
+    data: GameListItem[]
+    partners: {
+      name: string
+      hidden: boolean
+    }[]
+  }>()
 
   useEffect(() => {
     fetchGames()
@@ -36,45 +44,27 @@ export default function Games() {
         partners: { name: string; hidden: boolean }[]
       }
 
-      setGames(
-        <div className="flex justify-evenly lg:gap-6 gap-3 flex-wrap">
-          {data.data.map((element) => {
-            if (
-              !element.hidden &&
-              data.partners.find((p) => p.name === element.partner)?.hidden !==
-                true &&
-              (element.exclude
-                ? isMobile()
-                  ? !element.exclude.includes('mobileweb')
-                  : !element.exclude.includes('desktop')
-                : true)
-            ) {
-              return (
-                <Link key={element.id} href={`/games/${element.id}`}>
-                  <div className="rounded-lg max-w-[150px] h-[200px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-95">
-                    <Image
-                      src={element.name === 'I_SPY' ? ispy : element.thumbnail}
-                      alt={element.name}
-                      width={150}
-                      height={200}
-                      className="rounded-lg "
-                    ></Image>
-                  </div>
-                </Link>
-              )
-            } else {
-              return null
-            }
-          })}
-        </div>
-      )
+      setGamesData({
+        data: data.data.filter(
+          (element) =>
+            !element.hidden &&
+            data.partners.find((p) => p.name === element.partner)?.hidden !==
+              true &&
+            (element.exclude
+              ? isMobile()
+                ? !element.exclude.includes('mobileweb')
+                : !element.exclude.includes('desktop')
+              : true)
+        ),
+        partners: data.partners,
+      })
       if (!data) {
         console.error('Data not on firebase for some reason')
         throw 'Data not on firebase for some reason'
       }
     } catch (error) {
       console.error(error)
-      setGames(<p className=" text-green text-3xl">Failed to fetch games :(</p>)
+      setError('Failed to fetch games :(')
     }
   }
 
@@ -85,10 +75,64 @@ export default function Games() {
     )
   }
 
+  const containerWidth = () => {
+    const padding = (width as number) >= 640 ? 80 : 40
+
+    return (width as number) - padding
+  }
+
+  const flexGap = () => {
+    const cardWidth = 135
+    return (containerWidth() - cardsPerRow() * cardWidth) / (cardsPerRow() + 1)
+  }
+
+  const cardsPerRow = () => {
+    const cardWidth = 135
+    const gap = (width as number) >= 1024 ? 12 : 8
+
+    return Math.floor((containerWidth() + gap) / (cardWidth + gap))
+  }
+
   return (
     <>
+      <h3 className="text-3xl font-bold text-green">Play Games online!</h3>
       <br />
-      {games ? games : <p className="text-green text-3xl">Fetching Games...</p>}
+      {gamesData ? (
+        <div
+          className="flex justify-evenly lg:gap-x-3 gap-x-2 flex-wrap"
+          style={{ rowGap: flexGap() }}
+        >
+          {gamesData.data.map((element) => (
+            <Card key={element.id} game={element} />
+          ))}
+          {gamesData.data.length % cardsPerRow() !== 0
+            ? Array(cardsPerRow() - (gamesData.data.length % cardsPerRow()))
+                .fill(0)
+                .map((_, i) => (
+                  <div className={`w-[135px] h-[180px]`} key={i}></div>
+                ))
+            : null}
+        </div>
+      ) : error ? (
+        <p className=" text-green text-3xl">Failed to fetch games :(</p>
+      ) : (
+        <p className="text-green text-3xl">Fetching Games...</p>
+      )}
+      <br />
+      <br />
+      <br />
+      <h3 className="text-3xl font-bold text-green">Or download an app</h3>
+      <br />
+      <div
+        className="flex justify-evenly lg:gap-x-3 gap-x-2 flex-wrap"
+        style={{ rowGap: flexGap() }}
+      >
+        {gamesData
+          ? gamesData.data
+              .filter((x) => x.app)
+              .map((element) => <Card key={element.id} game={element} />)
+          : null}
+      </div>
     </>
   )
 }
