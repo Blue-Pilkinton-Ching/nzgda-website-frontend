@@ -1,25 +1,22 @@
-import Input from './input'
-import { Game } from '../../../types'
-import Button from '../(components)/button'
+'use client'
+
+import Input from './../../input'
+import { Game, Partner } from '../../../../../types'
+import Button from '../../../(components)/button'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-import back from '../../../public/images/back.svg'
+import back from '../../../../../public/images/back.svg'
+import '../../../../utils/client/firebase'
 
 import Image from 'next/image'
+import { useParams, useRouter } from 'next/navigation'
+import * as firestore from 'firebase/firestore'
 
-export default function EditGame({
-  game,
-  partners,
-  exit,
-  className,
-}: {
-  className: string
-  game?: Game
-  exit: () => void
-  partners: { name: string; hidden: boolean }[]
-}) {
+export default function EditGame() {
   const [user] = useAuthState(getAuth())
+
+  const [message, setMessage] = useState('Loading Game...')
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -39,9 +36,54 @@ export default function EditGame({
 
   const [thumbnail, setThumbnail] = useState<File | string>('')
 
+  const [game, setGame] = useState<Game>()
+
+  const router = useRouter()
+  const params = useParams<{ id: string }>()
+  const [partners, setPartners] = useState<Partner[]>()
+
   useEffect(() => {
-    resetGame(game)
-  }, [game])
+    if (params.id) {
+      console.log(params.id)
+      fetchGame()
+    }
+
+    async function fetchPartners() {
+      const query = firestore.query(
+        firestore.collection(firestore.getFirestore(), 'gameslist'),
+        firestore.limit(1)
+      )
+
+      const querySnapshot = await firestore.getDocs(query)
+
+      if (!querySnapshot || querySnapshot.docs.length === 0) {
+        alert("Couldn't find gameslist")
+        setMessage('Error fetching partners')
+        return
+      }
+
+      const data = querySnapshot.docs[0].data().partners as Partner[]
+      setPartners(data)
+    }
+
+    async function fetchGame() {
+      const query = firestore.query(
+        firestore.collection(firestore.getFirestore(), 'games'),
+        firestore.limit(1),
+        firestore.where('id', '==', params.id)
+      )
+
+      const querySnapshot = await firestore.getDocs(query)
+
+      if (!querySnapshot || querySnapshot.docs.length === 0) {
+        alert("Couldn't find game")
+        return
+      }
+
+      const data = querySnapshot.docs[0].data() as Game
+      resetGame(data)
+    }
+  }, [params.id])
 
   async function resetGame(data: Game | undefined) {
     setName(data?.name || '')
@@ -136,7 +178,7 @@ export default function EditGame({
   async function saveGame(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const res = await fetch(`/api/dashboard/${game?.id}`, {
+    const res = await fetch(`/api/dashboard/${params.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         name,
@@ -162,7 +204,7 @@ export default function EditGame({
 
     switch (res.status) {
       case 200:
-        exit()
+        router.push('/dashboard')
         return
       case 401:
         alert('You are Unauthorized to make that action')
@@ -174,12 +216,12 @@ export default function EditGame({
   }
 
   return (
-    <div className={`${className} `}>
+    <div className={``}>
       {name ? (
         <>
           <div className="flex gap-4">
             <button
-              onClick={exit}
+              onClick={() => router.push('/dashboard')}
               className="duration-100 text-green *:mb-4 hover:scale-110 active:scale-95 hover:rotate-6 active:-rotate-12 "
             >
               <Image
@@ -189,8 +231,8 @@ export default function EditGame({
               ></Image>
             </button>
             <div>
-              <h1 className="text-4xl font-bold">{game?.name}</h1>
-              <h2 className="text-1xl">{game?.id}</h2>
+              <h1 className="text-4xl font-bold">{name}</h1>
+              <h2 className="text-1xl">{params.id}</h2>
             </div>
           </div>
           <br />
@@ -385,7 +427,7 @@ export default function EditGame({
               <Button
                 onClick={(event) => {
                   event.preventDefault()
-                  resetGame(game as Game)
+                  resetGame(game)
                 }}
                 className="bg-black text-white"
                 invertedClassName="bg-white text-black"
@@ -396,7 +438,7 @@ export default function EditGame({
           </form>
         </>
       ) : (
-        <p className="text-lg font-semibold text-red">Loading Game...</p>
+        <p className="text-lg font-semibold text-red">{message}</p>
       )}
     </div>
   )

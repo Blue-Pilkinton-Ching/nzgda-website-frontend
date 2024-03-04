@@ -3,8 +3,8 @@
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth'
 import Background from '../(components)/background'
 import Button from '../(components)/button'
-import { User, getAuth } from 'firebase/auth'
-import React, { use, useEffect, useState } from 'react'
+import { getAuth } from 'firebase/auth'
+import React, { useEffect, useState } from 'react'
 
 import '../../utils/client/firebase'
 import { useRouter } from 'next/navigation'
@@ -84,7 +84,7 @@ export default function Page() {
   }
 
   return (
-    <Background>
+    <>
       {user ? (
         <>
           {dashboard}
@@ -105,7 +105,7 @@ export default function Page() {
           </Button>
         </>
       )}
-    </Background>
+    </>
   )
 }
 

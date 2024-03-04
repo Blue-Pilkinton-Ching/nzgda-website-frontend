@@ -8,6 +8,8 @@ import {
   AdminDashboard,
   GameListItem,
   UserPrivilege,
+  Partner,
+  GamesList,
 } from '../../../../types'
 import * as admin from 'firebase-admin'
 
@@ -29,10 +31,7 @@ export async function GET(req: NextRequest) {
       const func1 = async () => {
         const d = (
           await admin.firestore().doc('gameslist/BrHoO8yuD3JdDFo8F2BC').get()
-        ).data() as {
-          data: GameListItem[]
-          partners: { name: string; hidden: boolean }[]
-        }
+        ).data() as GamesList
 
         gameslist = d.data
         partners = d.partners

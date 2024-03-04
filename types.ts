@@ -32,7 +32,7 @@ export interface AuthHeader {
 
 export interface AdminDashboard {
   admins: Admin[]
-  partners: { name: string; hidden: boolean }[]
+  partners: Partner[]
   gameslist: GameListItem[]
   authRequests: AuthRequest[]
 }
@@ -62,4 +62,14 @@ export interface GameListItem {
 export interface AuthRequest {
   email: string
   uid: string
+}
+
+export interface Partner {
+  hidden: boolean
+  name: string
+}
+
+export interface GamesList {
+  data: GameListItem[]
+  partners: Partner[]
 }

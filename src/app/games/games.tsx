@@ -1,6 +1,6 @@
 'use client'
 
-import { GameListItem } from '../../../types'
+import { GamesList } from '../../../types'
 import * as firestore from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 
@@ -13,13 +13,7 @@ export default function Games() {
 
   const [error, setError] = useState('')
 
-  const [gamesData, setGamesData] = useState<{
-    data: GameListItem[]
-    partners: {
-      name: string
-      hidden: boolean
-    }[]
-  }>()
+  const [gamesData, setGamesData] = useState<GamesList>()
 
   useEffect(() => {
     fetchGames()
@@ -27,10 +21,7 @@ export default function Games() {
   }, [])
 
   async function fetchGames() {
-    let data: {
-      data: GameListItem[]
-      partners: { name: string; hidden: boolean }[]
-    }
+    let data: GamesList
     try {
       data = (
         await firestore.getDoc(
@@ -39,11 +30,7 @@ export default function Games() {
             'gameslist/BrHoO8yuD3JdDFo8F2BC'
           )
         )
-      ).data() as {
-        data: GameListItem[]
-        partners: { name: string; hidden: boolean }[]
-      }
-
+      ).data() as GamesList
       setGamesData({
         data: data.data.filter(
           (element) =>
@@ -95,44 +82,54 @@ export default function Games() {
 
   return (
     <>
-      <h3 className="text-3xl font-bold text-green">Play Games online</h3>
-      <br />
       {gamesData ? (
-        <div
-          className="flex justify-evenly lg:gap-x-3 gap-x-2 flex-wrap"
-          style={{ rowGap: flexGap() }}
-        >
-          {gamesData.data.map((element) => (
-            <Card key={element.id} game={element} />
-          ))}
-          {gamesData.data.length % cardsPerRow() !== 0
-            ? Array(cardsPerRow() - (gamesData.data.length % cardsPerRow()))
-                .fill(0)
-                .map((_, i) => (
-                  <div className={`w-[135px] h-[180px]`} key={i}></div>
-                ))
-            : null}
-        </div>
+        <>
+          <h3 className="text-3xl font-bold text-green">Play Games online</h3>
+          <br />
+          <div
+            className="flex justify-evenly lg:gap-x-3 gap-x-2 flex-wrap"
+            style={
+              typeof window !== 'undefined' && width
+                ? { rowGap: flexGap() }
+                : {}
+            }
+          >
+            {gamesData.data.map((element) => (
+              <Card key={element.id} game={element} />
+            ))}
+            {gamesData.data.length % cardsPerRow() !== 0
+              ? Array(cardsPerRow() - (gamesData.data.length % cardsPerRow()))
+                  .fill(0)
+                  .map((_, i) => (
+                    <div className={`w-[135px] h-[180px]`} key={i}></div>
+                  ))
+              : null}
+          </div>
+          <br />
+          <br />
+          <br />
+          <h3 className="text-3xl font-bold text-green">Or download an app</h3>
+          <br />
+          <div
+            className="flex justify-evenly lg:gap-x-3 gap-x-2 flex-wrap"
+            style={
+              typeof window !== 'undefined' && width
+                ? { rowGap: flexGap() }
+                : {}
+            }
+          >
+            {gamesData.data
+              .filter((x) => x.app)
+              .map((element) => (
+                <Card key={element.id} game={element} />
+              ))}
+          </div>
+        </>
       ) : error ? (
         <p className=" text-green text-3xl">Failed to fetch games :(</p>
       ) : (
         <p className="text-green text-3xl">Fetching Games...</p>
       )}
-      <br />
-      <br />
-      <br />
-      <h3 className="text-3xl font-bold text-green">Or download an app</h3>
-      <br />
-      <div
-        className="flex justify-evenly lg:gap-x-3 gap-x-2 flex-wrap"
-        style={{ rowGap: flexGap() }}
-      >
-        {gamesData
-          ? gamesData.data
-              .filter((x) => x.app)
-              .map((element) => <Card key={element.id} game={element} />)
-          : null}
-      </div>
     </>
   )
 }

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import '@/utils/server/init'
 import getPrivilege from '@/utils/server/get-privilege'
 import * as admin from 'firebase-admin'
-import { UserPrivilege } from '../../../../../types'
+import { GamesList, Partner, UserPrivilege } from '../../../../../types'
 
 export async function PATCH(req: NextRequest) {
   const res = await getPrivilege(req)
@@ -20,9 +20,7 @@ export async function PATCH(req: NextRequest) {
         const query = admin.firestore().collection('gameslist').limit(1)
 
         const doc = (await query.get()).docs[0]
-        const data = doc.data() as {
-          partners: { name: string; hidden: boolean }[]
-        }
+        const data = doc.data() as GamesList
 
         data.partners[
           data.partners.findIndex((item) => item.name === reqBody.name)
@@ -63,9 +61,7 @@ export async function POST(req: NextRequest) {
         const query = admin.firestore().collection('gameslist').limit(1)
 
         const doc = (await query.get()).docs[0]
-        const data = doc.data() as {
-          partners: { name: string; hidden: boolean }[]
-        }
+        const data = doc.data() as GamesList
 
         data.partners.push({ name: reqBody, hidden: false })
 
@@ -104,9 +100,7 @@ export async function DELETE(req: NextRequest) {
         const query = admin.firestore().collection('gameslist').limit(1)
 
         const doc = (await query.get()).docs[0]
-        const data = doc.data() as {
-          partners: { name: string; hidden: boolean }[]
-        }
+        const data = doc.data() as GamesList
 
         data.partners = data.partners.filter((item) => item.name !== reqBody)
 

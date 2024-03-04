@@ -6,6 +6,7 @@ import { getAuth } from 'firebase/auth'
 import { MdDeleteForever } from 'react-icons/md'
 import Confirm from './confirm'
 import Button from '../(components)/button'
+import { Partner } from '../../../types'
 
 export default function Partners({
   className,
@@ -13,13 +14,12 @@ export default function Partners({
   invalidatePartners,
 }: {
   className: string
-  partners: { name: string; hidden: boolean }[]
+  partners: Partner[]
   invalidatePartners: () => void
 }) {
   const [user] = useAuthState(getAuth())
 
-  const [partnerData, setPartnerData] =
-    useState<{ name: string; hidden: boolean }[]>()
+  const [partnerData, setPartnerData] = useState<Partner[]>()
   const [confirmText, setConfirmText] = useState('')
   const [partnerToDelete, setPartnerToDelete] = useState('')
 

@@ -2,20 +2,18 @@ import { MdDeleteForever, MdModeEdit } from 'react-icons/md'
 import { IconButton } from '../(components)/iconButton'
 import { Game, GameListItem } from '../../../types'
 import { IoEye, IoEyeOff } from 'react-icons/io5'
-import * as firestore from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import Confirm from './confirm'
+import { useRouter } from 'next/navigation'
 
 export default function GamesList({
-  className,
   games,
-  setGame,
+  className,
 }: {
-  className: string
   games: GameListItem[]
-  setGame: (game: Game) => void
+  className: string
 }) {
   const [user] = useAuthState(getAuth())
 
@@ -23,32 +21,11 @@ export default function GamesList({
   const [confirmText, setConfirmText] = useState('')
   const [confirmAction, setConfirmAction] = useState<() => void>()
 
+  const router = useRouter()
+
   useEffect(() => {
     setCurrentGames(games)
   }, [games])
-
-  async function editGame(gameListItem: GameListItem) {
-    setGame({ id: gameListItem.id, name: gameListItem.name } as Game)
-
-    const query = firestore.query(
-      firestore.collection(firestore.getFirestore(), 'games'),
-      firestore.limit(1),
-      firestore.where('id', '==', gameListItem.id)
-    )
-
-    const querySnapshot = await firestore.getDocs(query)
-
-    if (!querySnapshot || querySnapshot.docs.length === 0) {
-      alert("Couldn't find game")
-      return
-    }
-
-    const data = querySnapshot.docs[0].data() as Game
-
-    console.log(data)
-
-    setGame(data)
-  }
 
   async function onToggleVisibility(listItem: GameListItem) {
     const shouldHide = !listItem.hidden
@@ -89,7 +66,7 @@ export default function GamesList({
   }
 
   return (
-    <div className={className}>
+    <div className={`shadow-lg p-4 rounded ${className}`}>
       <Confirm
         text={confirmText}
         onConfirm={() => confirmAction}
@@ -117,13 +94,15 @@ export default function GamesList({
                 <td>
                   <div
                     className="hover:underline cursor-pointer"
-                    onClick={() => editGame(element)}
+                    onClick={() => router.push(`/dashboard/edit/${element.id}`)}
                   >
                     {element.name}
                   </div>
                 </td>
                 <td>
-                  <IconButton onClick={() => editGame(element)}>
+                  <IconButton
+                    onClick={() => router.push(`/dashboard/edit/${element.id}`)}
+                  >
                     <MdModeEdit className="w-full" size={'30px'} />
                   </IconButton>
                 </td>
