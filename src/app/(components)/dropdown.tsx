@@ -46,6 +46,7 @@ export default function Dropdown({
               <Link
                 href={`/games`}
                 className="block px-4 py-2 font-semibold hover:bg-neutral-100"
+                scroll={false}
               >
                 None
               </Link>
@@ -53,6 +54,7 @@ export default function Dropdown({
             {options.map((option) => (
               <li key={option}>
                 <Link
+                  scroll={false}
                   href={`/games?partner=${encodeURIComponent(option)}`}
                   className="block px-4 py-2 hover:bg-neutral-100"
                 >
