@@ -5,7 +5,6 @@ import * as firestore from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 
 import '@/utils/client/firebase'
-import Card from './card'
 import Dropdown from '../(components)/dropdown'
 import { useSearchParams } from 'next/navigation'
 import GameSection from './gamesection'
