@@ -1,13 +1,19 @@
 import Link from 'next/link'
 
-export default function Dropdown({ options }: { options: string[] }) {
+export default function Dropdown({
+  options,
+  className,
+}: {
+  options: string[]
+  className?: string
+}) {
   return (
     <>
-      <div className="relative pb-2 group/button cursor-pointer">
+      <div className={`relative mt-2 pb-2 group/button w-min ${className}`}>
         <button
           id="dropdownDefaultButton"
           data-dropdown-toggle="dropdown"
-          className="text-white bg-maingreen focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+          className="text-white bg-maingreen focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center w-44"
           type="button"
         >
           Filter by Studio{' '}

@@ -72,10 +72,11 @@ export default function Games() {
         <>
           {partner ? (
             <>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between sm:items-center flex-col-reverse sm:flex-row">
                 <h3 className="text-3xl font-bold text-maingreen">
                   Games by {partner}
                 </h3>
+                <br />
                 <Dropdown
                   options={gamesData.partners
                     .filter((x) => x.hidden !== true)
