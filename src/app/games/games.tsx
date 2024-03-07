@@ -69,12 +69,12 @@ export default function Games() {
   }
 
   const flexGap = () => {
-    const cardWidth = 135
+    const cardWidth = (width as number) >= 1024 ? 150 : 135
     return (containerWidth() - cardsPerRow() * cardWidth) / (cardsPerRow() + 1)
   }
 
   const cardsPerRow = () => {
-    const cardWidth = 135
+    const cardWidth = (width as number) >= 1024 ? 150 : 135
     const gap = (width as number) >= 1024 ? 12 : 8
 
     return Math.floor((containerWidth() + gap) / (cardWidth + gap))
@@ -101,7 +101,10 @@ export default function Games() {
               ? Array(cardsPerRow() - (gamesData.data.length % cardsPerRow()))
                   .fill(0)
                   .map((_, i) => (
-                    <div className={`w-[135px] h-[180px]`} key={i}></div>
+                    <div
+                      className={`lg:w-[150px] w-[135px] h-[180px] lg:h-[200px]`}
+                      key={i}
+                    ></div>
                   ))
               : null}
           </div>
@@ -123,6 +126,19 @@ export default function Games() {
               .map((element) => (
                 <Card key={element.id} game={element} />
               ))}
+            {gamesData.data.filter((x) => x.app).length % cardsPerRow() !== 0
+              ? Array(
+                  cardsPerRow() -
+                    (gamesData.data.filter((x) => x.app).length % cardsPerRow())
+                )
+                  .fill(0)
+                  .map((_, i) => (
+                    <div
+                      className={`lg:w-[150px] w-[135px] h-[180px] lg:h-[200px]`}
+                      key={i}
+                    ></div>
+                  ))
+              : null}
           </div>
         </>
       ) : error ? (
