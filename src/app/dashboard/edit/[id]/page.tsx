@@ -237,7 +237,7 @@ export default function EditGame() {
           <div className="flex gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="duration-100 text-green *:mb-4 hover:scale-110 active:scale-95 hover:rotate-6 active:-rotate-12 "
+              className="duration-100 text-maingreen *:mb-4 hover:scale-110 active:scale-95 hover:rotate-6 active:-rotate-12 "
             >
               <Image
                 src={back}
@@ -453,7 +453,7 @@ export default function EditGame() {
           </form>
         </>
       ) : (
-        <p className="text-lg font-semibold text-red">{message}</p>
+        <p className="text-lg font-semibold text-mainred">{message}</p>
       )}
     </div>
   )

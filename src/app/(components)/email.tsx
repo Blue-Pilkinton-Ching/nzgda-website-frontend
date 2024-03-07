@@ -8,7 +8,7 @@ export default function Email() {
         type="email"
         name="email"
         placeholder="Enter your email..."
-        className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow focus:border-red outline-none text-lg mb-3"
+        className="py-0.5 px-2 rounded-lg flex-1 border-white border shadow focus:border-mainred outline-none text-lg mb-3"
         required
         maxLength={50}
       />

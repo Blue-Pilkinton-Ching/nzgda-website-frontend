@@ -22,7 +22,9 @@ export default function Dashboard({
 
   if (!dashboardData) {
     return (
-      <div className="text-xl text-red font-semibold">Loading dashboard...</div>
+      <div className="text-xl text-mainred font-semibold">
+        Loading dashboard...
+      </div>
     )
   }
 

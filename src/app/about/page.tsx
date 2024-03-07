@@ -29,7 +29,7 @@ export default function Page() {
       <br />
       <Link
         href={'/games'}
-        className="duration-100 text-green *:mb-4 hover:scale-125 active:scale-95 hover:rotate-12 active:-rotate-12 "
+        className="duration-100 text-maingreen *:mb-4 hover:scale-125 active:scale-95 hover:rotate-12 active:-rotate-12 "
       >
         <Image src={back} alt={back} className="w-14 "></Image>
       </Link>

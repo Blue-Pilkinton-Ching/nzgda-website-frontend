@@ -23,7 +23,7 @@ export default function Card({ game }: { game: GameListItem }) {
           className="rounded-lg lg:hidden"
         ></Image>
         {game.app ? (
-          <div className="bg-green absolute w-11 h-7 bottom-0 right-0 z-10 rounded-br-lg rounded-tl-lg text-white text-xs font-semibold">
+          <div className="bg-maingreen absolute w-11 h-7 bottom-0 right-0 z-10 rounded-br-lg rounded-tl-lg text-white text-xs font-semibold">
             <p className="text-center items-center justify-center h-full flex">
               App
             </p>

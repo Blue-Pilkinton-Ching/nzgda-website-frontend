@@ -22,10 +22,10 @@ export default function Button({
         inverted
           ? invertedClassName
             ? invertedClassName
-            : `'bg-white text-red`
+            : `'bg-white text-mainred`
           : className
           ? className
-          : 'bg-red text-white'
+          : 'bg-mainred text-white'
       }`}
     >
       {children}

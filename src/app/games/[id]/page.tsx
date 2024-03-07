@@ -57,17 +57,19 @@ export default function Page() {
   }
 
   if (error) {
-    return <p className="text-5xl font-semibold text-green">{error}</p>
+    return <p className="text-5xl font-semibold text-maingreen">{error}</p>
   }
 
   if (!game) {
-    return <p className="text-5xl font-semibold text-green">Fetching Game...</p>
+    return (
+      <p className="text-5xl font-semibold text-maingreen">Fetching Game...</p>
+    )
   }
 
   return (
     <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none min-h-[calc(100vh-80px)]">
       <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] h-full flex justify-center flex-col">
-        <h1 className="sm:text-4xl text-3xl text-green font-semibold text-wrap flex items-center">
+        <h1 className="sm:text-4xl text-3xl text-maingreen font-semibold text-wrap flex items-center">
           <Link
             className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12 flex items-center mr-5 w-full max-w-12"
             href={'/games'}
@@ -143,7 +145,7 @@ export default function Page() {
 
                   gameView.current?.requestFullscreen()
                 }}
-                className="flex bg-green h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
+                className="flex bg-maingreen h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +176,7 @@ export default function Page() {
             ></Image>
           </div>
         ) : (
-          <p className="text-5xl font-semibold text-green">
+          <p className="text-5xl font-semibold text-maingreen">
             Game doesn&apos;t exist!
           </p>
         )}
