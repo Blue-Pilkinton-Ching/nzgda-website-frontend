@@ -48,6 +48,10 @@ export default function Users({
       case 500:
         alert('A server error occured while adding user')
         return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
     }
   }
 
@@ -74,6 +78,10 @@ export default function Users({
         return
       case 500:
         alert('A server error occured while deleting user')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
         return
     }
   }

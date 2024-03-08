@@ -65,6 +65,10 @@ export default function Partners({
       case 500:
         alert('An error occured while setting partner visibility')
         return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
     }
   }
 
@@ -91,6 +95,10 @@ export default function Partners({
         return
       case 500:
         alert('An error occured while deleting partner')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
         return
     }
   }
@@ -126,6 +134,10 @@ export default function Partners({
         return
       case 500:
         alert('An error occured while adding partner')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
         return
     }
   }

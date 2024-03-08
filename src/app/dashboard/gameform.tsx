@@ -66,13 +66,13 @@ export default function GameForm({
       case 'Android Link':
         setAndroid(event.target.value)
         break
-      case 'Gamefroot Link':
+      case 'Embed External Game URL':
         setGamefroot(event.target.value)
         break
-      case 'Width':
+      case 'Max Width':
         setWidth(event.target.value)
         break
-      case 'Height':
+      case 'Max Height':
         setHeight(event.target.value)
         break
       case 'Tags':
@@ -151,7 +151,7 @@ export default function GameForm({
       })
     } else {
       res = await fetch(`/api/dashboard/add`, {
-        method: 'PATCH',
+        method: 'POST',
         body: JSON.stringify({
           name,
           description,
@@ -185,6 +185,10 @@ export default function GameForm({
       case 500:
         alert('An error occured while saving the game')
         return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
     }
   }
 
@@ -210,13 +214,15 @@ export default function GameForm({
         <div className="flex gap-4">
           <button
             onClick={() => router.push('/dashboard')}
-            className="duration-100 text-maingreen *:mb-4 hover:scale-110 active:scale-95 hover:rotate-6 active:-rotate-12 "
+            className={`duration-100 text-maingreen ${
+              edit ? '*:mb-4' : ''
+            } hover:scale-110 active:scale-95 hover:rotate-6 active:-rotate-12`}
           >
             <Image src={back} alt={back} className="w-14 brightness-0"></Image>
           </button>
-          <div>
-            <h1 className="text-4xl font-bold">
-              {edit && !game ? 'Loading' : name}
+          <div className="flex flex-col justify-center-center">
+            <h1 className="text-4xl font-bold my-auto">
+              {edit ? (!game ? 'Loading' : name) : name ? name : 'New Game'}
             </h1>
             <h2 className="text-1xl">{id}</h2>
           </div>
@@ -369,7 +375,7 @@ export default function GameForm({
               htmlFor="Change Thumbnail"
               className="text-left text-base font-bold mb-1"
             >
-              Change Thumbnail
+              {edit ? 'Change Thumbnail' : 'Upload Thumbnail'}
             </label>
             <p className="text-zinc-500 text-sm mb-3">
               Thumbnail should be 300x400px

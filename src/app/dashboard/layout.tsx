@@ -77,6 +77,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         break
       case 500:
         setPanel('error')
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
     }
   }
 

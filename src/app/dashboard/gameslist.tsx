@@ -64,6 +64,10 @@ export default function GamesList({
       case 500:
         alert('An error occured while setting game visibility')
         return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
     }
   }
 
