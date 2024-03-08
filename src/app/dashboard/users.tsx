@@ -86,7 +86,35 @@ export default function Users({
     }
   }
 
-  async function denyAuthRequest(authRequest: User) {}
+  async function denyAuthRequest(authRequest: User) {
+    let res
+    try {
+      res = await fetch(`/api/dashboard/requests`, {
+        body: JSON.stringify({ user: authRequest }),
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
+      })
+    } catch (error) {
+      alert('An error occured while removing user')
+      console.error(error)
+      return
+    }
+    switch (res.status) {
+      case 200:
+        invalidateUsers()
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('An error occured removing user')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
+    }
+  }
 
   return (
     <>
