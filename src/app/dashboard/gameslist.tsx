@@ -7,6 +7,8 @@ import { getAuth } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import Confirm from './confirm'
 import { useRouter } from 'next/navigation'
+import Button from '../(components)/button'
+import Link from 'next/link'
 
 export default function GamesList({
   games,
@@ -72,7 +74,17 @@ export default function GamesList({
         onConfirm={() => confirmAction}
         onCancel={() => setConfirmText('')}
       />
-      <h1 className="text-4xl font-bold">Games</h1>
+      <div className="flex justify-between">
+        <h1 className="text-4xl font-bold">Games</h1>
+        <Link href={'/dashboard/add'}>
+          <Button
+            className="bg-black text-white float-right"
+            invertedClassName="bg-white text-black"
+          >
+            Add New Game
+          </Button>
+        </Link>
+      </div>
       <br />
       <table>
         <thead>

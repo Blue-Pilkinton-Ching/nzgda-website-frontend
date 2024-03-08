@@ -176,7 +176,7 @@ export default function Users({
               return (
                 <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
                   <td className="w-24 h-10 my-1">
-                    <p className="text-center font-semibold">Privileged</p>
+                    <p className="text-center font-semibold">Normal</p>
                   </td>
                   <td>
                     <div>{element.email}</div>
