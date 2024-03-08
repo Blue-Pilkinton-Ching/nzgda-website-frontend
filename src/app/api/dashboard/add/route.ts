@@ -3,12 +3,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import '@/utils/server/init'
 import getPrivilege from '@/utils/server/get-privilege'
 import {
-  User,
   AdminDashboard,
   UserPrivilege,
   GamesList,
-  UserTypes,
-  GameListItem,
+  Game,
 } from '../../../../../types'
 import * as admin from 'firebase-admin'
 
@@ -17,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   const privilege = res.headers.get('privilege') as UserPrivilege
 
-  const game = (await res.json()) as GameListItem
+  const game = (await req.json()) as Game
 
   let body: AdminDashboard | {} = {}
   let statusCode = 500
@@ -30,7 +28,7 @@ export async function POST(req: NextRequest) {
     latestID.id += 1
 
     try {
-      await admin.firestore().doc('gameslist/latest-id').set(latestID)
+      await admin.firestore().doc('gameslist/latest-id').set({ latestID })
     } catch (error) {
       console.error(error)
       statusCode = 500
@@ -50,17 +48,24 @@ export async function POST(req: NextRequest) {
           ).data() as GamesList
 
           d.data.push({
-            app: game.app,
+            app: game.displayAppBadge,
             id,
-            hidden: game.hidden,
-            exclude: game.exclude,
+            hidden: false,
+            exclude: game.exclude || '',
             name: game.name,
             partner: game.partner,
             thumbnail: '',
           })
+
+          await admin.firestore().doc(`gameslist/BrHoO8yuD3JdDFo8F2BC`).set(d)
         }
 
-        const func2 = async () => admin.firestore().doc(`games/${id}`).set(game)
+        const func2 = async () => {
+          admin
+            .firestore()
+            .doc(`games/${id}`)
+            .set({ ...game, id: id })
+        }
 
         await Promise.all([func1(), func2()])
 
