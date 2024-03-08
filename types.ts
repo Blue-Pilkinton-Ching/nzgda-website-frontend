@@ -30,14 +30,19 @@ export interface AuthHeader {
   authorization: IncomingHttpHeaders
 }
 
-export interface AdminDashboard {
-  admins: Admin[]
-  partners: Partner[]
-  gameslist: GameListItem[]
-  authRequests: AuthRequest[]
+export interface UserTypes {
+  admins: User[]
+  privileged: User[]
 }
 
-export interface Admin {
+export interface AdminDashboard {
+  users: UserTypes
+  partners: Partner[]
+  gameslist: GameListItem[]
+  authRequests: User[]
+}
+
+export interface User {
   email: string
   uid: string
 }
@@ -48,6 +53,7 @@ export type UserPrivilege =
   | 'error'
   | 'noprivilege'
   | 'admin'
+  | 'privileged'
 
 export interface GameListItem {
   id: number
@@ -57,11 +63,6 @@ export interface GameListItem {
   partner: string
   exclude: string
   app?: boolean
-}
-
-export interface AuthRequest {
-  email: string
-  uid: string
 }
 
 export interface Partner {

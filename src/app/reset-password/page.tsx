@@ -63,7 +63,7 @@ export default function ResetPassword() {
   }, [passwordError])
 
   return (
-    <Background>
+    <Background center>
       {returnMessage ? (
         <p className="text-2xl max-w-[800px] mx-auto">{returnMessage}</p>
       ) : resetEmailSent ? (

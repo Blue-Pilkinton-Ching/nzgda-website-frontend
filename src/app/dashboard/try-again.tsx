@@ -5,5 +5,9 @@ export default function TryAgain({
 }: {
   onButtonClick: () => void
 }) {
-  return <Button onClick={onButtonClick}>Try Again</Button>
+  return (
+    <div className="block w-full">
+      <Button onClick={onButtonClick}>Try Again</Button>
+    </div>
+  )
 }

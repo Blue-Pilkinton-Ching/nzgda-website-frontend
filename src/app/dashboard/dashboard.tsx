@@ -65,6 +65,8 @@ export default function Dashboard({
           games={dashboardData.gameslist}
         ></GamesList>
         <Users
+          invalidateUsers={invalidateData}
+          users={dashboardData.users}
           className={`${
             panel === 'users' ? 'block' : 'hidden'
           } shadow-lg p-4 rounded`}

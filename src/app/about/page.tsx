@@ -8,7 +8,7 @@ const classes =
 
 export default function Page() {
   return (
-    <div className="flex justify-center flex-col items-center my-20">
+    <div className="flex justify-center flex-col items-center">
       <Link href={'/about/whowhatwhy'} className={classes}>
         <p className="inline-block">The Who, What, & Why</p>
         <br />

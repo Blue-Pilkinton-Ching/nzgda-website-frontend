@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import '@/utils/server/init'
 import getPrivilege from '@/utils/server/get-privilege'
 import {
-  Admin,
-  AuthRequest,
+  User,
   AdminDashboard,
   UserPrivilege,
   GamesList,
+  UserTypes,
 } from '../../../../types'
 import * as admin from 'firebase-admin'
 
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   let statusCode = 500
 
   if (privilege === 'admin') {
-    let admins
+    let users
     let gameslist
     let authRequests
     let partners
@@ -37,13 +37,17 @@ export async function GET(req: NextRequest) {
 
       const func2 = async () =>
         (authRequests = (
-          await admin.firestore().collection('users/privileged/requests').get()
-        ).docs.map((doc) => doc.data()) as AuthRequest[])
+          await admin
+            .firestore()
+            .collection('users/privileged/requests')
+            .limit(100)
+            .get()
+        ).docs.map((doc) => doc.data()) as User[])
 
       const func3 = async () =>
-        (admins = (
+        (users = (
           await admin.firestore().doc('users/privileged').get()
-        ).data() as Admin[])
+        ).data() as UserTypes)
 
       await Promise.all([func1(), func2(), func3()])
 
@@ -53,7 +57,7 @@ export async function GET(req: NextRequest) {
       statusCode = 500
     }
 
-    body = { admins, gameslist, authRequests, partners }
+    body = { users, gameslist, authRequests, partners }
   } else {
     statusCode = 401
   }

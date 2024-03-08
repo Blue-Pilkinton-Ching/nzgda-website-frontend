@@ -81,7 +81,7 @@ export default function Page() {
   }, [userError])
 
   return (
-    <Background>
+    <Background center>
       {user ? (
         <>
           <h1 className="text-4xl font-bold"> You are signed in!</h1>

@@ -149,7 +149,7 @@ export default function Page() {
   }, [verifyError])
 
   return (
-    <Background>
+    <Background center>
       {user ? (
         verified ? (
           <>
