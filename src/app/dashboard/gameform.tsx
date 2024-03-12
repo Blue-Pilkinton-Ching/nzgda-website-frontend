@@ -115,7 +115,7 @@ export default function GameForm({
       case 'Partner / Studio':
         setPartner(event.target.value)
         break
-      case 'Display App Badge':
+      case 'Downloadable App':
         setDisplayAppBadge(event.target.value === 'false')
         break
     }
@@ -316,18 +316,19 @@ export default function GameForm({
               name={'Android Link'}
               tooltip="If your game has an Google Play Store link you can add that here"
             />
-            <br />
             <Input
               onChange={onGameInputChange}
               value={displayAppBadge}
+              tooltip={`Display this game in the 'Downloadable apps' catagory`}
               type="checkbox"
               maxLength={0}
-              name={'Display App Badge'}
+              name={'Downloadable App'}
             />
             <Input
               onChange={onGameInputChange}
               value={playableOnHeihei}
               type="checkbox"
+              tooltip={`Display this game inside the 'Play Online Games' catagory`}
               maxLength={0}
               name={'Playable on Heihei'}
             />
@@ -337,6 +338,7 @@ export default function GameForm({
               type="checkbox"
               maxLength={0}
               name={'Exclude on mobile browser'}
+              tooltip="Don't display this game on mobile devices."
             />
             <Input
               onChange={onGameInputChange}
@@ -344,6 +346,7 @@ export default function GameForm({
               type="checkbox"
               maxLength={0}
               name={'Exclude on desktop browser'}
+              tooltip="Don't display this game on desktop devices."
             />
             <br />
             <Input
@@ -359,7 +362,7 @@ export default function GameForm({
               value={width}
               type="number"
               maxLength={4}
-              tooltip="Ideally your game's canvas should extend infinitely. If this is the case, leave this value blank, or set to 0. If this is not the base, enter the canvas's max width in px."
+              tooltip="Ideally your game's canvas should extend infinitely. If this is the case, leave this value blank or set to 0. Otherwise enter the canvas's max width in px."
               name={'Max Width'}
             />
             <Input

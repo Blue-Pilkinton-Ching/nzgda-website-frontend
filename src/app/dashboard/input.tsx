@@ -35,10 +35,16 @@ export default function Input({
             : 'flex-col'
         } flex mb-3`}
       >
-        <label htmlFor={name} className="text-left text-base font-bold mb-1">
-          {name}
-        </label>
-        <p className="text-zinc-500 text-sm mb-3">{tooltip}</p>
+        <div
+          className={`flex flex-col ${
+            type === 'checkbox' ? 'translate-y-2.5' : ''
+          }`}
+        >
+          <label htmlFor={name} className="text-left text-base font-bold mb-1">
+            {name}
+          </label>
+          <p className={`text-zinc-500 text-sm mb-3 `}>{tooltip}</p>
+        </div>
         {type === 'textarea' ? (
           <textarea
             onChange={(event) => onChange(event, name)}
