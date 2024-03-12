@@ -1,17 +1,17 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Game, GameListItem } from '../../../../types'
+import { Game } from '../../../../../types'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
-import logo from '../../../../public/images/heihei-logo-green.png'
+import logo from '../../../../../public/images/heihei-logo-green.png'
 import Link from 'next/link'
 
-import google from '../../../../public/images/google-badge.svg'
-import apple from '../../../../public/images/apple-badge.svg'
+import google from '../../../../../public/images/google-badge.svg'
+import apple from '../../../../../public/images/apple-badge.svg'
 
-import back from '../../../../public/images/back.svg'
+import back from '../../../../../public/images/back.svg'
 import * as firestore from 'firebase/firestore'
 import '@/utils/client/firebase'
 

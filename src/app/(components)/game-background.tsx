@@ -1,9 +1,14 @@
-import Image from 'next/image'
-import React from 'react'
-import background from '../../../public/images/game-background.png'
-import Footer from '../(components)/footer'
+import Footer from './footer'
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+import Image from 'next/image'
+
+import background from '@/../public/images/game-background.png'
+
+export default function GameBackground({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <>
       <div className="absolute right-0 w-[40%] lg:w-fit -z-10">
