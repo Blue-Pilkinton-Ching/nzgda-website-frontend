@@ -71,7 +71,7 @@ export default function Games() {
         <>
           {partner ? (
             <>
-              <div className="flex justify-between sm:items-center flex-col-reverse sm:flex-row">
+              <div className="flex justify-between sm:items-center gap-0 sm:gap-3 flex-col-reverse sm:flex-row">
                 <h3 className="text-3xl font-bold text-maingreen">
                   Games by {partner}
                 </h3>
@@ -90,8 +90,11 @@ export default function Games() {
               <br />
             </>
           ) : null}
-          <div className="flex justify-between items-center">
-            <h3 className="text-3xl font-bold text-maingreen">
+          <div className="flex justify-between gap-3 items-center">
+            <h3 className="text-3xl font-bold sm:hidden text-maingreen">
+              Games
+            </h3>
+            <h3 className="text-3xl font-bold hidden sm:block text-maingreen">
               Play Games online
             </h3>
             {partner ? null : (
@@ -107,8 +110,9 @@ export default function Games() {
           <br />
           <br />
           <br />
-          <h3 className="text-3xl font-bold text-maingreen">
-            Or download an app
+          <h3 className="text-3xl font-bold sm:hidden text-maingreen">Apps</h3>
+          <h3 className="text-3xl font-bold hidden sm:block text-maingreen">
+            Or download an App
           </h3>
           <br />
           <GameSection games={gamesData.data.filter((x) => x.app)} />
