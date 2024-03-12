@@ -67,119 +67,130 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-center gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none min-h-[calc(100vh-80px)]">
-      <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] h-full flex justify-center flex-col">
-        <h1 className="sm:text-4xl text-3xl text-maingreen font-semibold text-wrap flex items-center">
-          <Link
-            className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12 flex items-center mr-5 w-full max-w-12"
-            href={'/games'}
-          >
-            <Image src={back} alt={'back'}></Image>
-          </Link>
-          {game.name}
-        </h1>
-        <p className="sm:text-xl text-lg whitespace-pre-line">
-          {game.description}
-        </p>
-        <div className="flex justify-center gap-8">
-          {game.androidLink ? (
-            <div>
-              <Link href={game.androidLink} target="_blank">
-                <Image
-                  src={google}
-                  alt={'Download on Android'}
-                  className="pt-px"
-                ></Image>
-              </Link>
+    <div className="flex items-center min-h-[calc(100vh-80px)]">
+      <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-start gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none ">
+        <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] flex justify-center flex-col">
+          <h1 className="sm:text-4xl text-3xl text-maingreen font-semibold text-wrap flex items-center">
+            <Link
+              className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12 flex items-center mr-5 w-full max-w-12"
+              href={'/games'}
+            >
+              <Image src={back} alt={'back'}></Image>
+            </Link>
+            {game.name}
+          </h1>
+          <p className="sm:text-xl text-lg whitespace-pre-line">
+            {game.description}
+          </p>
+          <div className="flex justify-center gap-8">
+            {game.androidLink ? (
+              <div>
+                <Link href={game.androidLink} target="_blank">
+                  <Image
+                    src={google}
+                    alt={'Download on Android'}
+                    className="pt-px"
+                  ></Image>
+                </Link>
+              </div>
+            ) : (
+              ''
+            )}
+            {game.iosLink ? (
+              <div>
+                <Link href={game.iosLink} target="_blank">
+                  <Image src={apple} alt={'Download on IOS'}></Image>
+                </Link>
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+        </div>
+        <div
+          ref={gameView}
+          style={{
+            maxWidth: game.width && game.width < 1422 ? game.width : 1422,
+            maxHeight: game.height && game.height < 800 ? game.height : 800,
+          }}
+          className="justify-center w-full xl:w-auto items-center aspect-video xl:flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
+        >
+          {game.url ? (
+            <>
+              <iframe
+                src={game.url}
+                allowFullScreen
+                className="w-full shadow-lg overflow-hidden aspect-video"
+                style={{
+                  maxWidth: isFullscreen ? '100%' : game.width,
+                  maxHeight:
+                    game.height && game.height < 800
+                      ? game.height
+                      : isFullscreen
+                      ? 'calc(100vh - 64px)'
+                      : 800,
+                }}
+                scrolling="no"
+                id="heihei-game"
+                frameBorder={0}
+              ></iframe>
+              <div
+                style={{
+                  maxWidth: isFullscreen
+                    ? 'calc((100vh - 64px) * 1.7778)'
+                    : game.width,
+                }}
+                className="w-full h-16 flex justify-between flex-row-reverse items-center px-3"
+              >
+                <button
+                  onClick={() => {
+                    setFullscreen((old) => {
+                      if (old) {
+                        document.exitFullscreen()
+                      } else {
+                        gameView.current?.requestFullscreen()
+                      }
+                      return !old
+                    })
+
+                    gameView.current?.requestFullscreen()
+                  }}
+                  className="flex bg-maingreen h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="white"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="-pl-0.5 w-7 h-7"
+                  >
+                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path>
+                  </svg>
+                  <p className="font-semibold text-white pt-0.5 ">
+                    {isFullscreen ? 'EXIT' : 'FULLSCREEN'}
+                  </p>
+                </button>
+                <div className="w-8 h-8 pb-9">
+                  <Image quality={10} src={logo} alt={'logo'}></Image>
+                </div>
+              </div>
+            </>
+          ) : game.screenshot ? (
+            <div className="w-full h-full shadow-lg rounded-xl">
+              <Image
+                src={game.screenshot}
+                quality={100}
+                fill
+                alt={'game visual'}
+                className="w-full h-auto shadow-lg rounded-xl"
+              ></Image>
             </div>
           ) : (
-            ''
-          )}
-          {game.iosLink ? (
-            <div>
-              <Link href={game.iosLink} target="_blank">
-                <Image src={apple} alt={'Download on IOS'}></Image>
-              </Link>
-            </div>
-          ) : (
-            ''
+            <p className="text-5xl font-semibold text-maingreen">
+              Game doesn&apos;t exist!
+            </p>
           )}
         </div>
-      </div>
-      <div
-        ref={gameView}
-        style={{
-          maxWidth: game.width && game.width < 1422 ? game.width : 1422,
-          maxHeight: game.height && game.height < 800 ? game.height : 800,
-        }}
-        className="justify-center max-h-[800px] w-full xl:w-auto items-center aspect-video xl:flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
-      >
-        {game.url ? (
-          <>
-            <iframe
-              src={game.url}
-              allowFullScreen
-              className="w-full shadow-lg overflow-hidden aspect-video"
-              style={{
-                maxWidth: game.width,
-                maxHeight: game.height && game.height < 800 ? game.height : 800,
-              }}
-              scrolling="no"
-              id="heihei-game"
-              frameBorder={0}
-            ></iframe>
-            <div
-              style={{ maxWidth: game.width }}
-              className="w-full h-16 flex justify-between flex-row-reverse items-center px-3"
-            >
-              <button
-                onClick={() => {
-                  setFullscreen((old) => {
-                    if (old) {
-                      document.exitFullscreen()
-                    } else {
-                      gameView.current?.requestFullscreen()
-                    }
-                    return !old
-                  })
-
-                  gameView.current?.requestFullscreen()
-                }}
-                className="flex bg-maingreen h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="white"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="-pl-0.5 w-7 h-7"
-                >
-                  <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path>
-                </svg>
-                <p className="font-semibold text-white pt-0.5 ">
-                  {isFullscreen ? 'EXIT' : 'FULLSCREEN'}
-                </p>
-              </button>
-              <div className="w-8 h-8 pb-9">
-                <Image quality={10} src={logo} alt={'logo'}></Image>
-              </div>
-            </div>
-          </>
-        ) : game.screenshot ? (
-          <div className="w-full h-full shadow-lg rounded-xl">
-            <Image
-              src={game.screenshot}
-              quality={100}
-              fill
-              alt={'game visual'}
-              className="w-full h-auto shadow-lg rounded-xl"
-            ></Image>
-          </div>
-        ) : (
-          <p className="text-5xl font-semibold text-maingreen">
-            Game doesn&apos;t exist!
-          </p>
-        )}
       </div>
     </div>
   )
