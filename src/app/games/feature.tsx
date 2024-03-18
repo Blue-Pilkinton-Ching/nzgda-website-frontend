@@ -30,12 +30,9 @@ export default async function Feature() {
   return (
     <>
       {feature != undefined ? (
-        <div className="hover:cursor-pointer aspect-video h-full w-full max-h-[315px] hidden lg:block">
-          <Link
-            href={`/game/${feature.id}/${urlName(feature.name)}`}
-            className=""
-          >
-            <div className="relative aspect-video max-h-[315px] h-full w-auto float-right hover:scale-[1.03] active:scale-100 duration-100">
+        <div className="aspect-video h-full w-full max-h-[315px] xl:max-h-[min(27vw,450px)] hidden lg:block">
+          <Link href={`/game/${feature.id}/${urlName(feature.name)}`}>
+            <div className="relative aspect-video max-h-[315px] xl:max-h-[min(27vw,450px)] lg:h-full xl:h-[min(27vw,450px)] float-right hover:scale-[1.03] active:scale-100 duration-100">
               <Image
                 quality={100}
                 src={
@@ -44,8 +41,8 @@ export default async function Feature() {
                 }
                 alt="Placeholder"
                 height={315}
-                width={600}
-                className="shadow-md rounded-xl w-auto h-full aspect-video"
+                width={711}
+                className="shadow-md rounded-xl w-auto h-full aspect-video lg:h-full xl:h-[min(27vw,450px)]"
               ></Image>
               <div className="absolute w-full bottom-0 lg:h-[72px] h-14 bg-gradient-to-t from-10% via-75% from-maingreen/90 via-maingreen/75 0 to-maingreen/0 rounded-b-lg">
                 <div className="text-white drop-shadow-md translate-y-1 gap-1.5 flex text-center px-3 items-center justify-center w-full h-full my-auto text-2xl">
