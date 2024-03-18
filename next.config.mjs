@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/heihei-arcade-storage/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 }

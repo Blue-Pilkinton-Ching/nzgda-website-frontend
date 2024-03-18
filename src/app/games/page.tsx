@@ -1,10 +1,10 @@
 import Image from 'next/image'
 
-import charactors from '../../../public/images/game-characters.png'
 import logo from '../../../public/images/game-logo.png'
 import Games from './games'
 import { Suspense } from 'react'
 import GameBackground from '../(components)/game-background'
+import Feature from './feature'
 
 export default function Page() {
   return (
@@ -22,12 +22,7 @@ export default function Page() {
             </p>
           </div>
           <div className="xl:mr-44 lg:mr-[6%] my-16 hidden sm:block">
-            <Image
-              quality={75}
-              src={charactors}
-              alt="game-characters"
-              width={400}
-            ></Image>
+            <Feature />
           </div>
         </section>
         <section>
