@@ -1,3 +1,4 @@
+import { getAnalytics } from 'firebase/analytics'
 import * as firebase from 'firebase/app'
 
 console.log('Initialized Firebase Client')
@@ -14,4 +15,7 @@ if (!firebase.getApps().length) {
   }
 
   const app = firebase.initializeApp(firebaseConfig)
+  if (typeof window !== 'undefined') {
+    getAnalytics(app)
+  }
 }

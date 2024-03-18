@@ -11,14 +11,10 @@ import { useEffect, useState } from 'react'
 import Button from '../(components)/button'
 import TryAgain from './try-again'
 
-import { AdminDashboard } from '@/../types'
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [user, userLoading, userError] = useAuthState(getAuth())
   const [signOut, loading, signOutError] = useSignOut(getAuth())
   const [panel, setPanel] = useState<'admin' | 'noauth' | 'error' | ''>('')
-
-  const [data, setData] = useState<AdminDashboard | null>(null)
 
   const [uid, setUID] = useState('')
 
@@ -70,7 +66,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     switch (res.status) {
       case 200:
         setPanel('admin')
-        setData(await res.json())
         break
       case 401:
         setPanel('noauth')

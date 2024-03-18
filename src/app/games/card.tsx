@@ -1,37 +1,28 @@
-import Link from 'next/link'
-import Image from 'next/image'
+'use client'
 
+import Link from 'next/link'
 import URLName from '@/utils/client/get-url-friendly-name'
 
-import ispy from '../../../public/images/I-Spyportrait.png'
 import { GameListItem } from '../../../types'
+import CardContent from './card-content'
+import { getAnalytics, logEvent } from 'firebase/analytics'
 
 export default function Card({ game }: { game: GameListItem }) {
+  function onClick() {
+    logEvent(getAnalytics(), 'click_game', {
+      game_name: game.name,
+      isApp: game.app || false,
+      partner: game.partner || 'None',
+    })
+  }
+
   return (
-    <Link key={game.id} href={`/game/${game.id}/${URLName(game.name)}`}>
-      <div className="relative rounded-lg lg:max-w-[150px] lg:h-[200px] max-w-[135px] h-[180px] flex shadow-md hover:cursor-pointer hover:scale-105 duration-100 active:scale-95">
-        <Image
-          src={game.name === 'I_SPY' ? ispy : game.thumbnail}
-          alt={game.name}
-          width={150}
-          height={200}
-          className="rounded-lg hidden lg:inline"
-        ></Image>
-        <Image
-          src={game.name === 'I_SPY' ? ispy : game.thumbnail}
-          alt={game.name}
-          width={135}
-          height={180}
-          className="rounded-lg lg:hidden"
-        ></Image>
-        {game.app ? (
-          <div className="bg-maingreen absolute w-11 h-7 bottom-0 right-0 z-10 rounded-br-lg rounded-tl-lg text-white text-xs font-semibold">
-            <p className="text-center items-center justify-center h-full flex">
-              App
-            </p>
-          </div>
-        ) : null}
-      </div>
+    <Link
+      onClick={onClick}
+      key={game.id}
+      href={`/game/${game.id}/${URLName(game.name)}`}
+    >
+      <CardContent game={game} />
     </Link>
   )
 }
