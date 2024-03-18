@@ -7,4 +7,5 @@ if (!hasInit) {
   config()
 }
 
-import './firebase-admin'
+import './init-firebase-admin'
+import './init-aws'

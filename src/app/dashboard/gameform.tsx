@@ -168,9 +168,11 @@ export default function GameForm({
           ].toString(),
           partner: partner === 'None' ? '' : partner,
           displayAppBadge,
+          thumbnail: thumbnail,
         }),
         headers: {
           Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+          'Content-Type': 'multipart/form-data',
         },
       })
     }

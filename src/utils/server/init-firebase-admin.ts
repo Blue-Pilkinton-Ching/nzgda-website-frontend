@@ -1,7 +1,4 @@
 import * as admin from 'firebase-admin'
-import { config } from 'dotenv'
-
-config()
 
 if (!admin.apps.length) {
   try {
@@ -10,5 +7,6 @@ if (!admin.apps.length) {
     })
   } catch (error) {
     console.error('Firebase admin initialization error', error)
+    throw new Error('Firebase admin initialization error')
   }
 }

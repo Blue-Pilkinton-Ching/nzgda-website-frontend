@@ -14,6 +14,11 @@ export default function Card({ game }: { game: GameListItem }) {
       isApp: game.app || false,
       partner: game.partner || 'None',
     })
+    logEvent(getAnalytics(), `click_${game.name}`, {
+      game_name: game.name,
+      isApp: game.app || false,
+      partner: game.partner || 'None',
+    })
   }
 
   return (

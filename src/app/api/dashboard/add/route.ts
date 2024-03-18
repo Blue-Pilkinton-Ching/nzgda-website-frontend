@@ -43,6 +43,8 @@ export async function POST(req: NextRequest) {
     if (privilege === 'admin') {
       try {
         const func1 = async () => {
+          // File uploads here
+
           const d = (
             await admin.firestore().doc('gameslist/BrHoO8yuD3JdDFo8F2BC').get()
           ).data() as GamesList
