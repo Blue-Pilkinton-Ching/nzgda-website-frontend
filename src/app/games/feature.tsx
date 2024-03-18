@@ -34,14 +34,14 @@ export default async function Feature() {
           <Link href={`/game/${feature.id}/${urlName(feature.name)}`}>
             <div className="relative aspect-video max-h-[315px] xl:max-h-[min(27vw,450px)] lg:h-full xl:h-[min(27vw,450px)] float-right hover:scale-[1.03] active:scale-100 duration-100">
               <Image
-                quality={100}
+                quality={90}
                 src={
                   feature.banner ||
-                  `https://placehold.co/506x400.jpg?text=Placeholder`
+                  `https://placehold.co/800x450.jpg?text=Placeholder`
                 }
                 alt="Placeholder"
-                height={315}
-                width={711}
+                height={450}
+                width={800}
                 className="shadow-md rounded-xl w-auto h-full aspect-video lg:h-full xl:h-[min(27vw,450px)]"
               ></Image>
               <div className="absolute w-full bottom-0 lg:h-[72px] h-14 bg-gradient-to-t from-10% via-75% from-maingreen/90 via-maingreen/75 0 to-maingreen/0 rounded-b-lg">
