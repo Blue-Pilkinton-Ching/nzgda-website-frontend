@@ -1,6 +1,6 @@
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md'
 import { IconButton } from '../(components)/iconButton'
-import { Game, GameListItem } from '../../../types'
+import { GameListItem } from '../../../types'
 import { IoEye, IoEyeOff } from 'react-icons/io5'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
@@ -9,6 +9,8 @@ import Confirm from './confirm'
 import { useRouter } from 'next/navigation'
 import Button from '../(components)/button'
 import Link from 'next/link'
+import { FaCrown } from 'react-icons/fa'
+import { TbCrownOff } from 'react-icons/tb'
 
 export default function GamesList({
   games,
@@ -71,6 +73,50 @@ export default function GamesList({
     }
   }
 
+  async function onToggleFeature(listItem: GameListItem) {
+    const shouldFeature = !(listItem.featured || false)
+
+    let res
+
+    setCurrentGames(
+      currentGames.map((x) => {
+        if (x.id === listItem.id) {
+          x.featured = shouldFeature
+        } else {
+          x.featured = false
+        }
+        return x
+      })
+    )
+
+    try {
+      res = await fetch(`/api/dashboard/${listItem.id}/feature`, {
+        body: JSON.stringify({ featured: shouldFeature }),
+        method: 'PATCH',
+        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
+      })
+    } catch (error) {
+      alert('An error occured while setting game feature')
+      console.error(error)
+      return
+    }
+
+    switch (res.status) {
+      case 200:
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('An error occured while setting game feature')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
+    }
+  }
+
   return (
     <div className={`shadow-lg p-4 rounded ${className}`}>
       <Confirm
@@ -95,6 +141,7 @@ export default function GamesList({
           <tr className="*:p-1">
             <th>ID</th>
             <th>Name</th>
+            <th className="w-14 text-center">Feature</th>
             <th className="w-14 text-center">Edit</th>
             <th className="w-14 text-center">Hide</th>
             <th className="flex justify-center w-14 max-w-14 text-center">
@@ -114,6 +161,19 @@ export default function GamesList({
                   >
                     {element.name}
                   </div>
+                </td>
+                <td>
+                  <IconButton
+                    onClick={() => {
+                      onToggleFeature(element)
+                    }}
+                  >
+                    {element.featured ? (
+                      <FaCrown className="w-full" size={'28px'} />
+                    ) : (
+                      <TbCrownOff className="w-full" size={'30px'} />
+                    )}
+                  </IconButton>
                 </td>
                 <td>
                   <IconButton

@@ -63,6 +63,7 @@ export interface GameListItem {
   partner: string
   exclude: string
   app?: boolean
+  featured: boolean
 }
 
 export interface Partner {
