@@ -8,7 +8,10 @@ import * as firestore from 'firebase/firestore'
 
 import '@/utils/client/firebase'
 
+import urlName from '@/utils/client/get-url-friendly-name'
+
 import charactors from '../../../public/images/game-characters.png'
+import Link from 'next/link'
 
 export default function Feature() {
   const [feature, setFeature] = useState<GameListItem>()
@@ -57,15 +60,21 @@ export default function Feature() {
         }
       >
         {feature ? (
-          <Image
-            quality={100}
-            src={`https://placehold.co/506x400.jpg?text=${encodeURIComponent(
-              feature.name
-            )}`}
-            alt="Placeholder"
-            height={506}
-            width={400}
-          ></Image>
+          <Link
+            href={`/game/${feature.id}/${urlName(feature.name)}`}
+            className="hover:cursor-pointer"
+          >
+            <Image
+              quality={100}
+              src={`https://placehold.co/506x400.jpg?text=${encodeURIComponent(
+                feature.name
+              )}`}
+              alt="Placeholder"
+              height={506}
+              width={400}
+              className="shadow-md rounded-xl"
+            ></Image>
+          </Link>
         ) : (
           <Image
             quality={75}
