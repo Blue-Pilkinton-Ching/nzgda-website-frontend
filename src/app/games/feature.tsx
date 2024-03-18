@@ -64,16 +64,22 @@ export default function Feature() {
             href={`/game/${feature.id}/${urlName(feature.name)}`}
             className="hover:cursor-pointer"
           >
-            <Image
-              quality={100}
-              src={`https://placehold.co/506x400.jpg?text=${encodeURIComponent(
-                feature.name
-              )}`}
-              alt="Placeholder"
-              height={506}
-              width={400}
-              className="shadow-md rounded-xl"
-            ></Image>
+            <div className="relative hover:scale-[1.03] active:scale-100 duration-100">
+              <Image
+                quality={100}
+                src={`https://placehold.co/506x400.jpg?text=Placeholder`}
+                alt="Placeholder"
+                height={506}
+                width={400}
+                className="shadow-md rounded-xl"
+              ></Image>
+              <div className="absolute w-full bottom-0 h-16 bg-gradient-to-t from-10% via-70% from-maingreen/80 via-maingreen/55 0 to-maingreen/0 rounded-b-lg">
+                <div className="text-white translate-y-0.5 gap-1 flex text-center px-3 items-center justify-center w-full h-full my-auto text-xl">
+                  <p className="font-thin">Featured</p>
+                  <p className="font-semibold">Game</p>
+                </div>
+              </div>
+            </div>
           </Link>
         ) : (
           <Image

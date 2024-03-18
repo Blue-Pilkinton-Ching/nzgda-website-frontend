@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <>
       <GameBackground>
-        <section className="flex justify-between items-center">
+        <section className="flex justify-between items-center gap-4">
           <div>
             <div className="lg:w-[350px] min-w-[240px] w-[65%]">
               <Image quality={100} src={logo} alt="game-characters"></Image>
