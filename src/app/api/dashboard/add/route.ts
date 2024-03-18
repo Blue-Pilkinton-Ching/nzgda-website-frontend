@@ -55,6 +55,8 @@ export async function POST(req: NextRequest) {
             name: game.name,
             partner: game.partner,
             thumbnail: '',
+            featured: false,
+            // banner: "NEED TO IMPLEMENT",
           })
 
           await admin.firestore().doc(`gameslist/BrHoO8yuD3JdDFo8F2BC`).set(d)
