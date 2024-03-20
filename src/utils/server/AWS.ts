@@ -7,6 +7,4 @@ AWS.config.update({
   region: process.env.AWS_REGION || 'ap-southeast-2', // Defaulting to 'ap-southeast-2'
 })
 
-console.log(new AWS.S3())
-
 export default AWS

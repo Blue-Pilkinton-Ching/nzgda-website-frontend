@@ -149,10 +149,12 @@ export default function GameForm({
           Authorization: 'Bearer ' + (await user?.getIdToken(true)),
         },
       })
-    } else {
-      res = await fetch(`/api/dashboard/add`, {
-        method: 'POST',
-        body: JSON.stringify({
+    } else if (typeof thumbnail === 'object') {
+      const form = new FormData()
+
+      form.append(
+        'data',
+        JSON.stringify({
           name,
           description,
           iosLink: ios,
@@ -168,18 +170,26 @@ export default function GameForm({
           ].toString(),
           partner: partner === 'None' ? '' : partner,
           displayAppBadge,
-          thumbnail: thumbnail,
-        }),
+        })
+      )
+
+      form.append('thumbnail', thumbnail)
+
+      res = await fetch(`/api/dashboard/add`, {
+        method: 'POST',
+        body: form,
         headers: {
           Authorization: 'Bearer ' + (await user?.getIdToken(true)),
           'Content-Type': 'multipart/form-data',
         },
       })
+    } else {
+      return
     }
 
     switch (res.status) {
       case 200:
-        router.push('/dashboard')
+        // router.push('/dashboard')
         return
       case 401:
         alert('You are Unauthorized to make that action')

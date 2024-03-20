@@ -8,4 +8,4 @@ if (!hasInit) {
 }
 
 import './init-firebase-admin'
-import './init-aws'
+import './AWS'
