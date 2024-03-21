@@ -1,4 +1,3 @@
-import { IncomingHttpHeaders } from 'http'
 export interface Game {
   id: number
   name: string
@@ -25,11 +24,6 @@ export interface Game {
   playableOnHeihei?: boolean
   displayAppBadge?: boolean
 }
-
-export interface AuthHeader {
-  authorization: IncomingHttpHeaders
-}
-
 export interface UserTypes {
   admins: User[]
   privileged: User[]
