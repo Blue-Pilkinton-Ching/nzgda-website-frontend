@@ -45,7 +45,7 @@ export default function Page() {
         setMessage('Failed to fetch games :(')
       }
     }
-  })
+  }, [user])
 
   return (
     <>
