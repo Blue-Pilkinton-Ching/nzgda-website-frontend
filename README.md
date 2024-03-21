@@ -26,15 +26,6 @@ Open [http://localhost:3001](http://localhost:3001) with your browser to see the
 
 ## Secrets
 
-Inside .env file, you should have a GOOGLE_APPLICATION_CREDENTIALS key that points to `firebase.json`, which contains credentials to initilize Firebase Admin SDK.
-
-This .json credential can be generated from the firebase console
-
-`GOOGLE_APPLICATION_CREDENTIALS="./firebase.json"`
-
 BACKEND_URL = "http://localhost:3002"
-
-AWS_KEY = "AWS key"
-AWS_KEY_SECRET = "AWS key secret"
 
 Developed by [Blue Pilkinton-Ching](https://www.bluepc.me)
