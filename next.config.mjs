@@ -16,6 +16,14 @@ const nextConfig = {
       },
     ],
   },
+  rewrites: async () => {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.BACKEND_URL}/:path*`,
+      },
+    ]
+  },
 }
 
 export default nextConfig
