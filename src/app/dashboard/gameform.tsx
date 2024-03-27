@@ -42,7 +42,8 @@ export default function GameForm({
   const [thumbnailWarning, setThumbnailWarning] = useState('')
   const [gameFolder, setGameFolder] = useState<File>()
   const [gameWarning, setGameWarning] = useState('')
-  const [banner, setBanner] = useState<File | string>('')
+  const [banner, setBanner] = useState<File>()
+  const [bannerWarning, setBannerWarning] = useState('')
 
   const [user] = useAuthState(getAuth())
   const router = useRouter()
@@ -101,29 +102,47 @@ export default function GameForm({
       case 'Change Thumbnail':
         const target = event.target as HTMLInputElement
 
-        console.log(target.files)
-
-        console.log(target.files != undefined && target.files[0] != undefined)
-
         if (target.files && target.files[0]) {
           if (target.files.length > 1) {
             setThumbnailWarning('Only one file is allowed!')
             setThumbnail(undefined)
             break
           }
-          if (target.files[0].size > 1048576) {
-            setThumbnailWarning('File size should be less than 1mb!')
+          if (target.files[0].size > 1048576 * 4) {
+            setThumbnailWarning('File size should be less than 4mb!')
             setThumbnail(undefined)
             break
           }
           if (target.files[0].type !== 'image/png') {
-            console.log('not an image')
             setThumbnailWarning('File should be an image!')
             setThumbnail(undefined)
             break
           }
           setThumbnailWarning('')
           setThumbnail(target.files[0])
+        }
+        break
+      case 'Change Banner':
+        const target3 = event.target as HTMLInputElement
+
+        if (target3.files && target3.files[0]) {
+          if (target3.files.length > 1) {
+            setBannerWarning('Only one file is allowed!')
+            setBanner(undefined)
+            break
+          }
+          if (target3.files[0].size > 1048576 * 8) {
+            setBannerWarning('File size should be less than 8mb!')
+            setBanner(undefined)
+            break
+          }
+          if (target3.files[0].type !== 'image/png') {
+            setBannerWarning('File should be an image!')
+            setBanner(undefined)
+            break
+          }
+          setBannerWarning('')
+          setBanner(target3.files[0])
         }
         break
       case 'Change Game Folder':
@@ -148,7 +167,7 @@ export default function GameForm({
 
           const zip = await new JSZip().loadAsync(target2.files[0])
 
-          if (!(zip.files[`index.html`] || zip.files[`index.htm`])) {
+          if (!zip.files[`index.html`]) {
             setGameWarning(
               'Zip should contain an index.html file at its route!'
             )
@@ -166,8 +185,10 @@ export default function GameForm({
   async function formSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (!gamefroot && !gameFolder) {
-      alert('You must upload a game or provide an external link')
+    if (!gamefroot && !gameFolder && !banner) {
+      alert(
+        'You must upload a game, a banner, or provide an external game link'
+      )
       return
     }
 
@@ -226,6 +247,10 @@ export default function GameForm({
         form.append('game', gameFolder)
       }
 
+      if (banner) {
+        form.append('banner', banner)
+      }
+
       res = await fetch(`/api/dashboard/add`, {
         method: 'POST',
         body: form,
@@ -268,9 +293,6 @@ export default function GameForm({
     setExcludeBrowserDesktop(game?.exclude?.includes('desktop') || false)
     setPartner(game?.partner || 'None')
     setDisplayAppBadge(game?.displayAppBadge || false)
-    setThumbnailWarning('')
-    setGameWarning('')
-    setBanner('')
   }
 
   return (
@@ -446,7 +468,7 @@ export default function GameForm({
               {edit ? 'Change Thumbnail' : 'Upload Thumbnail'}
             </label>
             <p className="text-zinc-500 text-sm mb-3">
-              Thumbnail should be 300x400px
+              Thumbnail should be 300x400px. Maximum size is 4mb.
             </p>
 
             <input
@@ -484,7 +506,7 @@ export default function GameForm({
               Game should be uploaded as a compressed .zip file. Maximum size is
               2gb. <br />
               <br />
-              You should have a index.html/htm file at the root of the zip. Your
+              You should have a index.html file at the root of the zip. Your
               files should not be contained inside an additional folder.
             </p>
             <input
@@ -500,6 +522,40 @@ export default function GameForm({
             <div className="py-3 text-rose-600">
               {gameWarning ? (
                 <p className="text-lg font-semibold">{gameWarning}</p>
+              ) : null}
+            </div>
+            <label
+              htmlFor="Change Banner"
+              className="text-left text-base font-bold mb-1"
+            >
+              {edit ? 'Change Banner' : 'Upload Banner'}
+            </label>
+            <p className="text-zinc-500 text-sm mb-3">
+              Banner should be a large 16/9 aspect. Reccomended size is 1424px x
+              801px.
+            </p>
+
+            <input
+              multiple={false}
+              type="file"
+              name="Change Banner"
+              accept="image/png"
+              id="Change Thumbnail"
+              onChange={(event) => onGameInputChange(event, 'Change Banner')}
+            />
+            <div className="py-3 text-rose-600">
+              {bannerWarning ? (
+                <p className="text-lg font-semibold">{bannerWarning}</p>
+              ) : banner ? (
+                <div className="rounded-md shadow w-[150px] h-[200px]">
+                  <Image
+                    src={URL.createObjectURL(banner)}
+                    alt={'Uploaded Banner'}
+                    className="rounded-md shadow"
+                    width={256}
+                    height={341}
+                  ></Image>
+                </div>
               ) : null}
             </div>
             <br />
