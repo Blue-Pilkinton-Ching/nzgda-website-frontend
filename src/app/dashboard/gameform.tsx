@@ -192,6 +192,11 @@ export default function GameForm({
       return
     }
 
+    if (thumbnailWarning || gameWarning || bannerWarning) {
+      alert('Please fix the errors before submitting')
+      return
+    }
+
     let res
     if (edit && id) {
       res = await fetch(`/api/dashboard/${id}`, {
@@ -547,13 +552,13 @@ export default function GameForm({
               {bannerWarning ? (
                 <p className="text-lg font-semibold">{bannerWarning}</p>
               ) : banner ? (
-                <div className="rounded-md shadow w-[150px] h-[200px]">
+                <div className="rounded-md shadow w-[240px] h-[135px]">
                   <Image
                     src={URL.createObjectURL(banner)}
                     alt={'Uploaded Banner'}
                     className="rounded-md shadow"
-                    width={256}
-                    height={341}
+                    width={360}
+                    height={180}
                   ></Image>
                 </div>
               ) : null}
