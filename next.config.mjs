@@ -14,6 +14,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'heihei-game-content.s3.ap-southeast-2.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   rewrites: async () => {

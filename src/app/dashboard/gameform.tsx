@@ -10,6 +10,7 @@ import { Game, Partner } from '../../../types'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
+import JSZip from 'jszip'
 
 export default function GameForm({
   edit,
@@ -37,7 +38,11 @@ export default function GameForm({
     useState<boolean>(false)
   const [partner, setPartner] = useState('')
   const [displayAppBadge, setDisplayAppBadge] = useState(false)
-  const [thumbnail, setThumbnail] = useState<File | string>('')
+  const [thumbnail, setThumbnail] = useState<File>()
+  const [thumbnailWarning, setThumbnailWarning] = useState('')
+  const [gameFolder, setGameFolder] = useState<File>()
+  const [gameWarning, setGameWarning] = useState('')
+  const [banner, setBanner] = useState<File | string>('')
 
   const [user] = useAuthState(getAuth())
   const router = useRouter()
@@ -47,7 +52,7 @@ export default function GameForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game])
 
-  function onGameInputChange(
+  async function onGameInputChange(
     event: ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
@@ -87,42 +92,84 @@ export default function GameForm({
       case 'Exclude on desktop browser':
         setExcludeBrowserDesktop(event.target.value === 'false')
         break
-      case 'Change Thumbnail':
-        const target = event.target as HTMLInputElement
-
-        console.log(target.files)
-
-        if (target.files && target.files[0]) {
-          if (target.files.length > 1) {
-            setThumbnail('Only one file is allowed!')
-            break
-          }
-          if (target.files[0].size > 1048576) {
-            setThumbnail('File size should be less than 1MB!')
-            break
-          }
-          if (
-            target.files[0].type !== 'image/png' &&
-            target.files[0].type !== 'image/jpeg' &&
-            target.files[0].type !== 'image/gif'
-          ) {
-            setThumbnail('File should be an image!')
-            break
-          }
-          setThumbnail(target.files[0])
-        }
-        break
       case 'Partner / Studio':
         setPartner(event.target.value)
         break
       case 'Downloadable App':
         setDisplayAppBadge(event.target.value === 'false')
         break
+      case 'Change Thumbnail':
+        const target = event.target as HTMLInputElement
+
+        console.log(target.files)
+
+        console.log(target.files != undefined && target.files[0] != undefined)
+
+        if (target.files && target.files[0]) {
+          if (target.files.length > 1) {
+            setThumbnailWarning('Only one file is allowed!')
+            setThumbnail(undefined)
+            break
+          }
+          if (target.files[0].size > 1048576) {
+            setThumbnailWarning('File size should be less than 1mb!')
+            setThumbnail(undefined)
+            break
+          }
+          if (target.files[0].type !== 'image/png') {
+            console.log('not an image')
+            setThumbnailWarning('File should be an image!')
+            setThumbnail(undefined)
+            break
+          }
+          setThumbnailWarning('')
+          setThumbnail(target.files[0])
+        }
+        break
+      case 'Change Game Folder':
+        const target2 = event.target as HTMLInputElement
+
+        if (target2.files && target2.files[0]) {
+          if (target2.files.length > 1) {
+            setGameWarning('Only one file is allowed!')
+            setGameFolder(undefined)
+            break
+          }
+          if (target2.files[0].size > 2147483648) {
+            setGameWarning('File size should be less than 2gb!')
+            setGameFolder(undefined)
+            break
+          }
+          if (target2.files[0].type !== 'application/x-zip-compressed') {
+            setGameWarning('Upload should be a compressed .zip !')
+            setGameFolder(undefined)
+            break
+          }
+
+          const zip = await new JSZip().loadAsync(target2.files[0])
+
+          if (!(zip.files[`index.html`] || zip.files[`index.htm`])) {
+            setGameWarning(
+              'Zip should contain an index.html file at its route!'
+            )
+            setGameFolder(undefined)
+            break
+          }
+
+          setGameWarning('')
+          setGameFolder(target2.files[0])
+        }
+        break
     }
   }
 
   async function formSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
+    if (!gamefroot && !gameFolder) {
+      alert('You must upload a game or provide an external link')
+      return
+    }
 
     let res
     if (edit && id) {
@@ -175,12 +222,15 @@ export default function GameForm({
 
       form.append('thumbnail', thumbnail)
 
+      if (gameFolder) {
+        form.append('game', gameFolder)
+      }
+
       res = await fetch(`/api/dashboard/add`, {
         method: 'POST',
         body: form,
         headers: {
           Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-          'Content-Type': 'multipart/form-data',
         },
       })
     } else {
@@ -189,7 +239,7 @@ export default function GameForm({
 
     switch (res.status) {
       case 200:
-        router.push('/dashboard')
+        // router.push('/dashboard')
         return
       case 401:
         alert('You are Unauthorized to make that action')
@@ -218,6 +268,9 @@ export default function GameForm({
     setExcludeBrowserDesktop(game?.exclude?.includes('desktop') || false)
     setPartner(game?.partner || 'None')
     setDisplayAppBadge(game?.displayAppBadge || false)
+    setThumbnailWarning('')
+    setGameWarning('')
+    setBanner('')
   }
 
   return (
@@ -399,30 +452,56 @@ export default function GameForm({
             <input
               multiple={false}
               type="file"
+              required
               name="Change Thumbnail"
-              accept="image/*"
+              accept="image/png"
               id="Change Thumbnail"
               onChange={(event) => onGameInputChange(event, 'Change Thumbnail')}
             />
-            {thumbnail ? (
-              <div className="py-3 text-rose-600">
-                {typeof thumbnail === 'string' ? (
-                  <p className="text-lg font-semibold">{thumbnail}</p>
-                ) : (
-                  <div className="rounded-md shadow w-[150px] h-[200px]">
-                    <Image
-                      src={URL.createObjectURL(thumbnail)}
-                      alt={'Uploaded Thumnail'}
-                      className="rounded-md shadow"
-                      width={256}
-                      height={341}
-                    ></Image>
-                  </div>
-                )}
-              </div>
-            ) : (
-              ''
-            )}
+            <div className="py-3 text-rose-600">
+              {thumbnailWarning ? (
+                <p className="text-lg font-semibold">{thumbnailWarning}</p>
+              ) : thumbnail ? (
+                <div className="rounded-md shadow w-[150px] h-[200px]">
+                  <Image
+                    src={URL.createObjectURL(thumbnail)}
+                    alt={'Uploaded Thumnail'}
+                    className="rounded-md shadow"
+                    width={256}
+                    height={341}
+                  ></Image>
+                </div>
+              ) : null}
+            </div>
+            <br />
+            <label
+              htmlFor="Change Game Folder"
+              className="text-left text-base font-bold mb-1"
+            >
+              {edit ? 'Change Game' : 'Upload Game'}
+            </label>
+            <p className="text-zinc-500 text-sm mb-3">
+              Game should be uploaded as a compressed .zip file. Maximum size is
+              2gb. <br />
+              <br />
+              You should have a index.html/htm file at the root of the zip. Your
+              files should not be contained inside an additional folder.
+            </p>
+            <input
+              multiple={false}
+              type="file"
+              name="Change Game Folder"
+              accept="application/x-zip-compressed"
+              id="Change Game Folder"
+              onChange={(event) =>
+                onGameInputChange(event, 'Change Game Folder')
+              }
+            />
+            <div className="py-3 text-rose-600">
+              {gameWarning ? (
+                <p className="text-lg font-semibold">{gameWarning}</p>
+              ) : null}
+            </div>
             <br />
             <div className="flex justify-center *:w-32 gap-4">
               <Button
