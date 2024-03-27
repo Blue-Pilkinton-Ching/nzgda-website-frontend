@@ -15,15 +15,17 @@ import { TbCrownOff } from 'react-icons/tb'
 export default function GamesList({
   games,
   className,
+  invalidateGames,
 }: {
   games: GameListItem[]
   className: string
+  invalidateGames: () => void
 }) {
   const [user] = useAuthState(getAuth())
 
   const [currentGames, setCurrentGames] = useState<GameListItem[]>([])
   const [confirmText, setConfirmText] = useState('')
-  const [confirmAction, setConfirmAction] = useState<() => void>()
+  const [gameToDelete, setGameToDelete] = useState(0)
 
   const router = useRouter()
 
@@ -65,6 +67,36 @@ export default function GamesList({
         return
       case 500:
         alert('An error occured while setting game visibility')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
+    }
+  }
+
+  async function deleteGame() {
+    let res
+    try {
+      res = await fetch(`/api/dashboard/${gameToDelete}`, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
+      })
+    } catch (error) {
+      alert(`'An error occured while deleting game ${gameToDelete}'`)
+      console.error(error)
+      return
+    }
+
+    switch (res.status) {
+      case 200:
+        invalidateGames()
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('An error occured while deleting partner')
         return
       default:
         alert('An unknown error occured')
@@ -121,7 +153,7 @@ export default function GamesList({
     <div className={`shadow-lg p-4 rounded ${className}`}>
       <Confirm
         text={confirmText}
-        onConfirm={() => confirmAction}
+        onConfirm={() => deleteGame()}
         onCancel={() => setConfirmText('')}
       />
       <div className="flex justify-between">
@@ -195,18 +227,20 @@ export default function GamesList({
                     )}
                   </IconButton>
                 </td>
-                <td>
-                  <IconButton
-                    onClick={() => {
-                      setConfirmAction(() => {})
-                      setConfirmText(
-                        'Are you sure you want to delete this partner? This action is irreversible.'
-                      )
-                    }}
-                  >
-                    <MdDeleteForever className="w-full" size={'30px'} />
-                  </IconButton>
-                </td>
+                {element.id > 200 ? (
+                  <td>
+                    <IconButton
+                      onClick={() => {
+                        setGameToDelete(element.id)
+                        setConfirmText(
+                          'Are you sure you want to delete this partner? This action is irreversible.'
+                        )
+                      }}
+                    >
+                      <MdDeleteForever className="w-full" size={'30px'} />
+                    </IconButton>
+                  </td>
+                ) : null}
               </tr>
             )
           })}

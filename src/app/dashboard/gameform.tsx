@@ -269,7 +269,7 @@ export default function GameForm({
 
     switch (res.status) {
       case 200:
-        // router.push('/dashboard')
+        router.push('/dashboard')
         return
       case 401:
         alert('You are Unauthorized to make that action')

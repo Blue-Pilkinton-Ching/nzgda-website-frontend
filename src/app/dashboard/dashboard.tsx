@@ -59,6 +59,7 @@ export default function Dashboard({
         </div>
         <br />
         <GamesList
+          invalidateGames={invalidateData}
           className={`${
             panel === 'games' ? 'block' : 'hidden'
           } shadow-lg p-4 rounded`}
