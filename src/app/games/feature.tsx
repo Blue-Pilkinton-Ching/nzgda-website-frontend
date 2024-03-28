@@ -5,7 +5,11 @@ import Image from 'next/image'
 import urlName from '@/utils/client/get-url-friendly-name'
 import charactors from '../../../public/images/game-characters.png'
 
+import { unstable_noStore as noStore } from 'next/cache'
+
 export default async function Feature() {
+  noStore()
+
   let feature: GameListItem | undefined = undefined
 
   let data: GamesList
@@ -23,7 +27,6 @@ export default async function Feature() {
       throw 'Data not on firebase for some reason'
     }
     feature = data.data.find((element) => element.featured)
-    console.log(feature)
   } catch (error) {
     console.error(error)
   }
