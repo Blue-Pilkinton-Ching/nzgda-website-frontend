@@ -45,6 +45,8 @@ export default function GameForm({
   const [banner, setBanner] = useState<File>()
   const [bannerWarning, setBannerWarning] = useState('')
 
+  const [submitting, setSubmitting] = useState(false)
+
   const [user] = useAuthState(getAuth())
   const router = useRouter()
 
@@ -190,6 +192,8 @@ export default function GameForm({
       return
     }
 
+    setSubmitting(true)
+
     let res
     if (edit && id) {
       const form = new FormData()
@@ -292,12 +296,15 @@ export default function GameForm({
         return
       case 401:
         alert('You are Unauthorized to make that action')
+        setSubmitting(false)
         return
       case 500:
         alert('An error occured while saving the game')
+        setSubmitting(false)
         return
       default:
         alert('An unknown error occured')
+        setSubmitting(false)
         console.error(res.status, res.statusText, res.body)
         return
     }
@@ -339,282 +346,292 @@ export default function GameForm({
           </div>
         </div>
         <br />
-        {edit && !game ? (
-          <p>Loading Game...</p>
-        ) : (
-          <form className={`flex-col mx-auto flex`} onSubmit={formSubmit}>
-            <Input
-              onChange={onGameInputChange}
-              value={name}
-              required
-              maxLength={100}
-              name={'Name'}
-              tooltip="This is the name that will be displayed on the HEIHEI website"
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={description}
-              type="textarea"
-              required
-              maxLength={1000}
-              name={'Description'}
-              tooltip="This is the description people will see when they open your game. There is a 1000 character limit"
-            />
-            <label
-              htmlFor="Partner / Studio"
-              className="text-left text-base font-bold mb-1"
-            >
-              Partner / Studio
-            </label>
-            <p className="text-zinc-500 text-sm mb-3">
-              Name of this games partner / studio
-            </p>
-            <select
-              id="Partner / Studio"
-              name="Partner / Studio"
-              value={partner}
-              onChange={(event) => onGameInputChange(event, 'Partner / Studio')}
-              className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
-            >
-              <option value={'None'}>None</option>
+        <div className={submitting ? 'block' : 'hidden'}>
+          <p>Submitting Game, please wait...</p>
+        </div>
+        <div className={submitting ? 'hidden' : 'block'}>
+          {edit && !game ? (
+            <p>Loading Game...</p>
+          ) : (
+            <form className={`flex-col mx-auto flex`} onSubmit={formSubmit}>
+              <Input
+                onChange={onGameInputChange}
+                value={name}
+                required
+                maxLength={100}
+                name={'Name'}
+                tooltip="This is the name that will be displayed on the HEIHEI website"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={description}
+                type="textarea"
+                required
+                maxLength={1000}
+                name={'Description'}
+                tooltip="This is the description people will see when they open your game. There is a 1000 character limit"
+              />
+              <label
+                htmlFor="Partner / Studio"
+                className="text-left text-base font-bold mb-1"
+              >
+                Partner / Studio
+              </label>
+              <p className="text-zinc-500 text-sm mb-3">
+                Name of this games partner / studio
+              </p>
+              <select
+                id="Partner / Studio"
+                name="Partner / Studio"
+                value={partner}
+                onChange={(event) =>
+                  onGameInputChange(event, 'Partner / Studio')
+                }
+                className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
+              >
+                <option value={'None'}>None</option>
 
-              {game &&
-              game.partner &&
-              partners.find((x) => x.name === game.partner) === undefined ? (
-                <option value={game.partner}>{game.partner}</option>
-              ) : (
-                ''
-              )}
-              <optgroup label="Shown">
-                {partners.map((element) => {
-                  return element.hidden === false ? (
-                    <option key={element.name} value={element.name}>
-                      {element.name}
-                    </option>
-                  ) : null
-                })}
-              </optgroup>
-              <optgroup label="Hidden">
-                {partners.map((element) => {
-                  return element.hidden === true ? (
-                    <option key={element.name} value={element.name}>
-                      {element.name}
-                    </option>
-                  ) : null
-                })}
-              </optgroup>
-            </select>
-            <Input
-              onChange={onGameInputChange}
-              value={tags}
-              type="text"
-              maxLength={200}
-              name={'Tags'}
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={ios}
-              type="url"
-              maxLength={1000}
-              name={'Ios Link'}
-              tooltip="If your game has an AppStore link you can add that here"
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={android}
-              type="url"
-              maxLength={1000}
-              name={'Android Link'}
-              tooltip="If your game has an Google Play Store link you can add that here"
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={displayAppBadge}
-              tooltip={`Display this game in the 'Downloadable apps' catagory`}
-              type="checkbox"
-              maxLength={0}
-              name={'Downloadable App'}
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={playableOnHeihei}
-              type="checkbox"
-              tooltip={`Display this game inside the 'Play Online Games' catagory`}
-              maxLength={0}
-              name={'Playable on Heihei'}
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={excludeBrowserMobile}
-              type="checkbox"
-              maxLength={0}
-              name={'Exclude on mobile browser'}
-              tooltip="Don't display this game on mobile devices."
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={excludeBrowserDesktop}
-              type="checkbox"
-              maxLength={0}
-              name={'Exclude on desktop browser'}
-              tooltip="Don't display this game on desktop devices."
-            />
-            <br />
-            <Input
-              onChange={onGameInputChange}
-              value={gamefroot}
-              type="url"
-              maxLength={1000}
-              name={'Embed External Game URL'}
-              tooltip="If your game is hosted on another site, you can add the embed url here"
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={width}
-              type="number"
-              maxLength={4}
-              tooltip="Ideally your game's canvas should extend infinitely. If this is the case, leave this value blank or set to 0. Otherwise enter the canvas's max width in px."
-              name={'Max Width'}
-            />
-            <Input
-              onChange={onGameInputChange}
-              value={height}
-              type="number"
-              maxLength={4}
-              tooltip="Same as width, but for height."
-              name={'Max Height'}
-            />
-            <br />
-            {(edit && id != undefined && id > 200) || !edit ? (
-              <>
-                <label
-                  htmlFor="Change Thumbnail"
-                  className="text-left text-base font-bold mb-1"
-                >
-                  {edit ? 'Change Thumbnail' : 'Upload Thumbnail'}
-                </label>
-                <p className="text-zinc-500 text-sm mb-3">
-                  Thumbnail should be 300x400px. Maximum size is 4mb.
-                </p>
-                <input
-                  multiple={false}
-                  type="file"
-                  required={edit ? false : true}
-                  name="Change Thumbnail"
-                  accept="image/png"
-                  id="Change Thumbnail"
-                  onChange={(event) =>
-                    onGameInputChange(event, 'Change Thumbnail')
-                  }
-                />
-                <div className="py-3 text-rose-600">
-                  {thumbnailWarning ? (
-                    <p className="text-lg font-semibold">{thumbnailWarning}</p>
-                  ) : thumbnail ? (
-                    <div className="rounded-md shadow w-[150px] h-[200px]">
-                      <Image
-                        src={URL.createObjectURL(thumbnail)}
-                        alt={'Uploaded Thumnail'}
-                        className="rounded-md shadow"
-                        width={256}
-                        height={341}
-                      ></Image>
-                    </div>
-                  ) : null}
-                </div>
-                <br />
-                <label
-                  htmlFor="Change Game Folder"
-                  className="text-left text-base font-bold mb-1"
-                >
-                  {edit ? 'Change Game' : 'Upload Game'}
-                </label>
-                <p className="text-zinc-500 text-sm mb-3">
-                  Game should be uploaded as a compressed .zip file. Maximum
-                  size is 2gb. <br />
-                  <br />
-                  You should have a index.html file at the root of the zip. Your
-                  files should not be contained inside an additional folder.
-                </p>
-                <input
-                  multiple={false}
-                  type="file"
-                  name="Change Game Folder"
-                  accept="application/x-zip-compressed"
-                  id="Change Game Folder"
-                  onChange={(event) =>
-                    onGameInputChange(event, 'Change Game Folder')
-                  }
-                />
-                <div className="py-3 text-rose-600">
-                  {gameWarning ? (
-                    <p className="text-lg font-semibold">{gameWarning}</p>
-                  ) : null}
-                </div>
-                <label
-                  htmlFor="Change Banner"
-                  className="text-left text-base font-bold mb-1"
-                >
-                  {edit ? 'Change Banner' : 'Upload Banner'}
-                </label>
-                <p className="text-zinc-500 text-sm mb-3">
-                  Banner should be a large 16/9 aspect. Reccomended size is
-                  1424px x 801px.
-                </p>
-
-                <input
-                  multiple={false}
-                  type="file"
-                  name="Change Banner"
-                  accept="image/png"
-                  id="Change Thumbnail"
-                  onChange={(event) =>
-                    onGameInputChange(event, 'Change Banner')
-                  }
-                />
-                <div className="py-3 text-rose-600">
-                  {bannerWarning ? (
-                    <p className="text-lg font-semibold">{bannerWarning}</p>
-                  ) : banner ? (
-                    <div className="rounded-md shadow w-[240px] h-[135px]">
-                      <Image
-                        src={URL.createObjectURL(banner)}
-                        alt={'Uploaded Banner'}
-                        className="rounded-md shadow"
-                        width={360}
-                        height={180}
-                      ></Image>
-                    </div>
-                  ) : null}
-                </div>
-                <br />
-                <div className="flex justify-center *:w-32 gap-4">
-                  <Button
-                    inverted
-                    className="bg-black text-white"
-                    invertedClassName="bg-white text-black"
+                {game &&
+                game.partner &&
+                partners.find((x) => x.name === game.partner) === undefined ? (
+                  <option value={game.partner}>{game.partner}</option>
+                ) : (
+                  ''
+                )}
+                <optgroup label="Shown">
+                  {partners.map((element) => {
+                    return element.hidden === false ? (
+                      <option key={element.name} value={element.name}>
+                        {element.name}
+                      </option>
+                    ) : null
+                  })}
+                </optgroup>
+                <optgroup label="Hidden">
+                  {partners.map((element) => {
+                    return element.hidden === true ? (
+                      <option key={element.name} value={element.name}>
+                        {element.name}
+                      </option>
+                    ) : null
+                  })}
+                </optgroup>
+              </select>
+              <Input
+                onChange={onGameInputChange}
+                value={tags}
+                type="text"
+                maxLength={200}
+                name={'Tags'}
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={ios}
+                type="url"
+                maxLength={1000}
+                name={'Ios Link'}
+                tooltip="If your game has an AppStore link you can add that here"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={android}
+                type="url"
+                maxLength={1000}
+                name={'Android Link'}
+                tooltip="If your game has an Google Play Store link you can add that here"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={displayAppBadge}
+                tooltip={`Display this game in the 'Downloadable apps' catagory`}
+                type="checkbox"
+                maxLength={0}
+                name={'Downloadable App'}
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={playableOnHeihei}
+                type="checkbox"
+                tooltip={`Display this game inside the 'Play Online Games' catagory`}
+                maxLength={0}
+                name={'Playable on Heihei'}
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={excludeBrowserMobile}
+                type="checkbox"
+                maxLength={0}
+                name={'Exclude on mobile browser'}
+                tooltip="Don't display this game on mobile devices."
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={excludeBrowserDesktop}
+                type="checkbox"
+                maxLength={0}
+                name={'Exclude on desktop browser'}
+                tooltip="Don't display this game on desktop devices."
+              />
+              <br />
+              <Input
+                onChange={onGameInputChange}
+                value={gamefroot}
+                type="url"
+                maxLength={1000}
+                name={'Embed External Game URL'}
+                tooltip="If your game is hosted on another site, you can add the embed url here"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={width}
+                type="number"
+                maxLength={4}
+                tooltip="Ideally your game's canvas should extend infinitely. If this is the case, leave this value blank or set to 0. Otherwise enter the canvas's max width in px."
+                name={'Max Width'}
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={height}
+                type="number"
+                maxLength={4}
+                tooltip="Same as width, but for height."
+                name={'Max Height'}
+              />
+              <br />
+              {(edit && id != undefined && id > 200) || !edit ? (
+                <>
+                  <label
+                    htmlFor="Change Thumbnail"
+                    className="text-left text-base font-bold mb-1"
                   >
-                    {edit ? 'Save Game' : 'Add Game'}
-                  </Button>
-                  {edit ? (
+                    {edit ? 'Change Thumbnail' : 'Upload Thumbnail'}
+                  </label>
+                  <p className="text-zinc-500 text-sm mb-3">
+                    Thumbnail should be 300x400px. Maximum size is 4mb.
+                  </p>
+                  <input
+                    multiple={false}
+                    type="file"
+                    required={edit ? false : true}
+                    name="Change Thumbnail"
+                    accept="image/png"
+                    id="Change Thumbnail"
+                    onChange={(event) =>
+                      onGameInputChange(event, 'Change Thumbnail')
+                    }
+                  />
+                  <div className="py-3 text-rose-600">
+                    {thumbnailWarning ? (
+                      <p className="text-lg font-semibold">
+                        {thumbnailWarning}
+                      </p>
+                    ) : thumbnail ? (
+                      <div className="rounded-md shadow w-[150px] h-[200px]">
+                        <Image
+                          src={URL.createObjectURL(thumbnail)}
+                          alt={'Uploaded Thumnail'}
+                          className="rounded-md shadow"
+                          width={256}
+                          height={341}
+                        ></Image>
+                      </div>
+                    ) : null}
+                  </div>
+                  <br />
+                  <label
+                    htmlFor="Change Game Folder"
+                    className="text-left text-base font-bold mb-1"
+                  >
+                    {edit ? 'Change Game' : 'Upload Game'}
+                  </label>
+                  <p className="text-zinc-500 text-sm mb-3">
+                    Game should be uploaded as a compressed .zip file. Maximum
+                    size is 2gb. <br />
+                    <br />
+                    You should have a index.html file at the root of the zip.
+                    Your files should not be contained inside an additional
+                    folder.
+                  </p>
+                  <input
+                    multiple={false}
+                    type="file"
+                    name="Change Game Folder"
+                    accept="application/x-zip-compressed"
+                    id="Change Game Folder"
+                    onChange={(event) =>
+                      onGameInputChange(event, 'Change Game Folder')
+                    }
+                  />
+                  <div className="py-3 text-rose-600">
+                    {gameWarning ? (
+                      <p className="text-lg font-semibold">{gameWarning}</p>
+                    ) : null}
+                  </div>
+                  <label
+                    htmlFor="Change Banner"
+                    className="text-left text-base font-bold mb-1"
+                  >
+                    {edit ? 'Change Banner' : 'Upload Banner'}
+                  </label>
+                  <p className="text-zinc-500 text-sm mb-3">
+                    Banner should be a large 16/9 aspect. Reccomended size is
+                    1424px x 801px.
+                  </p>
+
+                  <input
+                    multiple={false}
+                    type="file"
+                    name="Change Banner"
+                    accept="image/png"
+                    id="Change Thumbnail"
+                    onChange={(event) =>
+                      onGameInputChange(event, 'Change Banner')
+                    }
+                  />
+                  <div className="py-3 text-rose-600">
+                    {bannerWarning ? (
+                      <p className="text-lg font-semibold">{bannerWarning}</p>
+                    ) : banner ? (
+                      <div className="rounded-md shadow w-[240px] h-[135px]">
+                        <Image
+                          src={URL.createObjectURL(banner)}
+                          alt={'Uploaded Banner'}
+                          className="rounded-md shadow"
+                          width={360}
+                          height={180}
+                        ></Image>
+                      </div>
+                    ) : null}
+                  </div>
+                  <br />
+                  <div className="flex justify-center *:w-32 gap-4">
                     <Button
-                      onClick={(event) => {
-                        event.preventDefault()
-                        resetGame()
-                      }}
+                      inverted
                       className="bg-black text-white"
                       invertedClassName="bg-white text-black"
                     >
-                      Reset
+                      {edit ? 'Save Game' : 'Add Game'}
                     </Button>
-                  ) : null}
-                </div>
-              </>
-            ) : null}
-          </form>
-        )}
+                    {edit ? (
+                      <Button
+                        onClick={(event) => {
+                          event.preventDefault()
+                          resetGame()
+                        }}
+                        className="bg-black text-white"
+                        invertedClassName="bg-white text-black"
+                      >
+                        Reset
+                      </Button>
+                    ) : null}
+                  </div>
+                </>
+              ) : null}
+            </form>
+          )}
+        </div>
+        <br />
       </div>
-      <br />
     </>
   )
 }
