@@ -23,6 +23,7 @@ export default async function Feature() {
       throw 'Data not on firebase for some reason'
     }
     feature = data.data.find((element) => element.featured)
+    console.log(feature)
   } catch (error) {
     console.error(error)
   }
