@@ -17,7 +17,9 @@ export default function GameForm({
   id,
   partners,
   game,
+  admin,
 }: {
+  admin: boolean
   edit: boolean
   id?: number
   partners: Partner[]

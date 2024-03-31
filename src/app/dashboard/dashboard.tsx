@@ -1,20 +1,28 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { AdminDashboard as DashboardData, Game } from '../../../types'
+import { AdminDashboard as DashboardData, GameListItem } from '../../../types'
 import Button from '../(components)/button'
 import Users from './users'
 import GamesList from './gameslist'
 import Partners from './partners'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { getAuth } from 'firebase/auth'
+
+import '@/utils/client/firebase'
 
 export default function Dashboard({
   data,
   invalidateData,
+  admin,
 }: {
+  admin: boolean
   data: DashboardData
   invalidateData: () => void
 }) {
   const [dashboardData, setDashboardData] = useState<DashboardData>()
   const [panel, setPanel] = useState<'users' | 'games' | 'partners'>('games')
+
+  const [user] = useAuthState(getAuth())
 
   useEffect(() => {
     setDashboardData(data)
@@ -30,56 +38,72 @@ export default function Dashboard({
 
   return (
     <>
-      <div className="max-w-[600px] text-wrap mx-auto text-left mt-20 text-lg mb-12 font-sans text-black">
-        <div className="flex justify-center gap-10">
-          <Button
-            onClick={() => setPanel('games')}
-            inverted={panel !== 'games'}
-            className="bg-black text-white"
-            invertedClassName="bg-white text-black"
-          >
-            Games
-          </Button>
-          <Button
-            onClick={() => setPanel('users')}
-            inverted={panel !== 'users'}
-            className="bg-black text-white"
-            invertedClassName="bg-white text-black"
-          >
-            Users & Settings
-          </Button>
-          <Button
-            onClick={() => setPanel('partners')}
-            inverted={panel !== 'partners'}
-            className="bg-black text-white"
-            invertedClassName="bg-white text-black"
-          >
-            Partners
-          </Button>
-        </div>
+      <div className="max-w-[800px] text-wrap mx-auto text-left mt-20 text-lg mb-12 font-sans text-black">
+        {admin ? (
+          <div className="flex justify-center gap-10">
+            <Button
+              onClick={() => setPanel('games')}
+              inverted={panel !== 'games'}
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
+            >
+              Games
+            </Button>
+            <Button
+              onClick={() => setPanel('users')}
+              inverted={panel !== 'users'}
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
+            >
+              Users & Settings
+            </Button>
+            <Button
+              onClick={() => setPanel('partners')}
+              inverted={panel !== 'partners'}
+              className="bg-black text-white"
+              invertedClassName="bg-white text-black"
+            >
+              Partners
+            </Button>
+          </div>
+        ) : null}
         <br />
         <GamesList
           invalidateGames={invalidateData}
           className={`${
             panel === 'games' ? 'block' : 'hidden'
           } shadow-lg p-4 rounded`}
-          games={dashboardData.gameslist}
+          games={
+            admin
+              ? dashboardData.gameslist
+              : dashboardData.gameslist.filter(
+                  (game: GameListItem) =>
+                    game.partner ===
+                    data.users.privileged.find((u) => u.uid === user?.uid)
+                      ?.partner
+                )
+          }
         ></GamesList>
-        <Users
-          invalidateUsers={invalidateData}
-          users={dashboardData.users}
-          className={`${
-            panel === 'users' ? 'block' : 'hidden'
-          } shadow-lg p-4 rounded`}
-          authRequests={dashboardData.authRequests}
-        ></Users>
-        <Partners
-          invalidatePartners={invalidateData}
-          partners={dashboardData.partners}
-          className={`${
-            panel === 'partners' ? 'block' : 'hidden'
-          } shadow-lg p-4 rounded`}
-        ></Partners>
+        {admin ? (
+          <>
+            <Users
+              invalidateUsers={invalidateData}
+              partners={dashboardData.partners}
+              users={dashboardData.users}
+              className={`${
+                panel === 'users' ? 'block' : 'hidden'
+              } shadow-lg p-4 rounded`}
+              authRequests={dashboardData.authRequests}
+            ></Users>
+            <Partners
+              invalidatePartners={invalidateData}
+              partners={dashboardData.partners}
+              className={`${
+                panel === 'partners' ? 'block' : 'hidden'
+              } shadow-lg p-4 rounded`}
+            ></Partners>
+          </>
+        ) : null}
       </div>
     </>
   )

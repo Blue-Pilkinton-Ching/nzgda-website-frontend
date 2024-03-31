@@ -37,6 +37,7 @@ export interface AdminDashboard {
 }
 
 export interface User {
+  partner?: string
   email: string
   uid: string
 }

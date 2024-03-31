@@ -10,6 +10,8 @@ export default function Page() {
 
   const [data, setData] = useState<AdminDashboard | null>(null)
 
+  const [admin, setAdmin] = useState(false)
+
   useEffect(() => {
     if (user) {
       fetchDashboardData()
@@ -29,6 +31,7 @@ export default function Page() {
 
       switch (res.status) {
         case 200:
+          setAdmin(res.headers.get('privilege') === 'admin')
           setData(await res.json())
           break
         case 401:
@@ -47,7 +50,11 @@ export default function Page() {
   return (
     <>
       {data ? (
-        <Dashboard data={data} invalidateData={fetchDashboardData} />
+        <Dashboard
+          data={data}
+          admin={admin}
+          invalidateData={fetchDashboardData}
+        />
       ) : (
         <p className="text-xl font-semibold my-5">Loading dashboard...</p>
       )}

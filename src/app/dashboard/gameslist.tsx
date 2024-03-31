@@ -168,7 +168,7 @@ export default function GamesList({
         </Link>
       </div>
       <br />
-      <table>
+      <table className="w-full">
         <thead>
           <tr className="*:p-1">
             <th>ID</th>

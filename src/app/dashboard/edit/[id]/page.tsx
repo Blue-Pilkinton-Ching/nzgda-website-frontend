@@ -81,7 +81,13 @@ export default function EditGame() {
       {message ? (
         <p>{message}</p>
       ) : (
-        <GameForm edit game={game} partners={partners} id={Number(params.id)} />
+        <GameForm
+          edit
+          game={game}
+          partners={partners}
+          id={Number(params.id)}
+          admin={false}
+        />
       )}
     </>
   )
