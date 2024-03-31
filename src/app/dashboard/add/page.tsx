@@ -1,6 +1,6 @@
 'use client'
 
-import { GamesList, Partner } from '../../../../types'
+import { GamesList, Partner, User, UserTypes } from '../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
@@ -13,6 +13,7 @@ export default function Page() {
   const [user] = useAuthState(getAuth())
 
   const [partners, setPartners] = useState<Partner[]>([])
+  const [users, setUsers] = useState<UserTypes>()
 
   const [message, setMessage] = useState('')
 
@@ -22,6 +23,7 @@ export default function Page() {
       return
     } else {
       fetchPartners()
+      fetchUsers()
     }
 
     async function fetchPartners() {
@@ -45,6 +47,28 @@ export default function Page() {
         setMessage('Failed to fetch games :(')
       }
     }
+
+    async function fetchUsers() {
+      let data
+      try {
+        data = (await (
+          await fetch('/api/dashboard/users', {
+            headers: {
+              Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+            },
+          })
+        ).json()) as UserTypes
+        console.log(data)
+        if (!data) {
+          setMessage("Couldn't find data :(")
+          throw 'User data not on firebase for some reason'
+        }
+        setUsers(data)
+      } catch (error) {
+        console.error(error)
+        setMessage('Failed to fetch users :(')
+      }
+    }
   }, [user])
 
   return (
@@ -52,7 +76,13 @@ export default function Page() {
       {message ? (
         <p>{message}</p>
       ) : (
-        <GameForm edit={false} partners={partners} />
+        <GameForm
+          edit={false}
+          partners={partners}
+          admin={
+            users?.privileged.find((u) => u.uid === user?.uid) == undefined
+          }
+        />
       )}
     </>
   )

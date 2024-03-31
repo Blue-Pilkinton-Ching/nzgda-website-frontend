@@ -73,6 +73,7 @@ export default function Dashboard({
           className={`${
             panel === 'games' ? 'block' : 'hidden'
           } shadow-lg p-4 rounded`}
+          admin={admin}
           games={
             admin
               ? dashboardData.gameslist

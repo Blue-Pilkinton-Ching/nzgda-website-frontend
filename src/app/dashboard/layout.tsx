@@ -63,8 +63,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       },
     })
 
-    console.log(res)
-    console.log(await res.json())
     switch (res.status) {
       case 200:
         setPanel('admin')

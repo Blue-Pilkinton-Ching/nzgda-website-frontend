@@ -16,7 +16,9 @@ export default function GamesList({
   games,
   className,
   invalidateGames,
+  admin,
 }: {
+  admin: boolean
   games: GameListItem[]
   className: string
   invalidateGames: () => void
@@ -173,7 +175,9 @@ export default function GamesList({
           <tr className="*:p-1">
             <th>ID</th>
             <th>Name</th>
-            <th className="w-14 text-center">Feature</th>
+            <th className={`w-14 text-center ${admin ? 'block' : 'hidden'}`}>
+              Feature
+            </th>
             <th className="w-14 text-center">Edit</th>
             <th className="w-14 text-center">Hide</th>
             <th className="flex justify-center w-14 max-w-14 text-center">
@@ -194,7 +198,7 @@ export default function GamesList({
                     {element.name}
                   </div>
                 </td>
-                <td>
+                <td className={` ${admin ? 'block' : 'hidden'}`}>
                   <IconButton
                     onClick={() => {
                       onToggleFeature(element)

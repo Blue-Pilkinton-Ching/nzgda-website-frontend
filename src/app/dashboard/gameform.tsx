@@ -29,7 +29,7 @@ export default function GameForm({
   const [description, setDescription] = useState('')
   const [ios, setIos] = useState('')
   const [android, setAndroid] = useState('')
-  const [gamefroot, setGamefroot] = useState('')
+  //   const [gamefroot, setGamefroot] = useState('')
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
   const [tags, setTags] = useState('')
@@ -76,9 +76,9 @@ export default function GameForm({
       case 'Android Link':
         setAndroid(event.target.value)
         break
-      case 'Embed External Game URL':
-        setGamefroot(event.target.value)
-        break
+      //   case 'Embed External Game URL':
+      //     setGamefroot(event.target.value)
+      //     break
       case 'Max Width':
         setWidth(event.target.value)
         break
@@ -207,7 +207,7 @@ export default function GameForm({
           description,
           iosLink: ios,
           androidLink: android,
-          gamefrootLink: gamefroot,
+          //   gamefrootLink: gamefroot,
           width: Number(width) ? Number(width) : null,
           height: Number(height) ? Number(height) : null,
           tags: tags.split(','),
@@ -241,9 +241,10 @@ export default function GameForm({
         },
       })
     } else if (thumbnail != undefined) {
-      if (!gamefroot && !gameFolder && !banner) {
+      if (/*!gamefroot &&*/ !gameFolder && !banner) {
         alert(
-          'You must upload a game, a banner, or provide an external game link'
+          //   'You must upload a game, a banner, or provide an external game link'
+          'You must upload a game or a banner'
         )
         return
       }
@@ -257,7 +258,7 @@ export default function GameForm({
           description,
           iosLink: ios,
           androidLink: android,
-          gamefrootLink: gamefroot,
+          //   gamefrootLink: gamefroot,
           width: Number(width) ? Number(width) : null,
           height: Number(height) ? Number(height) : null,
           tags: tags.split(','),
@@ -317,7 +318,7 @@ export default function GameForm({
     setDescription(game?.description || '')
     setIos(game?.iosLink || '')
     setAndroid(game?.androidLink || '')
-    setGamefroot(game?.gamefrootLink || '')
+    // setGamefroot(game?.gamefrootLink || '')
     setWidth(game?.width?.toString() || '')
     setHeight(game?.height?.toString() || '')
     setTags(game?.tags?.toString() || '')
@@ -373,52 +374,57 @@ export default function GameForm({
                 name={'Description'}
                 tooltip="This is the description people will see when they open your game. There is a 1000 character limit"
               />
-              <label
-                htmlFor="Partner / Studio"
-                className="text-left text-base font-bold mb-1"
-              >
-                Partner / Studio
-              </label>
-              <p className="text-zinc-500 text-sm mb-3">
-                Name of this games partner / studio
-              </p>
-              <select
-                id="Partner / Studio"
-                name="Partner / Studio"
-                value={partner}
-                onChange={(event) =>
-                  onGameInputChange(event, 'Partner / Studio')
-                }
-                className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
-              >
-                <option value={'None'}>None</option>
+              {admin ? (
+                <>
+                  <label
+                    htmlFor="Partner / Studio"
+                    className="text-left text-base font-bold mb-1"
+                  >
+                    Partner / Studio
+                  </label>
+                  <p className="text-zinc-500 text-sm mb-3">
+                    Name of this games partner / studio
+                  </p>
+                  <select
+                    id="Partner / Studio"
+                    name="Partner / Studio"
+                    value={partner}
+                    onChange={(event) =>
+                      onGameInputChange(event, 'Partner / Studio')
+                    }
+                    className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
+                  >
+                    <option value={'None'}>None</option>
 
-                {game &&
-                game.partner &&
-                partners.find((x) => x.name === game.partner) === undefined ? (
-                  <option value={game.partner}>{game.partner}</option>
-                ) : (
-                  ''
-                )}
-                <optgroup label="Shown">
-                  {partners.map((element) => {
-                    return element.hidden === false ? (
-                      <option key={element.name} value={element.name}>
-                        {element.name}
-                      </option>
-                    ) : null
-                  })}
-                </optgroup>
-                <optgroup label="Hidden">
-                  {partners.map((element) => {
-                    return element.hidden === true ? (
-                      <option key={element.name} value={element.name}>
-                        {element.name}
-                      </option>
-                    ) : null
-                  })}
-                </optgroup>
-              </select>
+                    {game &&
+                    game.partner &&
+                    partners.find((x) => x.name === game.partner) ===
+                      undefined ? (
+                      <option value={game.partner}>{game.partner}</option>
+                    ) : (
+                      ''
+                    )}
+                    <optgroup label="Shown">
+                      {partners.map((element) => {
+                        return element.hidden === false ? (
+                          <option key={element.name} value={element.name}>
+                            {element.name}
+                          </option>
+                        ) : null
+                      })}
+                    </optgroup>
+                    <optgroup label="Hidden">
+                      {partners.map((element) => {
+                        return element.hidden === true ? (
+                          <option key={element.name} value={element.name}>
+                            {element.name}
+                          </option>
+                        ) : null
+                      })}
+                    </optgroup>
+                  </select>
+                </>
+              ) : null}
               <Input
                 onChange={onGameInputChange}
                 value={tags}
@@ -475,14 +481,14 @@ export default function GameForm({
                 tooltip="Don't display this game on desktop devices."
               />
               <br />
-              <Input
+              {/* <Input
                 onChange={onGameInputChange}
                 value={gamefroot}
                 type="url"
                 maxLength={1000}
                 name={'Embed External Game URL'}
                 tooltip="If your game is hosted on another site, you can add the embed url here"
-              />
+              /> */}
               <Input
                 onChange={onGameInputChange}
                 value={width}

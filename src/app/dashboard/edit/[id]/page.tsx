@@ -1,11 +1,13 @@
 'use client'
 
-import { Game, GamesList, Partner } from '../../../../../types'
+import { Game, GamesList, Partner, UserTypes } from '../../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 
-import { useParams, useRouter } from 'next/navigation'
+import '@/utils/client/firebase'
+
+import { useParams } from 'next/navigation'
 import * as firestore from 'firebase/firestore'
 import GameForm from '../../gameform'
 
@@ -17,6 +19,8 @@ export default function EditGame() {
   const [game, setGame] = useState<Game>()
   const [partners, setPartners] = useState<Partner[]>([])
 
+  const [users, setUsers] = useState<UserTypes>()
+
   const params = useParams<{ id: string }>()
 
   useEffect(() => {
@@ -24,7 +28,7 @@ export default function EditGame() {
       window.location.href = '/dashboard'
       return
     } else {
-      Promise.all([fetchGame(), fetchPartners()])
+      Promise.all([fetchGame(), fetchPartners(), fetchUsers()])
       setMessage('')
     }
 
@@ -47,6 +51,28 @@ export default function EditGame() {
       } catch (error) {
         console.error(error)
         setMessage('Failed to fetch games :(')
+      }
+    }
+
+    async function fetchUsers() {
+      let data
+      try {
+        data = (await (
+          await fetch('/api/dashboard/users', {
+            headers: {
+              Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+            },
+          })
+        ).json()) as UserTypes
+        console.log(data)
+        if (!data) {
+          setMessage("Couldn't find data :(")
+          throw 'User data not on firebase for some reason'
+        }
+        setUsers(data)
+      } catch (error) {
+        console.error(error)
+        setMessage('Failed to fetch users :(')
       }
     }
 
@@ -86,7 +112,9 @@ export default function EditGame() {
           game={game}
           partners={partners}
           id={Number(params.id)}
-          admin={false}
+          admin={
+            users?.privileged.find((u) => u.uid === user?.uid) == undefined
+          }
         />
       )}
     </>
