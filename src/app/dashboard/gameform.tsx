@@ -627,29 +627,29 @@ export default function GameForm({
                     ) : null}
                   </div>
                   <br />
-                  <div className="flex justify-center *:w-32 gap-4">
-                    <Button
-                      inverted
-                      className="bg-black text-white"
-                      invertedClassName="bg-white text-black"
-                    >
-                      {edit ? 'Save Game' : 'Add Game'}
-                    </Button>
-                    {edit ? (
-                      <Button
-                        onClick={(event) => {
-                          event.preventDefault()
-                          resetGame()
-                        }}
-                        className="bg-black text-white"
-                        invertedClassName="bg-white text-black"
-                      >
-                        Reset
-                      </Button>
-                    ) : null}
-                  </div>
                 </>
               ) : null}
+              <div className="flex justify-center *:w-32 gap-4">
+                <Button
+                  inverted
+                  className="bg-black text-white"
+                  invertedClassName="bg-white text-black"
+                >
+                  {edit ? 'Save Game' : 'Add Game'}
+                </Button>
+                {edit ? (
+                  <Button
+                    onClick={(event) => {
+                      event.preventDefault()
+                      resetGame()
+                    }}
+                    className="bg-black text-white"
+                    invertedClassName="bg-white text-black"
+                  >
+                    Reset
+                  </Button>
+                ) : null}
+              </div>
             </form>
           )}
         </div>
