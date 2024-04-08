@@ -1,5 +1,6 @@
 import {
   MdArchive,
+  MdDelete,
   MdDeleteForever,
   MdModeEdit,
   MdUnarchive,
@@ -172,7 +173,7 @@ export default function GamesList({
         onConfirm={() => onToggleVisibility(gameToHide as GameListItem)}
         onCancel={() => setConfirmText('')}
       />
-      {hiddenGames.length > 0 ? (
+      {hiddenGames.length > 0 && admin ? (
         <>
           <div className="flex justify-between">
             <h1 className="text-4xl font-bold mb-3">Archived Games</h1>
@@ -240,9 +241,9 @@ export default function GamesList({
 
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">Games</h1>
-        <Link href={'/dashboard/add'}>
+        <Link href={'/dashboard/add'} className="mb-4">
           <Button
-            className="bg-black text-white float-right"
+            className="bg-black text-white float-right mt-0"
             invertedClassName="bg-white text-black"
           >
             Add New Game
@@ -259,10 +260,7 @@ export default function GamesList({
               Feature
             </th>
             <th className="w-14 text-center">Edit</th>
-            <th className="w-14 text-center">Archive</th>
-            {/* <th className="flex justify-center w-14 max-w-14 text-center">
-              Delete
-            </th> */}
+            <th className="w-14 text-center">{admin ? 'Archive' : 'Delete'}</th>
           </tr>
         </thead>
         <tbody>
@@ -312,7 +310,7 @@ export default function GamesList({
                     {admin ? (
                       <MdArchive className="w-full" size={'30px'} />
                     ) : (
-                      <MdDeleteForever className="w-full" size={'30px'} />
+                      <MdDelete className="w-full" size={'30px'} />
                     )}
                   </IconButton>
                 </td>
