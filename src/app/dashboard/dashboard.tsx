@@ -74,16 +74,18 @@ export default function Dashboard({
             panel === 'games' ? 'block' : 'hidden'
           } shadow-lg p-4 rounded`}
           admin={admin}
-          games={
-            admin
-              ? dashboardData.gameslist
-              : dashboardData.gameslist.filter(
-                  (game: GameListItem) =>
-                    game.partner ===
+          games={dashboardData.gameslist
+            .filter(
+              (x) =>
+                (x.hidden === false || x.hidden === undefined) &&
+                (admin
+                  ? true
+                  : x.partner ===
                     data.users.privileged.find((u) => u.uid === user?.uid)
-                      ?.partner
-                )
-          }
+                      ?.partner)
+            )
+            .sort((a, b) => b.id - a.id)}
+          hiddenGames={dashboardData.gameslist.filter((x) => x.hidden)}
         ></GamesList>
         {admin ? (
           <>

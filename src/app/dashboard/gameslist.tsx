@@ -1,7 +1,11 @@
-import { MdDeleteForever, MdModeEdit } from 'react-icons/md'
+import {
+  MdArchive,
+  MdDeleteForever,
+  MdModeEdit,
+  MdUnarchive,
+} from 'react-icons/md'
 import { IconButton } from '../(components)/iconButton'
 import { GameListItem } from '../../../types'
-import { IoEye, IoEyeOff } from 'react-icons/io5'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { useEffect, useState } from 'react'
@@ -14,12 +18,14 @@ import { GoDotFill } from 'react-icons/go'
 
 export default function GamesList({
   games,
+  hiddenGames,
   className,
   invalidateGames,
   admin,
 }: {
   admin: boolean
   games: GameListItem[]
+  hiddenGames: GameListItem[]
   className: string
   invalidateGames: () => void
 }) {
@@ -27,7 +33,9 @@ export default function GamesList({
 
   const [currentGames, setCurrentGames] = useState<GameListItem[]>([])
   const [confirmText, setConfirmText] = useState('')
+
   const [gameToDelete, setGameToDelete] = useState(0)
+  const [gameToHide, setGameToHide] = useState<GameListItem>()
 
   const router = useRouter()
 
@@ -63,6 +71,7 @@ export default function GamesList({
 
     switch (res.status) {
       case 200:
+        invalidateGames()
         return
       case 401:
         alert('You are Unauthorized to make that action')
@@ -158,6 +167,77 @@ export default function GamesList({
         onConfirm={() => deleteGame()}
         onCancel={() => setConfirmText('')}
       />
+      <Confirm
+        text={confirmText}
+        onConfirm={() => onToggleVisibility(gameToHide as GameListItem)}
+        onCancel={() => setConfirmText('')}
+      />
+      {hiddenGames.length > 0 ? (
+        <>
+          <div className="flex justify-between">
+            <h1 className="text-4xl font-bold mb-3">Archived Games</h1>
+          </div>
+
+          <table className="w-full">
+            <thead>
+              <tr className="*:p-1">
+                <th>ID</th>
+                <th>Name</th>
+                <th className="w-14 text-center">Unarchive</th>
+                <th className="w-28 text-center">Perm Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {hiddenGames.map((element, index) => {
+                return (
+                  <tr
+                    key={index}
+                    className="*:p-1 odd:bg-white even:bg-zinc-100"
+                  >
+                    <td>{element.id}</td>
+                    <td>
+                      <div
+                        className="hover:underline cursor-pointer"
+                        onClick={() =>
+                          router.push(`/dashboard/edit/${element.id}`)
+                        }
+                      >
+                        {element.name}
+                      </div>
+                    </td>
+                    <td>
+                      <IconButton
+                        onClick={() => {
+                          onToggleVisibility(element)
+                        }}
+                      >
+                        <MdUnarchive className="w-full" size={'30px'} />
+                      </IconButton>
+                    </td>
+                    {element.id > 200 ? (
+                      <td>
+                        <IconButton
+                          onClick={() => {
+                            setGameToDelete(element.id)
+                            setConfirmText(
+                              'Are you sure you want to delete this partner? This action is irreversible.'
+                            )
+                          }}
+                        >
+                          <MdDeleteForever className="w-full" size={'30px'} />
+                        </IconButton>
+                      </td>
+                    ) : null}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </>
+      ) : null}
+      <br />
+      <br />
+
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">Games</h1>
         <Link href={'/dashboard/add'}>
@@ -169,7 +249,7 @@ export default function GamesList({
           </Button>
         </Link>
       </div>
-      <br />
+
       <table className="w-full">
         <thead>
           <tr className="*:p-1">
@@ -179,10 +259,10 @@ export default function GamesList({
               Feature
             </th>
             <th className="w-14 text-center">Edit</th>
-            <th className="w-14 text-center">Hide</th>
-            <th className="flex justify-center w-14 max-w-14 text-center">
+            <th className="w-14 text-center">Archive</th>
+            {/* <th className="flex justify-center w-14 max-w-14 text-center">
               Delete
-            </th>
+            </th> */}
           </tr>
         </thead>
         <tbody>
@@ -221,30 +301,21 @@ export default function GamesList({
                 <td>
                   <IconButton
                     onClick={() => {
-                      onToggleVisibility(element)
+                      setConfirmText(
+                        `Are you sure you want to ${
+                          admin ? 'archive' : 'delete'
+                        } this game?`
+                      )
+                      setGameToHide(element)
                     }}
                   >
-                    {element.hidden ? (
-                      <IoEyeOff className="w-full" size={'30px'} />
+                    {admin ? (
+                      <MdArchive className="w-full" size={'30px'} />
                     ) : (
-                      <IoEye className="w-full" size={'30px'} />
+                      <MdDeleteForever className="w-full" size={'30px'} />
                     )}
                   </IconButton>
                 </td>
-                {element.id > 200 ? (
-                  <td>
-                    <IconButton
-                      onClick={() => {
-                        setGameToDelete(element.id)
-                        setConfirmText(
-                          'Are you sure you want to delete this partner? This action is irreversible.'
-                        )
-                      }}
-                    >
-                      <MdDeleteForever className="w-full" size={'30px'} />
-                    </IconButton>
-                  </td>
-                ) : null}
               </tr>
             )
           })}
