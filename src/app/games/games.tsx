@@ -8,12 +8,16 @@ import '@/utils/client/firebase'
 import Dropdown from '../(components)/dropdown'
 import { useSearchParams } from 'next/navigation'
 import GameSection from './gamesection'
+import { IconButton } from '../(components)/iconButton'
+import { IoSchool, IoSchoolOutline } from 'react-icons/io5'
 
 export default function Games() {
   const [error, setError] = useState('')
 
   const [gamesData, setGamesData] = useState<GamesList>()
   const [partner, setPartner] = useState<string | null>()
+
+  const [educational, setEducational] = useState(false)
 
   const params = useSearchParams()
 
@@ -71,51 +75,107 @@ export default function Games() {
         <>
           {partner ? (
             <>
-              <div className="flex justify-between sm:items-center gap-0 sm:gap-3 flex-col-reverse sm:flex-row">
-                <h3 className="text-3xl font-bold text-maingreen">
-                  Games by {partner}
-                </h3>
-                <br />
-                <Dropdown
-                  options={gamesData.partners
-                    .filter((x) => x.hidden !== true)
-                    .map((x) => x.name)}
-                />
-              </div>
-              <br />
               <GameSection
-                games={gamesData.data.filter((x) => x.partner === partner)}
+                smallTitle={`${partner}`}
+                largeTitle={`${
+                  educational ? 'Educational' : ''
+                } Games by ${partner}`}
+                titleChildren={
+                  <div className="flex items-center gap-4">
+                    <IconButton
+                      onClick={() => {
+                        setEducational(!educational)
+                      }}
+                    >
+                      {educational ? (
+                        <IoSchool
+                          className="w-full"
+                          size={'35px'}
+                          color="#00A98F"
+                        />
+                      ) : (
+                        <IoSchoolOutline
+                          className="w-full"
+                          size={'35px'}
+                          color="#00A98F"
+                        />
+                      )}
+                    </IconButton>
+                    <Dropdown
+                      options={gamesData.partners
+                        .filter((x) => x.hidden !== true)
+                        .map((x) => x.name)}
+                    />
+                  </div>
+                }
+                games={gamesData.data.filter(
+                  (x) =>
+                    x.partner === partner &&
+                    (educational ? x.educational : true)
+                )}
               />
-              <br />
-              <br />
             </>
           ) : null}
-          <div className="flex justify-between gap-3 items-center">
-            <h3 className="text-3xl font-bold sm:hidden text-maingreen">
-              Games
-            </h3>
-            <h3 className="text-3xl font-bold hidden sm:block text-maingreen">
-              Play Games online
-            </h3>
-            {partner ? null : (
-              <Dropdown
-                options={gamesData.partners
-                  .filter((x) => x.hidden !== true)
-                  .map((x) => x.name)}
-              />
-            )}
-          </div>
-          <br />
-          <GameSection games={gamesData.data} />
           <br />
           <br />
           <br />
-          <h3 className="text-3xl font-bold sm:hidden text-maingreen">Apps</h3>
-          <h3 className="text-3xl font-bold hidden sm:block text-maingreen">
-            Or download an App
-          </h3>
+          <GameSection
+            smallTitle={educational ? 'Educational Games' : 'Online Games'}
+            largeTitle={
+              educational ? 'Educational Online Games' : 'Play Games Online'
+            }
+            titleChildren={
+              partner ? null : (
+                <>
+                  <div className="flex items-center gap-4">
+                    <IconButton
+                      onClick={() => {
+                        setEducational(!educational)
+                      }}
+                    >
+                      {educational ? (
+                        <IoSchool
+                          className="w-full"
+                          size={'35px'}
+                          color="#00A98F"
+                        />
+                      ) : (
+                        <IoSchoolOutline
+                          className="w-full"
+                          size={'35px'}
+                          color="#00A98F"
+                        />
+                      )}
+                    </IconButton>
+                    <Dropdown
+                      options={gamesData.partners
+                        .filter((x) => x.hidden !== true)
+                        .map((x) => x.name)}
+                    />
+                  </div>
+                </>
+              )
+            }
+            games={
+              educational
+                ? gamesData.data.filter((x) => x.educational)
+                : gamesData.data
+            }
+          />
           <br />
-          <GameSection games={gamesData.data.filter((x) => x.app)} />
+          <br />
+          <br />
+          {gamesData.data.filter(
+            (x) => x.app && (educational ? x.educational : true)
+          ).length === 0 ? null : (
+            <GameSection
+              smallTitle={educational ? 'Educational Apps' : 'Apps'}
+              largeTitle={educational ? 'Educational Apps' : 'Download an App'}
+              games={gamesData.data.filter(
+                (x) => x.app && (educational ? x.educational : true)
+              )}
+            />
+          )}
         </>
       ) : error ? (
         <p className=" text-maingreen text-3xl">Failed to fetch games :(</p>

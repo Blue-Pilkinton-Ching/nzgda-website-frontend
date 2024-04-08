@@ -23,6 +23,7 @@ export interface Game {
   updatedAt?: string
   playableOnHeihei?: boolean
   displayAppBadge?: boolean
+  educational: boolean
 }
 export interface UserTypes {
   admins: User[]
@@ -60,6 +61,7 @@ export interface GameListItem {
   app?: boolean
   featured: boolean
   banner?: string
+  educational?: boolean
 }
 
 export interface Partner {

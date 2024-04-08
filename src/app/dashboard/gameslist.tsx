@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 import Button from '../(components)/button'
 import Link from 'next/link'
 import { FaCrown } from 'react-icons/fa'
-import { TbCrownOff } from 'react-icons/tb'
+import { GoDotFill } from 'react-icons/go'
 
 export default function GamesList({
   games,
@@ -207,7 +207,7 @@ export default function GamesList({
                     {element.featured ? (
                       <FaCrown className="w-full" size={'28px'} />
                     ) : (
-                      <TbCrownOff className="w-full" size={'30px'} />
+                      <GoDotFill className="w-full" size={'22px'} />
                     )}
                   </IconButton>
                 </td>

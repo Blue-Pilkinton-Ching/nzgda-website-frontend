@@ -46,6 +46,7 @@ export default function GameForm({
   const [gameWarning, setGameWarning] = useState('')
   const [banner, setBanner] = useState<File>()
   const [bannerWarning, setBannerWarning] = useState('')
+  const [isEducational, setIsEducational] = useState(false)
 
   const [submitting, setSubmitting] = useState(false)
 
@@ -183,6 +184,9 @@ export default function GameForm({
           setGameFolder(target2.files[0])
         }
         break
+      case 'Educational':
+        setIsEducational(event.target.value === 'false')
+        break
     }
   }
 
@@ -218,6 +222,7 @@ export default function GameForm({
           ].toString(),
           partner: partner === 'None' ? '' : partner,
           displayAppBadge,
+          educational: isEducational,
         })
       )
 
@@ -269,6 +274,7 @@ export default function GameForm({
           ].toString(),
           partner: partner === 'None' ? '' : partner,
           displayAppBadge,
+          educational: isEducational,
         })
       )
 
@@ -327,6 +333,7 @@ export default function GameForm({
     setExcludeBrowserDesktop(game?.exclude?.includes('desktop') || false)
     setPartner(game?.partner || 'None')
     setDisplayAppBadge(game?.displayAppBadge || false)
+    setIsEducational(game?.educational || false)
   }
 
   return (
@@ -447,6 +454,14 @@ export default function GameForm({
                 maxLength={1000}
                 name={'Android Link'}
                 tooltip="If your game has an Google Play Store link you can add that here"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={isEducational}
+                type="checkbox"
+                maxLength={0}
+                name={'Educational'}
+                tooltip="Display this game as having educational value"
               />
               <Input
                 onChange={onGameInputChange}
