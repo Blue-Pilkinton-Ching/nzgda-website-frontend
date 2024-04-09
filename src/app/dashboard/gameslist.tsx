@@ -37,7 +37,8 @@ export default function GamesList({
   const [user] = useAuthState(getAuth())
 
   const [currentGames, setCurrentGames] = useState<GameListItem[]>([])
-  const [confirmText, setConfirmText] = useState('')
+  const [deleteText, setDeleteText] = useState('')
+  const [hideText, setHideText] = useState('')
 
   const [gameToDelete, setGameToDelete] = useState(0)
   const [gameToHide, setGameToHide] = useState<GameListItem>()
@@ -199,14 +200,14 @@ export default function GamesList({
   return (
     <div className={`shadow-lg p-4 rounded ${className}`}>
       <Confirm
-        text={confirmText}
+        text={deleteText}
         onConfirm={() => deleteGame()}
-        onCancel={() => setConfirmText('')}
+        onCancel={() => setDeleteText('')}
       />
       <Confirm
-        text={confirmText}
+        text={hideText}
         onConfirm={() => onToggleVisibility(gameToHide as GameListItem)}
-        onCancel={() => setConfirmText('')}
+        onCancel={() => setHideText('')}
       />
       {admin && unApprovedGames && unApprovedGames.length > 0 ? (
         <>
@@ -261,7 +262,7 @@ export default function GamesList({
                     <td>
                       <IconButton
                         onClick={() => {
-                          setConfirmText(
+                          setDeleteText(
                             `Are you sure you want to reject this game proposal?`
                           )
                           setGameToDelete(element.id)
@@ -340,7 +341,7 @@ export default function GamesList({
                 <td>
                   <IconButton
                     onClick={() => {
-                      setConfirmText(
+                      setHideText(
                         `Are you sure you want to ${
                           admin ? 'archive' : 'delete'
                         } this game?`
@@ -409,7 +410,7 @@ export default function GamesList({
                         <IconButton
                           onClick={() => {
                             setGameToDelete(element.id)
-                            setConfirmText(
+                            setDeleteText(
                               'Are you sure you want to delete this partner? This action is irreversible.'
                             )
                           }}
