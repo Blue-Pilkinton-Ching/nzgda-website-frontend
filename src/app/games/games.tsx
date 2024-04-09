@@ -17,6 +17,8 @@ export default function Games() {
   const [gamesData, setGamesData] = useState<GamesList>()
   const [partner, setPartner] = useState<string | null>()
 
+  const [admin, setAdmin] = useState<boolean>()
+
   const [educational, setEducational] = useState(false)
 
   const params = useSearchParams()
@@ -24,6 +26,7 @@ export default function Games() {
   useEffect(() => {
     fetchGames()
     setPartner(params.get('partner'))
+    setAdmin(params.get('admin') === 'true' || false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params])
 
@@ -111,6 +114,7 @@ export default function Games() {
                 games={gamesData.data.filter(
                   (x) =>
                     x.partner === partner &&
+                    (admin ? true : x.approved === true) &&
                     (educational ? x.educational : true)
                 )}
               />
@@ -156,11 +160,11 @@ export default function Games() {
                 </>
               )
             }
-            games={
-              educational
-                ? gamesData.data.filter((x) => x.educational)
-                : gamesData.data
-            }
+            games={gamesData.data.filter(
+              (x) =>
+                (educational ? x.educational : true) &&
+                (admin ? true : x.approved === true)
+            )}
           />
           <br />
           <br />
@@ -172,7 +176,10 @@ export default function Games() {
               smallTitle={educational ? 'Educational Apps' : 'Apps'}
               largeTitle={educational ? 'Educational Apps' : 'Download an App'}
               games={gamesData.data.filter(
-                (x) => x.app && (educational ? x.educational : true)
+                (x) =>
+                  x.app &&
+                  (educational ? x.educational : true) &&
+                  (admin ? true : x.approved === true)
               )}
             />
           )}

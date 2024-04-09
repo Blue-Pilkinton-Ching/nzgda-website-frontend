@@ -62,6 +62,7 @@ export interface GameListItem {
   featured: boolean
   banner?: string
   educational?: boolean
+  approved?: boolean
 }
 
 export interface Partner {

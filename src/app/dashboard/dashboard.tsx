@@ -78,6 +78,7 @@ export default function Dashboard({
             .filter(
               (x) =>
                 (x.hidden === false || x.hidden === undefined) &&
+                x.approved === true &&
                 (admin
                   ? true
                   : x.partner ===
@@ -86,6 +87,13 @@ export default function Dashboard({
             )
             .sort((a, b) => b.id - a.id)}
           hiddenGames={dashboardData.gameslist.filter((x) => x.hidden)}
+          unApprovedGames={
+            admin
+              ? dashboardData.gameslist.filter(
+                  (x) => x.approved === false || x.approved === undefined
+                )
+              : undefined
+          }
         ></GamesList>
         {admin ? (
           <>

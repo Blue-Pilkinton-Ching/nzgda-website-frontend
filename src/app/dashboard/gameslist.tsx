@@ -1,7 +1,9 @@
 import {
   MdArchive,
+  MdClose,
   MdDelete,
   MdDeleteForever,
+  MdDone,
   MdModeEdit,
   MdUnarchive,
 } from 'react-icons/md'
@@ -23,10 +25,12 @@ export default function GamesList({
   className,
   invalidateGames,
   admin,
+  unApprovedGames,
 }: {
   admin: boolean
   games: GameListItem[]
   hiddenGames: GameListItem[]
+  unApprovedGames?: GameListItem[]
   className: string
   invalidateGames: () => void
 }) {
@@ -79,6 +83,37 @@ export default function GamesList({
         return
       case 500:
         alert('An error occured while setting game visibility')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.statusText, res.body)
+        return
+    }
+  }
+
+  async function onApprove(listItem: GameListItem) {
+    let res
+
+    try {
+      res = await fetch(`/api/dashboard/${listItem.id}/approve`, {
+        method: 'PATCH',
+        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
+      })
+    } catch (error) {
+      alert('An error occured while approving game')
+      console.error(error)
+      return
+    }
+
+    switch (res.status) {
+      case 200:
+        invalidateGames()
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('An error occured while approving game')
         return
       default:
         alert('An unknown error occured')
@@ -173,10 +208,18 @@ export default function GamesList({
         onConfirm={() => onToggleVisibility(gameToHide as GameListItem)}
         onCancel={() => setConfirmText('')}
       />
-      {hiddenGames.length > 0 && admin ? (
+      {admin && unApprovedGames && unApprovedGames.length > 0 ? (
         <>
           <div className="flex justify-between">
-            <h1 className="text-4xl font-bold mb-3">Archived Games</h1>
+            <h1 className="text-4xl font-bold">Unapproved Games</h1>
+            <Link href={'/games?admin=true'} className="mb-4">
+              <Button
+                className="bg-black text-white float-right mt-0"
+                invertedClassName="bg-white text-black"
+              >
+                View Unapproved Games
+              </Button>
+            </Link>
           </div>
 
           <table className="w-full">
@@ -184,12 +227,12 @@ export default function GamesList({
               <tr className="*:p-1">
                 <th>ID</th>
                 <th>Name</th>
-                <th className="w-14 text-center">Unarchive</th>
-                <th className="w-28 text-center">Perm Delete</th>
+                <th className={`w-14 text-center`}>Approve</th>
+                <th className="w-14 text-center">Reject</th>
               </tr>
             </thead>
             <tbody>
-              {hiddenGames.map((element, index) => {
+              {unApprovedGames.map((element, index) => {
                 return (
                   <tr
                     key={index}
@@ -206,29 +249,27 @@ export default function GamesList({
                         {element.name}
                       </div>
                     </td>
+                    <td className={` ${admin ? 'block' : 'hidden'}`}>
+                      <IconButton
+                        onClick={() => {
+                          onApprove(element)
+                        }}
+                      >
+                        <MdDone className="w-full" size={'28px'} />
+                      </IconButton>
+                    </td>
                     <td>
                       <IconButton
                         onClick={() => {
-                          onToggleVisibility(element)
+                          setConfirmText(
+                            `Are you sure you want to reject this game proposal?`
+                          )
+                          setGameToDelete(element.id)
                         }}
                       >
-                        <MdUnarchive className="w-full" size={'30px'} />
+                        <MdClose className="w-full" size={'28px'} />
                       </IconButton>
                     </td>
-                    {element.id > 200 ? (
-                      <td>
-                        <IconButton
-                          onClick={() => {
-                            setGameToDelete(element.id)
-                            setConfirmText(
-                              'Are you sure you want to delete this partner? This action is irreversible.'
-                            )
-                          }}
-                        >
-                          <MdDeleteForever className="w-full" size={'30px'} />
-                        </IconButton>
-                      </td>
-                    ) : null}
                   </tr>
                 )
               })}
@@ -319,6 +360,71 @@ export default function GamesList({
           })}
         </tbody>
       </table>
+      {hiddenGames.length > 0 && admin ? (
+        <>
+          <br />
+          <br />
+          <div className="flex justify-between">
+            <h1 className="text-4xl font-bold mb-3">Archived Games</h1>
+          </div>
+
+          <table className="w-full">
+            <thead>
+              <tr className="*:p-1">
+                <th>ID</th>
+                <th>Name</th>
+                <th className="w-14 text-center">Unarchive</th>
+                <th className="w-28 text-center">Perm Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {hiddenGames.map((element, index) => {
+                return (
+                  <tr
+                    key={index}
+                    className="*:p-1 odd:bg-white even:bg-zinc-100"
+                  >
+                    <td>{element.id}</td>
+                    <td>
+                      <div
+                        className="hover:underline cursor-pointer"
+                        onClick={() =>
+                          router.push(`/dashboard/edit/${element.id}`)
+                        }
+                      >
+                        {element.name}
+                      </div>
+                    </td>
+                    <td>
+                      <IconButton
+                        onClick={() => {
+                          onToggleVisibility(element)
+                        }}
+                      >
+                        <MdUnarchive className="w-full" size={'30px'} />
+                      </IconButton>
+                    </td>
+                    {element.id > 200 ? (
+                      <td>
+                        <IconButton
+                          onClick={() => {
+                            setGameToDelete(element.id)
+                            setConfirmText(
+                              'Are you sure you want to delete this partner? This action is irreversible.'
+                            )
+                          }}
+                        >
+                          <MdDeleteForever className="w-full" size={'30px'} />
+                        </IconButton>
+                      </td>
+                    ) : null}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </>
+      ) : null}
     </div>
   )
 }
