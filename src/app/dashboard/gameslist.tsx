@@ -276,10 +276,10 @@ export default function GamesList({
               })}
             </tbody>
           </table>
+          <br />
+          <br />
         </>
       ) : null}
-      <br />
-      <br />
 
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">Games</h1>

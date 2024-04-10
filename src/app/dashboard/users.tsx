@@ -260,6 +260,7 @@ export default function Users({
                   <td>
                     <div className="h-10"></div>
                   </td>
+                  <td />
                 </tr>
               )
             })}
