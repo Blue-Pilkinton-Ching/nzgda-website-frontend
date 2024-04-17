@@ -3,10 +3,11 @@ import { IconButton } from '../(components)/iconButton'
 import { FormEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-import { MdDeleteForever } from 'react-icons/md'
-import Confirm from './confirm'
-import Button from '../(components)/button'
+import { MdDeleteForever, MdDone, MdEdit } from 'react-icons/md'
+
 import { Partner } from '../../../types'
+import Button from '../(components)/button'
+import Confirm from './confirm'
 
 export default function Partners({
   className,
@@ -22,6 +23,9 @@ export default function Partners({
   const [partnerData, setPartnerData] = useState<Partner[]>()
   const [confirmText, setConfirmText] = useState('')
   const [partnerToDelete, setPartnerToDelete] = useState('')
+  const [editPartner, setEditPartner] = useState('')
+
+  const [partnerName, setPartnerName] = useState('')
 
   useEffect(() => {
     setPartnerData(partners)
@@ -45,7 +49,7 @@ export default function Partners({
     )
 
     try {
-      res = await fetch(`/api/dashboard/partners`, {
+      res = await fetch(`/api/dashboard/partners/visibility`, {
         body: JSON.stringify({ hidden: shouldHide, name: partner.name }),
         method: 'PATCH',
         headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
@@ -69,6 +73,54 @@ export default function Partners({
         alert('An unknown error occured')
         console.error(res.status, res.statusText, res.body)
         return
+    }
+  }
+
+  async function onEditPartner(partner: string) {
+    if (editPartner === partner) {
+      if (editPartner !== partnerName) {
+        setEditPartner('')
+        setPartnerName('')
+
+        let p = (partnerData as Partner[]).find(
+          (x) => x.name === editPartner
+        ) as Partner
+
+        p.name = partnerName
+
+        let res
+        try {
+          res = await fetch(`/api/dashboard/partners/${editPartner}`, {
+            body: JSON.stringify({ partner: partnerName }),
+            method: 'PATCH',
+            headers: {
+              Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+            },
+          })
+        } catch (error) {
+          alert('An error occured while setting new partner name')
+          console.error(error)
+          return
+        }
+
+        switch (res.status) {
+          case 200:
+            return
+          case 401:
+            alert('You are Unauthorized to make that action')
+            return
+          case 500:
+            alert('An error occured while setting new partner name')
+            return
+          default:
+            alert('An unknown error occured')
+            console.error(res.status, res.statusText, res.body)
+            return
+        }
+      }
+    } else {
+      setEditPartner(partner)
+      setPartnerName(partner)
     }
   }
 
@@ -175,6 +227,7 @@ export default function Partners({
         <thead>
           <tr>
             <th className="pl-2">Partner</th>
+            <th className="w-16 text-center">Edit</th>
             <th className="w-16 text-center">Hide</th>
             <th className="w-16 text-center">Delete</th>
           </tr>
@@ -183,7 +236,29 @@ export default function Partners({
           {partnerData?.map((element, key) => {
             return (
               <tr key={key} className="even:bg-zinc-100 odd:bg-white">
-                <td className="pl-2">{element.name}</td>
+                <td className="pl-2">
+                  {editPartner === element.name ? (
+                    <>
+                      <input
+                        type="text"
+                        className="bg-transparent outline-none shadow-md border border-black px-1.5 rounded-md -translate-x-2"
+                        value={partnerName}
+                        onChange={(e) => setPartnerName(e.target.value)}
+                      />
+                    </>
+                  ) : (
+                    element.name
+                  )}
+                </td>
+                <td>
+                  <IconButton onClick={() => onEditPartner(element.name)}>
+                    {editPartner === element.name ? (
+                      <MdDone className="w-full" size={'35px'} />
+                    ) : (
+                      <MdEdit className="w-full" size={'30px'} />
+                    )}
+                  </IconButton>
+                </td>
                 <td>
                   <IconButton
                     onClick={() => {
