@@ -238,7 +238,7 @@ export default function GameForm({
         form.append('banner', banner)
       }
 
-      res = await fetch(`/api/dashboard/${id}`, {
+      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/${id}`, {
         method: 'PATCH',
         body: form,
         headers: {
@@ -288,7 +288,7 @@ export default function GameForm({
         form.append('banner', banner)
       }
 
-      res = await fetch(`/api/dashboard/add`, {
+      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/add`, {
         method: 'POST',
         body: form,
         headers: {

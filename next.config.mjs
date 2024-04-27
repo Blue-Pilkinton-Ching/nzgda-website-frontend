@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  api: {
-    responseLimit: false,
+  env: {
+    API_BACKEND_URL: process.env.API_BACKEND_URL,
   },
   images: {
     remotePatterns: [
@@ -24,14 +24,6 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-  },
-  rewrites: async () => {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.BACKEND_URL}/:path*`,
-      },
-    ]
   },
 }
 

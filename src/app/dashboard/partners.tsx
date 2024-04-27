@@ -49,11 +49,16 @@ export default function Partners({
     )
 
     try {
-      res = await fetch(`/api/dashboard/partners/visibility`, {
-        body: JSON.stringify({ hidden: shouldHide, name: partner.name }),
-        method: 'PATCH',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await fetch(
+        `${process.env.API_BACKEND_URL}/dashboard/partners/visibility`,
+        {
+          body: JSON.stringify({ hidden: shouldHide, name: partner.name }),
+          method: 'PATCH',
+          headers: {
+            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+          },
+        }
+      )
     } catch (error) {
       alert('An error occured while setting partner visibility')
       console.error(error)
@@ -90,13 +95,16 @@ export default function Partners({
 
         let res
         try {
-          res = await fetch(`/api/dashboard/partners/${editPartner}`, {
-            body: JSON.stringify({ partner: partnerName }),
-            method: 'PATCH',
-            headers: {
-              Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-            },
-          })
+          res = await fetch(
+            `${process.env.API_BACKEND_URL}/dashboard/partners/${editPartner}`,
+            {
+              body: JSON.stringify({ partner: partnerName }),
+              method: 'PATCH',
+              headers: {
+                Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+              },
+            }
+          )
         } catch (error) {
           alert('An error occured while setting new partner name')
           console.error(error)
@@ -127,7 +135,7 @@ export default function Partners({
   async function deletePartner() {
     let res
     try {
-      res = await fetch(`/api/dashboard/partners`, {
+      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/partners`, {
         body: JSON.stringify(partnerToDelete),
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
@@ -166,7 +174,7 @@ export default function Partners({
     currentTarget.value = ''
 
     try {
-      res = await fetch(`/api/dashboard/partners`, {
+      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/partners`, {
         body: JSON.stringify(pName),
         method: 'POST',
         headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },

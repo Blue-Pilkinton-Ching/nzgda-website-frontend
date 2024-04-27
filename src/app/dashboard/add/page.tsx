@@ -52,7 +52,7 @@ export default function Page() {
       let data
       try {
         data = (await (
-          await fetch('/api/dashboard/users', {
+          await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
             headers: {
               Authorization: 'Bearer ' + (await user?.getIdToken(true)),
             },
