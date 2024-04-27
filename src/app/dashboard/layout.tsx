@@ -55,7 +55,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [user])
 
   async function fetchDashboardData() {
-    const res = await fetch('/api/dashboard', {
+    const res = await fetch(`${process.env.API_BACKEND_URL}/dashboard`, {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + (await user?.getIdToken(true)),

@@ -21,7 +21,7 @@ export default function Page() {
 
   async function fetchDashboardData() {
     try {
-      const res = await fetch('/api/dashboard', {
+      const res = await fetch(`${process.env.API_BACKEND_URL}/dashboard`, {
         method: 'GET',
         headers: {
           Authorization: 'Bearer ' + (await user?.getIdToken(true)),
@@ -29,10 +29,12 @@ export default function Page() {
         },
       })
 
+      const json = await res.json()
+
       switch (res.status) {
         case 200:
           setAdmin(res.headers.get('privilege') === 'admin')
-          setData(await res.json())
+          setData(json)
           break
         case 401:
           alert(`You are not authorized to access this page.`)

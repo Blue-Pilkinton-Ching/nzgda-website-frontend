@@ -36,6 +36,19 @@ export default function Dashboard({
     )
   }
 
+  //   console.log(dashboardData.gameslist)
+  //   console.log(
+  //     dashboardData.gameslist.filter(
+  //       (x) =>
+  //         (x.hidden === false || x.hidden === undefined) &&
+  //         x.approved === true &&
+  //         (admin
+  //           ? true
+  //           : x.partner ===
+  //             data.users.privileged.find((u) => u.uid === user?.uid)?.partner)
+  //     )
+  //   )
+
   return (
     <>
       <div className="max-w-[800px] text-wrap mx-auto text-left mt-20 text-lg mb-12 font-sans text-black">

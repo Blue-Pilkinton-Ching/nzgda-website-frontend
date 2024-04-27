@@ -64,11 +64,16 @@ export default function GamesList({
     )
 
     try {
-      res = await fetch(`/api/dashboard/${listItem.id}/visibility`, {
-        body: JSON.stringify({ hidden: shouldHide }),
-        method: 'PATCH',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await fetch(
+        `${process.env.API_BACKEND_URL}/dashboard/${listItem.id}/visibility`,
+        {
+          body: JSON.stringify({ hidden: shouldHide }),
+          method: 'PATCH',
+          headers: {
+            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+          },
+        }
+      )
     } catch (error) {
       alert('An error occured while setting game visibility')
       console.error(error)
@@ -96,10 +101,15 @@ export default function GamesList({
     let res
 
     try {
-      res = await fetch(`/api/dashboard/${listItem.id}/approve`, {
-        method: 'PATCH',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await fetch(
+        `${process.env.API_BACKEND_URL}/dashboard/${listItem.id}/approve`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+          },
+        }
+      )
     } catch (error) {
       alert('An error occured while approving game')
       console.error(error)
@@ -126,10 +136,15 @@ export default function GamesList({
   async function deleteGame() {
     let res
     try {
-      res = await fetch(`/api/dashboard/${gameToDelete}`, {
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await fetch(
+        `${process.env.API_BACKEND_URL}/dashboard/${gameToDelete}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+          },
+        }
+      )
     } catch (error) {
       alert(`'An error occured while deleting game ${gameToDelete}'`)
       console.error(error)
@@ -170,11 +185,16 @@ export default function GamesList({
     )
 
     try {
-      res = await fetch(`/api/dashboard/${listItem.id}/feature`, {
-        body: JSON.stringify({ featured: shouldFeature }),
-        method: 'PATCH',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await fetch(
+        `${process.env.API_BACKEND_URL}/dashboard/${listItem.id}/feature`,
+        {
+          body: JSON.stringify({ featured: shouldFeature }),
+          method: 'PATCH',
+          headers: {
+            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
+          },
+        }
+      )
     } catch (error) {
       alert('An error occured while setting game feature')
       console.error(error)

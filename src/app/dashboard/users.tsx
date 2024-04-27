@@ -35,7 +35,7 @@ export default function Users({
   async function acceptAuthRequest(authRequest: User) {
     let res
     try {
-      res = await fetch(`/api/dashboard/users`, {
+      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
         body: JSON.stringify({ user: authRequest }),
         method: 'POST',
         headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
@@ -65,7 +65,7 @@ export default function Users({
   async function deleteUser(deletedUser: User) {
     let res
     try {
-      res = await fetch(`/api/dashboard/users`, {
+      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
         body: JSON.stringify({ user: deletedUser }),
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
@@ -96,7 +96,7 @@ export default function Users({
   async function denyAuthRequest(authRequest: User) {
     let res
     try {
-      res = await fetch(`/api/dashboard/requests`, {
+      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/requests`, {
         body: JSON.stringify({ user: authRequest }),
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
