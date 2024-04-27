@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  api: {
+    responseLimit: false,
+  },
   images: {
     remotePatterns: [
       {
