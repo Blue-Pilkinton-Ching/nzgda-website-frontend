@@ -5,3 +5,17 @@
 .scrollbar {
   scrollbar-gutter: stable;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.mask {
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 15px,
+    rgba(0, 0, 0, 1) calc(100% - 15px),
+    rgba(0, 0, 0, 0) 100%
+  );
+}
