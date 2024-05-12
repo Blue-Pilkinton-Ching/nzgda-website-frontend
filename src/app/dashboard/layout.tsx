@@ -102,7 +102,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <br />
           <Button
             onClick={() => {
-              router.push('login')
+              router.push('/login')
             }}
           >
             Go to Sign In
