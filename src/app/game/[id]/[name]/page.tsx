@@ -14,10 +14,7 @@ import apple from '../../../../../public/images/apple-badge.svg'
 import back from '../../../../../public/images/back.svg'
 import * as firestore from 'firebase/firestore'
 import '@/utils/client/firebase'
-import Dropdown from '@/app/(components)/dropdown'
-import { IconButton } from '@/app/(components)/iconButton'
 import GameSection from '@/app/games/gamesection'
-import { IoSchool, IoSchoolOutline } from 'react-icons/io5'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
@@ -25,6 +22,7 @@ export default function Page() {
   const [error, setError] = useState('')
   const gameView = useRef<HTMLIFrameElement>(null)
   const [isFullscreen, setFullscreen] = useState(false)
+  const [iosFullscreen, setIOSFullscreen] = useState(false)
 
   const params = useParams<{ id: string }>()
 
@@ -170,15 +168,26 @@ export default function Page() {
                   src={game.url}
                   allowFullScreen
                   className="w-full shadow-lg overflow-hidden aspect-video"
-                  style={{
-                    maxWidth: isFullscreen ? '100%' : game.width,
-                    maxHeight:
-                      game.height && game.height < 800
-                        ? game.height
-                        : isFullscreen
-                        ? 'calc(100vh - 64px)'
-                        : 800,
-                  }}
+                  style={
+                    iosFullscreen
+                      ? {
+                          position: 'fixed',
+                          top: 0,
+                          left: 0,
+                          width: '100vw',
+                          height: 'min(calc(100vw / 1.7777777778),100vh)',
+                          zIndex: 9999,
+                        }
+                      : {
+                          maxWidth: isFullscreen ? '100%' : game.width,
+                          maxHeight:
+                            game.height && game.height < 800
+                              ? game.height
+                              : isFullscreen
+                              ? 'calc(100vh - 64px)'
+                              : 800,
+                        }
+                  }
                   scrolling="no"
                   id="heihei-game"
                   frameBorder={0}
@@ -195,9 +204,19 @@ export default function Page() {
                     onClick={() => {
                       setFullscreen((old) => {
                         if (old) {
-                          document.exitFullscreen()
+                          try {
+                            document.exitFullscreen()
+                          } catch (error) {
+                            setIOSFullscreen(false)
+                            console.error(error)
+                          }
                         } else {
-                          gameView.current?.requestFullscreen()
+                          try {
+                            gameView.current?.requestFullscreen()
+                          } catch (error) {
+                            setIOSFullscreen(true)
+                            console.error(error)
+                          }
                         }
                         return !old
                       })

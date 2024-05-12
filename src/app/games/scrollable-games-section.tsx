@@ -39,11 +39,11 @@ export function ScrollableGamesSection({ cards }: { cards: React.ReactNode }) {
       >
         {cards}
       </div>
-      <div className="absolute top-0 w-full h-[200px] my-2 hidden sm:block pointer-events-none">
+      <div className="absolute top-0 w-full lg:h-[200px] h-[190px] my-2 hidden sm:block pointer-events-none">
         <div className="relative h-full *:w-9 *:h-full *:absolute hover:*:*:brightness-75 active:*:*:scale-90 *:hover:opacity-100 duration-200 group-hover:opacity-100 *:cursor-pointer opacity-0 *:*:duration-200 *:duration-200 *:pointer-events-auto">
           <button
             onClick={onClickLeft}
-            className="-translate-x-[35px] left-0"
+            className="lg:-translate-x-[35px] translate-x-[-26px] left-0"
             style={{
               cursor: `${
                 row.current?.scrollLeft === 0 ? 'default' : 'pointer'
@@ -55,7 +55,7 @@ export function ScrollableGamesSection({ cards }: { cards: React.ReactNode }) {
           </button>
           <button
             onClick={onClickRight}
-            className="-translate-x-[15px] right-0 "
+            className="lg:-translate-x-[15px] translate-x-[37px] right-0 "
             style={{
               cursor: `${
                 row.current?.scrollLeft ===
