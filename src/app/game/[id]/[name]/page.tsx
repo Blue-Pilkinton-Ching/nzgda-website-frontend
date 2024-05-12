@@ -156,10 +156,23 @@ export default function Page() {
           </div>
           <div
             ref={gameView}
-            style={{
-              maxWidth: game.width && game.width < 1422 ? game.width : 1422,
-              maxHeight: game.height && game.height < 800 ? game.height : 800,
-            }}
+            style={
+              iosFullscreen
+                ? {
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    zIndex: 9999,
+                  }
+                : {
+                    maxWidth:
+                      game.width && game.width < 1422 ? game.width : 1422,
+                    maxHeight:
+                      game.height && game.height < 800 ? game.height : 800,
+                  }
+            }
             className="justify-center w-full xl:w-auto items-center aspect-video xl:flex-grow relative flex flex-col box-content rounded-lg *:rounded-lg"
           >
             {game.url ? (
@@ -174,8 +187,8 @@ export default function Page() {
                           position: 'fixed',
                           top: 0,
                           left: 0,
-                          width: '100%',
-                          height: '56.25%',
+                          width: '100vw',
+                          height: 'min(0.5625vw,100vh)',
                           zIndex: 9999,
                         }
                       : {
