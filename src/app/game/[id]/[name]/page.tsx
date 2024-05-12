@@ -175,7 +175,7 @@ export default function Page() {
                           top: 0,
                           left: 0,
                           width: '100vw',
-                          height: 'min(0.5625vw,100vh)',
+                          height: 'min(calc(100vw / 1.7777777778),100vh)',
                           zIndex: 9999,
                         }
                       : {
