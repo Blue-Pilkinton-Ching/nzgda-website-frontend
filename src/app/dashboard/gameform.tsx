@@ -159,8 +159,8 @@ export default function GameForm({
             setGameFolder(undefined)
             break
           }
-          if (target2.files[0].size > 2147483648) {
-            setGameWarning('File size should be less than 2gb!')
+          if (target2.files[0].size > 1048576 * 500) {
+            setGameWarning('File size should be less than 500mb!')
             setGameFolder(undefined)
             break
           }
@@ -569,7 +569,7 @@ export default function GameForm({
                   </label>
                   <p className="text-zinc-500 text-sm mb-3">
                     Game should be uploaded as a compressed .zip file. Maximum
-                    size is 2gb. <br />
+                    size is 500mb. <br />
                     <br />
                     You should have a index.html file at the root of the zip.
                     Your files should not be contained inside an additional
