@@ -111,12 +111,14 @@ export default function Games() {
                     />
                   </div>
                 }
-                games={gamesData.data.filter(
-                  (x) =>
-                    x.partner === partner &&
-                    (admin ? true : x.approved === true) &&
-                    (educational ? x.educational : true)
-                )}
+                games={gamesData.data
+                  .filter(
+                    (x) =>
+                      x.partner === partner &&
+                      (admin ? true : x.approved === true) &&
+                      (educational ? x.educational : true)
+                  )
+                  .sort((a, b) => b.id - a.id)}
               />
             </>
           ) : null}
@@ -160,11 +162,13 @@ export default function Games() {
                 </>
               )
             }
-            games={gamesData.data.filter(
-              (x) =>
-                (educational ? x.educational : true) &&
-                (admin ? true : x.approved === true)
-            )}
+            games={gamesData.data
+              .filter(
+                (x) =>
+                  (educational ? x.educational : true) &&
+                  (admin ? true : x.approved === true)
+              )
+              .sort((a, b) => b.id - a.id)}
           />
           <br />
           <br />
@@ -175,12 +179,14 @@ export default function Games() {
             <GameSection
               smallTitle={educational ? 'Educational Apps' : 'Apps'}
               largeTitle={educational ? 'Educational Apps' : 'Download an App'}
-              games={gamesData.data.filter(
-                (x) =>
-                  x.app &&
-                  (educational ? x.educational : true) &&
-                  (admin ? true : x.approved === true)
-              )}
+              games={gamesData.data
+                .filter(
+                  (x) =>
+                    x.app &&
+                    (educational ? x.educational : true) &&
+                    (admin ? true : x.approved === true)
+                )
+                .sort((a, b) => b.id - a.id)}
             />
           )}
         </>
