@@ -271,7 +271,9 @@ export default function Page() {
             scrollable
             smallTitle={``}
             largeTitle={``}
-            games={games.data.filter((x) => x.approved === true)}
+            games={games.data
+              .filter((x) => x.approved === true)
+              .sort((a, b) => b.id - a.id)}
           />
         ) : null}
       </div>
