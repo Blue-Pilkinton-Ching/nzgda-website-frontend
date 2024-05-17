@@ -29,7 +29,7 @@ export default function GameForm({
   const [description, setDescription] = useState('')
   const [ios, setIos] = useState('')
   const [android, setAndroid] = useState('')
-  //   const [gamefroot, setGamefroot] = useState('')
+  const [externalURL, setExternalURL] = useState('')
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
   const [tags, setTags] = useState('')
@@ -47,6 +47,7 @@ export default function GameForm({
   const [banner, setBanner] = useState<File>()
   const [bannerWarning, setBannerWarning] = useState('')
   const [isEducational, setIsEducational] = useState(false)
+  const [isGameExternal, setIsGameExternal] = useState(false)
 
   const [submitting, setSubmitting] = useState(false)
 
@@ -77,9 +78,9 @@ export default function GameForm({
       case 'Android Link':
         setAndroid(event.target.value)
         break
-      //   case 'Embed External Game URL':
-      //     setGamefroot(event.target.value)
-      //     break
+      case 'Embed External Game URL':
+        setExternalURL(event.target.value)
+        break
       case 'Max Width':
         setWidth(event.target.value)
         break
@@ -211,7 +212,7 @@ export default function GameForm({
           description,
           iosLink: ios,
           androidLink: android,
-          //   gamefrootLink: gamefroot,
+          url: externalURL,
           width: Number(width) ? Number(width) : null,
           height: Number(height) ? Number(height) : null,
           tags: tags.split(','),
@@ -246,10 +247,9 @@ export default function GameForm({
         },
       })
     } else if (thumbnail != undefined) {
-      if (/*!gamefroot &&*/ !gameFolder && !banner) {
+      if (!externalURL && !gameFolder && !banner) {
         alert(
-          //   'You must upload a game, a banner, or provide an external game link'
-          'You must upload a game or a banner'
+          'You must upload a game, a banner, or provide an external game link'
         )
         return
       }
@@ -263,7 +263,7 @@ export default function GameForm({
           description,
           iosLink: ios,
           androidLink: android,
-          //   gamefrootLink: gamefroot,
+          url: externalURL,
           width: Number(width) ? Number(width) : null,
           height: Number(height) ? Number(height) : null,
           tags: tags.split(','),
@@ -324,16 +324,21 @@ export default function GameForm({
     setDescription(game?.description || '')
     setIos(game?.iosLink || '')
     setAndroid(game?.androidLink || '')
-    // setGamefroot(game?.gamefrootLink || '')
+    setExternalURL(game?.url || '')
     setWidth(game?.width?.toString() || '')
     setHeight(game?.height?.toString() || '')
     setTags(game?.tags?.toString() || '')
-    setPlayableOnHeihei(game?.playableOnHeihei || true)
+    setPlayableOnHeihei(
+      game?.playableOnHeihei == undefined ? true : game?.playableOnHeihei
+    )
     setExcludeBrowserMobile(game?.exclude?.includes('mobileweb') || false)
     setExcludeBrowserDesktop(game?.exclude?.includes('desktop') || false)
     setPartner(game?.partner || 'None')
     setDisplayAppBadge(game?.displayAppBadge || false)
     setIsEducational(game?.educational || false)
+    setIsGameExternal(
+      game?.isGameExternal == undefined ? true : game?.isGameExternal
+    )
   }
 
   return (
@@ -496,14 +501,18 @@ export default function GameForm({
                 tooltip="Don't display this game on desktop devices."
               />
               <br />
-              {/* <Input
-                onChange={onGameInputChange}
-                value={gamefroot}
-                type="url"
-                maxLength={1000}
-                name={'Embed External Game URL'}
-                tooltip="If your game is hosted on another site, you can add the embed url here"
-              /> */}
+              {isGameExternal === true ||
+              isGameExternal == undefined ||
+              edit === false ? (
+                <Input
+                  onChange={onGameInputChange}
+                  value={externalURL}
+                  type="url"
+                  maxLength={2048}
+                  name={'Embed External Game URL'}
+                  tooltip="If your game is hosted on another site, you can add the embed url here"
+                />
+              ) : null}
               <Input
                 onChange={onGameInputChange}
                 value={width}

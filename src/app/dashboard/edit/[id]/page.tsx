@@ -64,7 +64,6 @@ export default function EditGame() {
             },
           })
         ).json()) as UserTypes
-        console.log(data)
         if (!data) {
           setMessage("Couldn't find data :(")
           throw 'User data not on firebase for some reason'
