@@ -530,114 +530,109 @@ export default function GameForm({
                 name={'Max Height'}
               />
               <br />
-              {(edit && id != undefined && id > 200) || !edit ? (
-                <>
-                  <label
-                    htmlFor="Change Thumbnail"
-                    className="text-left text-base font-bold mb-1"
-                  >
-                    {edit ? 'Change Thumbnail' : 'Upload Thumbnail'}
-                  </label>
-                  <p className="text-zinc-500 text-sm mb-3">
-                    Thumbnail should be 300x400px. Maximum size is 4mb.
-                  </p>
-                  <input
-                    multiple={false}
-                    type="file"
-                    required={edit ? false : true}
-                    name="Change Thumbnail"
-                    accept="image/png"
-                    id="Change Thumbnail"
-                    onChange={(event) =>
-                      onGameInputChange(event, 'Change Thumbnail')
-                    }
-                  />
-                  <div className="py-3 text-rose-600">
-                    {thumbnailWarning ? (
-                      <p className="text-lg font-semibold">
-                        {thumbnailWarning}
-                      </p>
-                    ) : thumbnail ? (
-                      <div className="rounded-md shadow w-[150px] h-[200px]">
-                        <Image
-                          src={URL.createObjectURL(thumbnail)}
-                          alt={'Uploaded Thumnail'}
-                          className="rounded-md shadow"
-                          width={256}
-                          height={341}
-                        ></Image>
-                      </div>
-                    ) : null}
-                  </div>
+              <>
+                <label
+                  htmlFor="Change Thumbnail"
+                  className="text-left text-base font-bold mb-1"
+                >
+                  {edit ? 'Change Thumbnail' : 'Upload Thumbnail'}
+                </label>
+                <p className="text-zinc-500 text-sm mb-3">
+                  Thumbnail should be 300x400px. Maximum size is 4mb.
+                </p>
+                <input
+                  multiple={false}
+                  type="file"
+                  required={edit ? false : true}
+                  name="Change Thumbnail"
+                  accept="image/png"
+                  id="Change Thumbnail"
+                  onChange={(event) =>
+                    onGameInputChange(event, 'Change Thumbnail')
+                  }
+                />
+                <div className="py-3 text-rose-600">
+                  {thumbnailWarning ? (
+                    <p className="text-lg font-semibold">{thumbnailWarning}</p>
+                  ) : thumbnail ? (
+                    <div className="rounded-md shadow w-[150px] h-[200px]">
+                      <Image
+                        src={URL.createObjectURL(thumbnail)}
+                        alt={'Uploaded Thumnail'}
+                        className="rounded-md shadow"
+                        width={256}
+                        height={341}
+                      ></Image>
+                    </div>
+                  ) : null}
+                </div>
+                <br />
+                <label
+                  htmlFor="Change Game Folder"
+                  className="text-left text-base font-bold mb-1"
+                >
+                  {edit ? 'Change Game' : 'Upload Game'}
+                </label>
+                <p className="text-zinc-500 text-sm mb-3">
+                  Game should be uploaded as a compressed .zip file. Maximum
+                  size is 95mb. <br />
                   <br />
-                  <label
-                    htmlFor="Change Game Folder"
-                    className="text-left text-base font-bold mb-1"
-                  >
-                    {edit ? 'Change Game' : 'Upload Game'}
-                  </label>
-                  <p className="text-zinc-500 text-sm mb-3">
-                    Game should be uploaded as a compressed .zip file. Maximum
-                    size is 95mb. <br />
-                    <br />
-                    You should have a index.html file at the root of the zip.
-                    Your files should not be contained inside an additional
-                    folder.
-                  </p>
-                  <input
-                    multiple={false}
-                    type="file"
-                    name="Change Game Folder"
-                    accept="application/x-zip-compressed"
-                    id="Change Game Folder"
-                    onChange={(event) =>
-                      onGameInputChange(event, 'Change Game Folder')
-                    }
-                  />
-                  <div className="py-3 text-rose-600">
-                    {gameWarning ? (
-                      <p className="text-lg font-semibold">{gameWarning}</p>
-                    ) : null}
-                  </div>
-                  <label
-                    htmlFor="Change Banner"
-                    className="text-left text-base font-bold mb-1"
-                  >
-                    {edit ? 'Change Banner' : 'Upload Banner'}
-                  </label>
-                  <p className="text-zinc-500 text-sm mb-3">
-                    Banner should be a large 16/9 aspect. Reccomended size is
-                    1424px x 801px.
-                  </p>
+                  You should have a index.html file at the root of the zip. Your
+                  files should not be contained inside an additional folder.
+                </p>
+                <input
+                  multiple={false}
+                  type="file"
+                  name="Change Game Folder"
+                  accept="application/x-zip-compressed"
+                  id="Change Game Folder"
+                  onChange={(event) =>
+                    onGameInputChange(event, 'Change Game Folder')
+                  }
+                />
+                <div className="py-3 text-rose-600">
+                  {gameWarning ? (
+                    <p className="text-lg font-semibold">{gameWarning}</p>
+                  ) : null}
+                </div>
+                <label
+                  htmlFor="Change Banner"
+                  className="text-left text-base font-bold mb-1"
+                >
+                  {edit ? 'Change Banner' : 'Upload Banner'}
+                </label>
+                <p className="text-zinc-500 text-sm mb-3">
+                  Banner should be a large 16/9 aspect. Reccomended size is
+                  1424px x 801px.
+                </p>
 
-                  <input
-                    multiple={false}
-                    type="file"
-                    name="Change Banner"
-                    accept="image/png"
-                    id="Change Thumbnail"
-                    onChange={(event) =>
-                      onGameInputChange(event, 'Change Banner')
-                    }
-                  />
-                  <div className="py-3 text-rose-600">
-                    {bannerWarning ? (
-                      <p className="text-lg font-semibold">{bannerWarning}</p>
-                    ) : banner ? (
-                      <div className="rounded-md shadow w-[240px] h-[135px]">
-                        <Image
-                          src={URL.createObjectURL(banner)}
-                          alt={'Uploaded Banner'}
-                          className="rounded-md shadow"
-                          width={360}
-                          height={180}
-                        ></Image>
-                      </div>
-                    ) : null}
-                  </div>
-                  <br />
-                </>
-              ) : null}
+                <input
+                  multiple={false}
+                  type="file"
+                  name="Change Banner"
+                  accept="image/png"
+                  id="Change Thumbnail"
+                  onChange={(event) =>
+                    onGameInputChange(event, 'Change Banner')
+                  }
+                />
+                <div className="py-3 text-rose-600">
+                  {bannerWarning ? (
+                    <p className="text-lg font-semibold">{bannerWarning}</p>
+                  ) : banner ? (
+                    <div className="rounded-md shadow w-[240px] h-[135px]">
+                      <Image
+                        src={URL.createObjectURL(banner)}
+                        alt={'Uploaded Banner'}
+                        className="rounded-md shadow"
+                        width={360}
+                        height={180}
+                      ></Image>
+                    </div>
+                  ) : null}
+                </div>
+                <br />
+              </>
               <div className="flex justify-center *:w-32 gap-4">
                 <Button
                   inverted
