@@ -116,7 +116,10 @@ export default function Games() {
                     (x) =>
                       x.partner === partner &&
                       (admin ? true : x.approved === true) &&
-                      (educational ? x.educational : true)
+                      (educational ? x.educational : true) &&
+                      (x.playableOnHeihei == undefined
+                        ? true
+                        : x.playableOnHeihei)
                   )
                   .sort(
                     (a, b) =>
@@ -170,7 +173,8 @@ export default function Games() {
               .filter(
                 (x) =>
                   (educational ? x.educational : true) &&
-                  (admin ? true : x.approved === true)
+                  (admin ? true : x.approved === true) &&
+                  (x.playableOnHeihei == undefined ? true : x.playableOnHeihei)
               )
               .sort(
                 (a, b) =>
