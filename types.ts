@@ -64,6 +64,7 @@ export interface GameListItem {
   educational?: boolean
   approved?: boolean
   sort?: number
+  playableOnHeihei?: boolean
 }
 
 export interface Partner {

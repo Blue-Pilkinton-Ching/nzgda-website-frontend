@@ -425,20 +425,18 @@ export default function GamesList({
                         <MdUnarchive className="w-full" size={'30px'} />
                       </IconButton>
                     </td>
-                    {element.id > 200 ? (
-                      <td>
-                        <IconButton
-                          onClick={() => {
-                            setGameToDelete(element.id)
-                            setDeleteText(
-                              'Are you sure you want to delete this partner? This action is irreversible.'
-                            )
-                          }}
-                        >
-                          <MdDeleteForever className="w-full" size={'30px'} />
-                        </IconButton>
-                      </td>
-                    ) : null}
+                    <td>
+                      <IconButton
+                        onClick={() => {
+                          setGameToDelete(element.id)
+                          setDeleteText(
+                            'Are you sure you want to delete this partner? This action is irreversible.'
+                          )
+                        }}
+                      >
+                        <MdDeleteForever className="w-full" size={'30px'} />
+                      </IconButton>
+                    </td>
                   </tr>
                 )
               })}
