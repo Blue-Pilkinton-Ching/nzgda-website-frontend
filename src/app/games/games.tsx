@@ -118,7 +118,11 @@ export default function Games() {
                       (admin ? true : x.approved === true) &&
                       (educational ? x.educational : true)
                   )
-                  .sort((a, b) => b.id - a.id)}
+                  .sort(
+                    (a, b) =>
+                      (b.sort ? b.sort : b.id * 100) -
+                      (a.sort ? a.sort : a.id * 100)
+                  )}
               />
             </>
           ) : null}
@@ -168,7 +172,11 @@ export default function Games() {
                   (educational ? x.educational : true) &&
                   (admin ? true : x.approved === true)
               )
-              .sort((a, b) => b.id - a.id)}
+              .sort(
+                (a, b) =>
+                  (b.sort ? b.sort : b.id * 100) -
+                  (a.sort ? a.sort : a.id * 100)
+              )}
           />
           <br />
           <br />
@@ -186,7 +194,11 @@ export default function Games() {
                     (educational ? x.educational : true) &&
                     (admin ? true : x.approved === true)
                 )
-                .sort((a, b) => b.id - a.id)}
+                .sort(
+                  (a, b) =>
+                    (b.sort ? b.sort : b.id * 100) -
+                    (a.sort ? a.sort : a.id * 100)
+                )}
             />
           )}
         </>

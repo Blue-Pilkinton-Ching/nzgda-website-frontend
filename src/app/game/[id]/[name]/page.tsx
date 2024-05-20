@@ -273,7 +273,11 @@ export default function Page() {
             largeTitle={``}
             games={games.data
               .filter((x) => x.approved === true)
-              .sort((a, b) => b.id - a.id)}
+              .sort(
+                (a, b) =>
+                  (b.sort ? b.sort : b.id * 100) -
+                  (a.sort ? a.sort : a.id * 100)
+              )}
           />
         ) : null}
       </div>
