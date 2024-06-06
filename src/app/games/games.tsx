@@ -85,7 +85,7 @@ export default function Games() {
                 } Games by ${partner}`}
                 titleChildren={
                   <div className="flex items-center gap-4">
-                    <IconButton
+                    {/* <IconButton
                       onClick={() => {
                         setEducational(!educational)
                       }}
@@ -103,7 +103,7 @@ export default function Games() {
                           color="#00A98F"
                         />
                       )}
-                    </IconButton>
+                    </IconButton> */}
                     <Dropdown
                       options={gamesData.partners
                         .filter((x) => x.hidden !== true)
