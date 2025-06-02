@@ -19,6 +19,18 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'heihei-game-content.s3.ap-southeast-2.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'nzgda-website.s3.ap-southeast-2.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'heihei-bucket.syd1.digitaloceanspaces.com',
         port: '',
         pathname: '/**',
