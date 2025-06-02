@@ -37,7 +37,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'heihei-bucket.syd1.digitaloceanspaces.com',
+        hostname: 'heihei-bucket.syd1.cdn.digitaloceanspaces.com',
         port: '',
         pathname: '/**',
       },
